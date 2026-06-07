@@ -1,0 +1,78 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Custom properties (placeholders — iterate colors/fonts on landing) ── */
+:root {
+  --color-bg:        #ffffff;
+  --color-text:      #111111;
+  --color-muted:     #666666;
+  --color-border:    #cccccc;
+  --font-main:       sans-serif;
+  --transition-fade: opacity 0.5s ease;
+}
+
+/* ── Base ── */
+body {
+  background:  var(--color-bg);
+  color:       var(--color-text);
+  font-family: var(--font-main);
+}
+
+/* ── Typography ── */
+h1 {
+  font-size:      clamp(2.2rem, 9vw, 5.5rem);
+  font-weight:    700;
+  letter-spacing: 0.02em;
+  line-height:    1.1;
+}
+
+.role {
+  color:      var(--color-muted);
+  font-size:  clamp(0.9rem, 2.5vw, 1.25rem);
+  transition: var(--transition-fade);
+  min-height: 1.5em;
+}
+
+/* ── Language toggle button ── */
+#lang-toggle {
+  background:  none;
+  border:      1px solid var(--color-border);
+  border-radius: 2em;
+  padding:     0.3em 1em;
+  cursor:      pointer;
+  font-size:   0.85rem;
+  color:       var(--color-text);
+  font-family: var(--font-main);
+}
+
+#lang-toggle:hover { border-color: var(--color-text); }
+
+#lang-toggle:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+#lang-toggle:active { opacity: 0.8; }
+
+/* ── Landing page layout ── */
+body.page-landing {
+  min-height:   100vh;
+  display:      grid;
+  grid-template-rows: 1fr auto;
+}
+
+body.page-landing main {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  text-align:      center;
+  padding:         2rem;
+  gap:             0.75rem;
+}
+
+body.page-landing footer {
+  padding:         1.5rem;
+  display:         flex;
+  justify-content: center;
+}
