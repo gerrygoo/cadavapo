@@ -1,5 +1,6 @@
 const T = {
   es: {
+    name: "Español",
     roles: [
       "dirección creativa",
       "artista audiovisual",
@@ -15,6 +16,7 @@ const T = {
     langBtn: "idiomas"
   },
   en: {
+    name: "English",
     roles: [
       "creative director",
       "audiovisual artist",
@@ -32,6 +34,7 @@ const T = {
 
   // ── Africa ──
   ar: {
+    name: "العربية",
     dir: "rtl",
     roles: [
       "الإخراج الإبداعي",
@@ -48,6 +51,7 @@ const T = {
     langBtn: "اللغة"
   },
   sw: {
+    name: "Kiswahili",
     roles: [
       "uongozi wa ubunifu",
       "msanii wa sauti na picha",
@@ -63,6 +67,7 @@ const T = {
     langBtn: "lugha"
   },
   ha: {
+    name: "Hausa",
     roles: [
       "shugabancin kirkira",
       "mai fasahar gani da ji",
@@ -80,6 +85,7 @@ const T = {
 
   // ── Asia ──
   zh: {
+    name: "中文",
     roles: [
       "创意总监",
       "视听艺术家",
@@ -95,6 +101,7 @@ const T = {
     langBtn: "语言"
   },
   hi: {
+    name: "हिन्दी",
     roles: [
       "रचनात्मक निर्देशन",
       "दृश्य-श्रव्य कलाकार",
@@ -110,6 +117,7 @@ const T = {
     langBtn: "भाषा"
   },
   bn: {
+    name: "বাংলা",
     roles: [
       "সৃজনশীল পরিচালনা",
       "দৃশ্য-শ্রাব্য শিল্পী",
@@ -127,6 +135,7 @@ const T = {
 
   // ── Europe ──
   ru: {
+    name: "Русский",
     roles: [
       "креативное направление",
       "аудиовизуальный художник",
@@ -142,6 +151,7 @@ const T = {
     langBtn: "язык"
   },
   de: {
+    name: "Deutsch",
     roles: [
       "kreative Leitung",
       "audiovisuelle*r Künstler*in",
@@ -157,6 +167,7 @@ const T = {
     langBtn: "sprache"
   },
   fr: {
+    name: "Français",
     roles: [
       "direction créative",
       "artiste audiovisuel·le",
@@ -174,6 +185,7 @@ const T = {
 
   // ── South America ──
   pt: {
+    name: "Português",
     roles: [
       "direção criativa",
       "artista audiovisual",
@@ -189,6 +201,7 @@ const T = {
     langBtn: "idioma"
   },
   qu: {
+    name: "Runasimi",
     roles: [
       "kreatibo pusay",
       "audiovisual arte ruwaq",
@@ -206,6 +219,7 @@ const T = {
 
   // ── Oceania ──
   tpi: {
+    name: "Tok Pisin",
     roles: [
       "krietiv lidasip",
       "aatis bilong piksa na saun",
@@ -221,6 +235,7 @@ const T = {
     langBtn: "tok"
   },
   mi: {
+    name: "Te Reo Māori",
     roles: [
       "arahitanga auaha",
       "kaitoi ataata-oro",
