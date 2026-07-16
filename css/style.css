@@ -33,6 +33,103 @@ h1 {
   height:    auto;
 }
 
+/* Landing logo, sliced letter-by-letter so each glyph can drift independently */
+.logo-word {
+  position:     relative;
+  display:      block;
+  width:        100%;
+  max-width:    min(80vw, 520px);
+  aspect-ratio: 1920 / 1080;
+  margin-inline: auto;
+}
+
+.logo-letter {
+  position: absolute;
+  top:      var(--y);
+  left:     var(--x);
+  width:    var(--w);
+  height:   auto;
+  animation: var(--anim) var(--dur) ease-in-out var(--delay) infinite;
+}
+
+/* Movement is meant to be barely perceptible — near-subliminal, not obviously
+   animated — so it's purely decorative and safe to drop outright. */
+@media (prefers-reduced-motion: reduce) {
+  .logo-letter { animation: none; }
+}
+
+@keyframes letter-drift-1 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.1px, 0.13px); }
+  50%  { transform: translate(0.93px, -0.08px); }
+  75%  { transform: translate(0.02px, 0.19px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-2 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(0.29px, 0.64px); }
+  50%  { transform: translate(-0.89px, -0.43px); }
+  75%  { transform: translate(-0.9px, 0.68px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-3 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(1.06px, 1.02px); }
+  50%  { transform: translate(0.34px, 0.25px); }
+  75%  { transform: translate(-0.75px, -1.07px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-4 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.68px, -0.57px); }
+  50%  { transform: translate(-1.03px, -0.08px); }
+  75%  { transform: translate(-0.13px, 0.75px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-5 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.0px, 0.36px); }
+  50%  { transform: translate(-0.09px, -0.49px); }
+  75%  { transform: translate(1.09px, 1.09px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-6 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.41px, -0.59px); }
+  50%  { transform: translate(-0.46px, -0.95px); }
+  75%  { transform: translate(0.59px, -0.22px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-7 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(1.01px, 0.76px); }
+  50%  { transform: translate(-1.1px, -0.64px); }
+  75%  { transform: translate(0.9px, -0.07px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-8 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.94px, 0.28px); }
+  50%  { transform: translate(0.61px, -0.51px); }
+  75%  { transform: translate(-0.91px, -0.37px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
+@keyframes letter-drift-9 {
+  0%  { transform: translate(0px, 0px); }
+  25%  { transform: translate(-0.84px, -0.56px); }
+  50%  { transform: translate(-0.88px, -0.97px); }
+  75%  { transform: translate(0.65px, -0.71px); }
+  100%  { transform: translate(0px, 0px); }
+}
+
 .role {
   color:      var(--color-muted);
   font-size:  clamp(0.9rem, 2.5vw, 1.25rem);
