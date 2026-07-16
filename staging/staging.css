@@ -24,7 +24,7 @@ body.page-staging .hero {
   gap:             0.75rem;
 }
 
-body.page-staging .hero .logo {
+body.page-staging .hero .logo-word {
   max-width: min(45vw, 240px);
 }
 
