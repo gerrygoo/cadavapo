@@ -24,17 +24,8 @@ body.page-staging .hero {
   gap:             0.75rem;
 }
 
-.carousel-placeholder {
-  border:        2px solid var(--color-border);
-  border-radius: 0.5rem;
-  min-height:    320px;
-  display:       flex;
-  align-items:   center;
-  justify-content: center;
-  color:         var(--color-muted);
-  font-size:     0.9rem;
-  padding:       1rem;
-  text-align:    center;
+.carousel {
+  height: 320px;
 }
 
 .staging-nav {

@@ -1,5 +1,12 @@
 # Project asset provenance
 
+**Delivery format:** every still ships as a `<name>.avif` + `<name>.jpg`
+pair (see `docs/superpowers/specs/2026-07-16-media-delivery.md`). Some of the
+files originally sourced below had mislabeled extensions (AVIF-encoded bytes
+saved as `.png`/`.jpg`); these were corrected in place. When adding a new
+still, run `python3 scripts/generate-image-variants.py <path-to-source>` to
+generate the avif/jpg pair — don't hand-add files with the wrong extension.
+
 Stills below were sourced from a Wix export of `www.nataliaaguilera.com`
 (Dani's former employer — Dani worked as Natalia Aguilera's direct report on
 these projects). Cross-referenced against the project list Dani provided.
