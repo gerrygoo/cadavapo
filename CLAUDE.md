@@ -1,8 +1,15 @@
 # Working conventions for this repo
 
 - **Solo project, no PR workflow.** Commit and push directly to `main`.
-  Do not create feature branches or pull requests for routine work — ask
-  first if a change seems risky enough to want review.
+  Never open a pull request, even if a branch got created for you (e.g. by
+  an outer harness/task runner) — merge or rebase that branch's work into
+  `main` locally and push `main` directly instead of leaving it as a PR.
+  Do not create feature branches for routine work — ask first if a change
+  seems risky enough to want review.
+- **Test before pushing.** Verify the change actually works (run it,
+  load the page, exercise the affected flow) before pushing to `main` —
+  `main` is live, there's no review step to catch problems after the
+  fact.
 - **`/staging` first.** New layout/design work (wireframes, page structure,
   visual iteration) lands in `staging/` first and gets validated there
   before being carried over to the live pages (`index.html`, etc.).
