@@ -76,6 +76,7 @@
   var _carouselIndex = 0;
   var _carouselTimeout = null;
   var _carouselFadeTimeout = null;
+  var _carouselGeneration = 0;
 
   function shuffle(arr) {
     for (var i = arr.length - 1; i > 0; i--) {
@@ -111,13 +112,28 @@
     _carouselIndex = (index + _carouselSlides.length) % _carouselSlides.length;
     var slide = _carouselSlides[_carouselIndex];
     var img = el.querySelector('img');
+    // Each call bumps the generation; any async work from an older call that
+    // resolves late checks its generation and bails, so it can't reveal a
+    // stale slide after a newer advance has taken over.
+    var gen = ++_carouselGeneration;
     // Cancel any fade-in still pending from a prior call, so an overlapping
     // call can't briefly reveal that call's slide before this one takes over.
     if (_carouselFadeTimeout) clearTimeout(_carouselFadeTimeout);
     img.style.opacity = '0';
     _carouselFadeTimeout = setTimeout(function () {
       renderCarouselSlide(el, slide);
-      img.style.opacity = '1';
+      // Fade in only once the new image has actually decoded — otherwise the
+      // element still shows the previous frame and it flashes back in during
+      // the fade before the new slide finishes loading.
+      var reveal = function () {
+        if (gen !== _carouselGeneration) return;
+        img.style.opacity = '1';
+      };
+      if (img.decode) {
+        img.decode().then(reveal, reveal);
+      } else {
+        reveal();
+      }
     }, 500); // matches --transition-fade duration
   }
 
@@ -138,6 +154,13 @@
 
     _carouselSlides = buildCarouselSlides();
     if (!_carouselSlides.length) return;
+
+    // Open on the (already shuffled) first slide instead of the static poster
+    // baked into the HTML, so the carousel isn't identical on every load. The
+    // poster just gets replaced once this slide decodes — no fade, so there's
+    // nothing to flash.
+    _carouselIndex = 0;
+    renderCarouselSlide(el, _carouselSlides[0]);
 
     el.addEventListener('click', function () {
       showCarouselSlide(el, _carouselIndex + 1);
