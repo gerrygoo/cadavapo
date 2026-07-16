@@ -8,3 +8,15 @@
   before being carried over to the live pages (`index.html`, etc.).
   `staging/` only adds spacing/layout on top of the shared `css/style.css`
   — no new visual styles of its own.
+- **Working on multiple things at once: use git worktrees, not feature
+  branches.** Add a worktree per concurrent task with a throwaway local
+  branch (`git worktree add ../cadavapo-<task> -b scratch/<task>`), do the
+  work there, then merge it into `main` locally and push
+  (`git checkout main && git merge scratch/<task> && git push`), and clean
+  up (`git worktree remove ../cadavapo-<task> && git branch -d
+  scratch/<task>`). The branch is scratch scaffolding for the worktree,
+  never a PR — this still counts as "commit and push directly to `main`."
+  Worktrees isolate the working directory, not file history, so this works
+  best when the concurrent tasks touch different files (e.g. one in
+  `staging/`, one elsewhere); overlapping edits will still conflict on
+  merge.
