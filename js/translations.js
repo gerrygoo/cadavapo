@@ -28,5 +28,211 @@ const T = {
       contact:  "contact"
     },
     langBtn: "language"
+  },
+
+  // ── Africa ──
+  ar: {
+    dir: "rtl",
+    roles: [
+      "الإخراج الإبداعي",
+      "فنان سمعي بصري",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "عنّي",
+      projects: "مشاريع",
+      contact:  "تواصل"
+    },
+    langBtn: "اللغة"
+  },
+  sw: {
+    roles: [
+      "uongozi wa ubunifu",
+      "msanii wa sauti na picha",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "kunihusu",
+      projects: "miradi",
+      contact:  "mawasiliano"
+    },
+    langBtn: "lugha"
+  },
+  ha: {
+    roles: [
+      "shugabancin kirkira",
+      "mai fasahar gani da ji",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "game da ni",
+      projects: "ayyuka",
+      contact:  "tuntuɓa"
+    },
+    langBtn: "harshe"
+  },
+
+  // ── Asia ──
+  zh: {
+    roles: [
+      "创意总监",
+      "视听艺术家",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "关于我",
+      projects: "项目",
+      contact:  "联系"
+    },
+    langBtn: "语言"
+  },
+  hi: {
+    roles: [
+      "रचनात्मक निर्देशन",
+      "दृश्य-श्रव्य कलाकार",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "मेरे बारे में",
+      projects: "परियोजनाएं",
+      contact:  "संपर्क"
+    },
+    langBtn: "भाषा"
+  },
+  bn: {
+    roles: [
+      "সৃজনশীল পরিচালনা",
+      "দৃশ্য-শ্রাব্য শিল্পী",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "আমার সম্পর্কে",
+      projects: "প্রকল্প",
+      contact:  "যোগাযোগ"
+    },
+    langBtn: "ভাষা"
+  },
+
+  // ── Europe ──
+  ru: {
+    roles: [
+      "креативное направление",
+      "аудиовизуальный художник",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "обо мне",
+      projects: "проекты",
+      contact:  "контакты"
+    },
+    langBtn: "язык"
+  },
+  de: {
+    roles: [
+      "kreative Leitung",
+      "audiovisuelle*r Künstler*in",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "über mich",
+      projects: "projekte",
+      contact:  "kontakt"
+    },
+    langBtn: "sprache"
+  },
+  fr: {
+    roles: [
+      "direction créative",
+      "artiste audiovisuel·le",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "à propos",
+      projects: "projets",
+      contact:  "contact"
+    },
+    langBtn: "langue"
+  },
+
+  // ── South America ──
+  pt: {
+    roles: [
+      "direção criativa",
+      "artista audiovisual",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "sobre mim",
+      projects: "projetos",
+      contact:  "contato"
+    },
+    langBtn: "idioma"
+  },
+  qu: {
+    roles: [
+      "kreatibo pusay",
+      "audiovisual arte ruwaq",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "ñoqamanta",
+      projects: "llamkaykuna",
+      contact:  "rimanakuy"
+    },
+    langBtn: "simi"
+  },
+
+  // ── Oceania ──
+  tpi: {
+    roles: [
+      "krietiv lidasip",
+      "aatis bilong piksa na saun",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "stori bilong mi",
+      projects: "ol projek",
+      contact:  "kontak"
+    },
+    langBtn: "tok"
+  },
+  mi: {
+    roles: [
+      "arahitanga auaha",
+      "kaitoi ataata-oro",
+      "production designer",
+      "art historian",
+      "set dresser"
+    ],
+    nav: {
+      about:    "mōku",
+      projects: "kaupapa",
+      contact:  "whakapā"
+    },
+    langBtn: "reo"
   }
 };

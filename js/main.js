@@ -5,7 +5,12 @@
   function detectLang() {
     var stored = localStorage.getItem('lang');
     if (stored && T[stored]) return stored;
-    return navigator.language.startsWith('es') ? 'es' : 'en';
+    var candidates = navigator.languages || [navigator.language];
+    for (var i = 0; i < candidates.length; i++) {
+      var primary = candidates[i].split('-')[0].toLowerCase();
+      if (T[primary]) return primary;
+    }
+    return 'en';
   }
 
   function getNestedKey(obj, path) {
@@ -14,6 +19,7 @@
 
   function applyLang(lang) {
     document.documentElement.lang = lang;
+    document.documentElement.dir = T[lang].dir || 'ltr';
     localStorage.setItem('lang', lang);
     document.querySelectorAll('[data-i18n]').forEach(function (el) {
       var val = getNestedKey(T[lang], el.dataset.i18n);
