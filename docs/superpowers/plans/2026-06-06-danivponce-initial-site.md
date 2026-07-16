@@ -1,6 +1,6 @@
 # danivponce.xyz Initial Site Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build a static landing page at danivponce.xyz with fade role rotation + ES/EN i18n, and a spacing-only wireframe at /staging matching the hand-drawn sketch.
 
@@ -16,20 +16,20 @@
 - Create: `.gitignore`
 - Create directories: `css/`, `js/`, `staging/`
 
-- [ ] **Step 1: Create `.gitignore`**
+- [x] **Step 1: Create `.gitignore`**
 
 ```
 .superpowers/
 .DS_Store
 ```
 
-- [ ] **Step 2: Create directories**
+- [x] **Step 2: Create directories**
 
 ```bash
 mkdir -p css js staging
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add .gitignore
@@ -43,7 +43,7 @@ git commit -m "scaffold: project structure"
 **Files:**
 - Create: `js/translations.js`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```js
 const T = {
@@ -80,7 +80,7 @@ const T = {
 };
 ```
 
-- [ ] **Step 2: Verify in browser console**
+- [x] **Step 2: Verify in browser console**
 
 Create a temporary `test.html` in the project root, open it, and paste in the console:
 
@@ -99,7 +99,7 @@ console.assert(T.en.nav.contact === 'contact',    'EN nav.contact wrong');
 
 Delete `test.html` after verifying.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add js/translations.js
@@ -113,7 +113,7 @@ git commit -m "add ES/EN translations"
 **Files:**
 - Create: `css/style.css`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```css
 /* ── Reset ── */
@@ -198,7 +198,7 @@ No commit yet — style is unverifiable without HTML.
 **Files:**
 - Create: `js/main.js`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```js
 (function () {
@@ -279,7 +279,7 @@ No commit yet — verify after index.html is wired up.
 **Files:**
 - Create: `index.html`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```html
 <!DOCTYPE html>
@@ -304,7 +304,7 @@ No commit yet — verify after index.html is wired up.
 </html>
 ```
 
-- [ ] **Step 2: Open in browser and verify**
+- [x] **Step 2: Open in browser and verify**
 
 Open `index.html` (file:// or a local server). Check all of:
 - "Dani Ponce" renders as large heading centered on the page
@@ -316,7 +316,7 @@ Open `index.html` (file:// or a local server). Check all of:
 - Role text switches to the other language's roles on toggle
 - Reload the page — previously chosen language persists
 
-- [ ] **Step 3: Commit landing page**
+- [x] **Step 3: Commit landing page**
 
 ```bash
 git add index.html css/style.css js/translations.js js/main.js
@@ -330,7 +330,7 @@ git commit -m "landing page: hero name, fade role rotation, ES/EN toggle"
 **Files:**
 - Create: `staging/staging.css`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```css
 /* Staging wireframe — spacing and layout only, no new visual styles */
@@ -407,7 +407,7 @@ No commit yet — verify after staging/index.html exists.
 **Files:**
 - Create: `staging/index.html`
 
-- [ ] **Step 1: Create the file**
+- [x] **Step 1: Create the file**
 
 ```html
 <!DOCTYPE html>
@@ -447,7 +447,7 @@ No commit yet — verify after staging/index.html exists.
 </html>
 ```
 
-- [ ] **Step 2: Open in browser and verify**
+- [x] **Step 2: Open in browser and verify**
 
 Open `staging/index.html`. Check all of:
 - Layout top-to-bottom: hero → carousel box → nav pills → lang toggle
@@ -457,7 +457,7 @@ Open `staging/index.html`. Check all of:
 - Lang toggle works and persists (same localStorage key — shared with landing page)
 - No visual styles beyond what landing page has: only layout and spacing differ
 
-- [ ] **Step 3: Commit staging page**
+- [x] **Step 3: Commit staging page**
 
 ```bash
 git add staging/index.html staging/staging.css
