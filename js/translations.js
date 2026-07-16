@@ -12,6 +12,13 @@ const T = {
       projects: "proyectos",
       contact:  "contacto"
     },
+    proyectos: {
+      direccionCreativa: "dirección creativa",
+      disenoProduccion:  "diseño de producción",
+      otrosProyectos:    "otros proyectos",
+      fichaTecnica:      "ficha técnica",
+      volver:            "← volver a proyectos"
+    },
     langBtn: "idiomas"
   },
   en: {
@@ -26,6 +33,13 @@ const T = {
       about:    "about me",
       projects: "projects",
       contact:  "contact"
+    },
+    proyectos: {
+      direccionCreativa: "creative direction",
+      disenoProduccion:  "production design",
+      otrosProyectos:    "other projects",
+      fichaTecnica:      "credits",
+      volver:            "← back to projects"
     },
     langBtn: "language"
   },
