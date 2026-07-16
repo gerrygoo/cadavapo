@@ -26,6 +26,11 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 - 1 still (`still-01.avif`), pulled from a browser HAR capture at
   2154×726 — the static crawler only ever captured a 111×47 LQIP placeholder
   for this image; the HAR capture solved it, no manual save-as needed after all.
+- A 2026-07-16 re-supply attempt (11 named frames) only yielded two usable
+  stills (a higher-res version of the existing angle, plus one new wide/smoke
+  shot); the other nine were duplicated title/credits-card frames — one of
+  which was actually mislabeled Reality Club Cinépolis content, not this
+  project's. Not incorporated yet — pending a clean re-capture.
 
 ## Reality Club Cinépolis (`reality-club-cinepolis/`)
 
@@ -33,8 +38,10 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 - DP: Pablo Chávez
 - Diseño de producción: Natalia Aguilera
 - Decoración: **Daniela Ponce** - Gabriel García
-- 1 still (`still-01.avif`), pulled from a browser HAR capture at 1200×600
-  (same LQIP situation as above — solved via HAR, not manual save-as).
+- 4 stills (`bonbon_wide`, `calle_zoom`, `lab_wide_rayos`, `luna`), 2026-07-16
+  replacement of the original single 1200×600 HAR-capture still — Dani
+  supplied full-resolution frames directly (~2600×1480 native), superseding
+  the site-crawl capture entirely.
 
 ## Coffee Mate - Nescafé / Bomba Films (`coffee-mate-nescafe/`)
 
@@ -42,7 +49,10 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 - Dop: Yordi Planell
 - Dirección de arte: Natalia Aguilera
 - Mexico, 2023
-- 6 stills, full resolution from the site export.
+- 6 stills, full resolution from the site export. A 2026-07-16 re-supply
+  attempt only yielded one usable frame (a duplicate of the existing
+  `still-01` angle) plus five duplicated title/credits-card frames, so it
+  was not incorporated — these stills are still pending a clean re-capture.
 
 ## Didi Food (`didi-food/`)
 
@@ -50,6 +60,7 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 - Diseño de prod: Natalia Aguilera
 - Productora: Central Films
 - Mexico, 2025
-- 4 stills, full resolution from the site export. Only found after a full
-  28-page site export — the initial single-page export missed this case
-  study entirely (it's a separate page on the source site).
+- 7 stills (`mesa_cenital`, `repartidor`, `sala_4_amix`, `escaleras_4_amix`,
+  `junta_close`, `junta_kangre`, `junta_wide`), 2026-07-16 replacement of the
+  original 4-still site-crawl export — Dani supplied full-resolution frames
+  directly (~2260×1270 native), superseding the site-crawl captures entirely.

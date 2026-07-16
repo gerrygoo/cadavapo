@@ -7,7 +7,7 @@ const PROJECTS = [
   {
     slug: 'didi-food',
     title: 'Didi Food',
-    stills: ['still-01', 'still-02', 'still-03', 'still-04']
+    stills: ['mesa_cenital', 'repartidor', 'sala_4_amix', 'escaleras_4_amix', 'junta_close', 'junta_kangre', 'junta_wide']
   },
   {
     slug: 'luis-angel-el-flaco',
@@ -17,6 +17,6 @@ const PROJECTS = [
   {
     slug: 'reality-club-cinepolis',
     title: 'Reality Club Cinépolis',
-    stills: ['still-01']
+    stills: ['bonbon_wide', 'calle_zoom', 'lab_wide_rayos', 'luna']
   }
 ];
