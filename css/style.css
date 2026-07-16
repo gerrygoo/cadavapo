@@ -354,6 +354,7 @@ h1 {
 .carousel {
   display:       block;
   width:         100%;
+  aspect-ratio:  16 / 9;
   background:   none;
   border:        2px solid var(--color-border);
   padding:       0;

@@ -28,11 +28,6 @@ body.page-staging .hero .logo {
   max-width: min(45vw, 240px);
 }
 
-body.page-staging .carousel {
-  flex:       1;
-  min-height: 320px;
-}
-
 .staging-nav {
   display:         flex;
   justify-content: center;
