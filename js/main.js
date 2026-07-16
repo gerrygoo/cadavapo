@@ -31,13 +31,21 @@
 
   // ── Role rotation (fade) ──
 
-  var _roleInterval = null;
+  // Randomized hold time so the role text and carousel don't fade in lockstep.
+  var ROTATION_HOLD_MIN = 2800;
+  var ROTATION_HOLD_MAX = 4200;
+
+  function randomHold() {
+    return ROTATION_HOLD_MIN + Math.random() * (ROTATION_HOLD_MAX - ROTATION_HOLD_MIN);
+  }
+
+  var _roleTimeout = null;
 
   function initRoleRotation(lang) {
     var el = document.querySelector('.role');
     if (!el) return;
 
-    if (_roleInterval) clearInterval(_roleInterval);
+    if (_roleTimeout) clearTimeout(_roleTimeout);
 
     var roles = T[lang].roles;
     var idx = 0;
@@ -45,21 +53,38 @@
     el.textContent = roles[0];
     el.style.opacity = '1';
 
-    _roleInterval = setInterval(function () {
-      el.style.opacity = '0';
-      setTimeout(function () {
-        idx = (idx + 1) % roles.length;
-        el.textContent = roles[idx];
-        el.style.opacity = '1';
-      }, 500); // matches --transition-fade duration
-    }, 3500); // 3s hold + 0.5s fade out
+    (function scheduleNext() {
+      _roleTimeout = setTimeout(function () {
+        el.style.opacity = '0';
+        setTimeout(function () {
+          idx = (idx + 1) % roles.length;
+          el.textContent = roles[idx];
+          el.style.opacity = '1';
+          scheduleNext();
+        }, 500); // matches --transition-fade duration
+      }, randomHold()); // re-rolled each cycle, independent of the carousel's
+    })();
   }
 
   // ── Carousel (fade, single-element content swap — same shape as role rotation) ──
 
+  // Carousel images stay up longer than the role text, since there's more to look at.
+  var CAROUSEL_HOLD_MIN = 5500;
+  var CAROUSEL_HOLD_MAX = 9000;
+
   var _carouselSlides = [];
   var _carouselIndex = 0;
-  var _carouselInterval = null;
+  var _carouselTimeout = null;
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
 
   function buildCarouselSlides() {
     if (typeof PROJECTS === 'undefined') return [];
@@ -70,7 +95,7 @@
         slides.push({ avif: base + '.avif', jpg: base + '.jpg', alt: project.title });
       });
     });
-    return slides;
+    return shuffle(slides);
   }
 
   function renderCarouselSlide(el, slide) {
@@ -92,11 +117,14 @@
   }
 
   function startCarouselAutoplay(el) {
-    if (_carouselInterval) clearInterval(_carouselInterval);
+    if (_carouselTimeout) clearTimeout(_carouselTimeout);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    _carouselInterval = setInterval(function () {
-      showCarouselSlide(el, _carouselIndex + 1);
-    }, 3500); // 3s hold + 0.5s fade out, same cadence as role rotation
+    (function scheduleNext() {
+      _carouselTimeout = setTimeout(function () {
+        showCarouselSlide(el, _carouselIndex + 1);
+        scheduleNext();
+      }, CAROUSEL_HOLD_MIN + Math.random() * (CAROUSEL_HOLD_MAX - CAROUSEL_HOLD_MIN)); // longer, independent of the role rotation's
+    })();
   }
 
   function initCarousel() {
