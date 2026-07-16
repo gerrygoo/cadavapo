@@ -325,7 +325,6 @@ h1 {
 #lang-toggle {
   background:  none;
   border:      1px solid var(--color-border);
-  border-radius: 2em;
   padding:     0.3em 1em;
   cursor:      pointer;
   font-size:   0.85rem;
@@ -357,7 +356,6 @@ h1 {
   width:         100%;
   background:   none;
   border:        2px solid var(--color-border);
-  border-radius: 0.5rem;
   padding:       0;
   overflow:      hidden;
   cursor:        pointer;
@@ -398,7 +396,6 @@ h1 {
   list-style:    none;
   background:    var(--color-bg);
   border:        1px solid var(--color-border);
-  border-radius: 0.75em;
   padding:       0.4em;
   min-width:     10rem;
   max-height:    60vh;
@@ -424,7 +421,6 @@ h1 {
   font-size:     0.85rem;
   font-family:   var(--font-main);
   color:         var(--color-text);
-  border-radius: 0.4em;
   cursor:        pointer;
 }
 
