@@ -26,6 +26,7 @@
       if (val !== undefined) el.textContent = val;
     });
     initRoleRotation(lang);
+    updateLangList(lang);
   }
 
   // ── Role rotation (fade) ──
@@ -113,21 +114,89 @@
     startCarouselAutoplay(el);
   }
 
+  // ── Language menu (dropup) ──
+
+  function buildLangList(list) {
+    Object.keys(T).forEach(function (lang) {
+      var li = document.createElement('li');
+      var opt = document.createElement('button');
+      opt.type = 'button';
+      opt.setAttribute('role', 'option');
+      opt.dataset.lang = lang;
+      opt.textContent = T[lang].name || lang;
+      li.appendChild(opt);
+      list.appendChild(li);
+    });
+  }
+
+  function updateLangList(lang) {
+    var list = document.getElementById('lang-list');
+    if (!list) return;
+    list.querySelectorAll('button').forEach(function (opt) {
+      opt.setAttribute('aria-selected', String(opt.dataset.lang === lang));
+    });
+  }
+
+  function updateScrollFade(list) {
+    var atBottom = list.scrollTop + list.clientHeight >= list.scrollHeight - 1;
+    var overflowing = list.scrollHeight > list.clientHeight;
+    list.classList.toggle('has-more', overflowing && !atBottom);
+  }
+
+  function openLangMenu(list, btn) {
+    list.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    updateScrollFade(list);
+  }
+
+  function closeLangMenu(list, btn) {
+    list.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
   // ── Init ──
 
   document.addEventListener('DOMContentLoaded', function () {
-    var langs = Object.keys(T);
     var currentLang = detectLang();
-    applyLang(currentLang);
-    initCarousel();
 
     var btn = document.getElementById('lang-toggle');
-    if (btn) {
-      btn.addEventListener('click', function () {
-        currentLang = langs[(langs.indexOf(currentLang) + 1) % langs.length];
+    var list = document.getElementById('lang-list');
+
+    if (btn && list) {
+      buildLangList(list);
+      list.addEventListener('scroll', function () { updateScrollFade(list); });
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (list.hidden) openLangMenu(list, btn);
+        else closeLangMenu(list, btn);
+      });
+
+      list.addEventListener('click', function (e) {
+        var opt = e.target.closest('[data-lang]');
+        if (!opt) return;
+        currentLang = opt.dataset.lang;
         applyLang(currentLang);
+        closeLangMenu(list, btn);
+        btn.focus();
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!list.hidden && !list.contains(e.target) && e.target !== btn) {
+          closeLangMenu(list, btn);
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !list.hidden) {
+          closeLangMenu(list, btn);
+          btn.focus();
+        }
       });
     }
+
+    applyLang(currentLang);
+    initCarousel();
   });
 
 })();
