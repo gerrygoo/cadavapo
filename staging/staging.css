@@ -76,7 +76,7 @@ body.page-staging footer {
   font-weight:    normal;
 }
 
-.reel-placeholder {
+.wireframe-placeholder {
   border:          2px dashed var(--color-border);
   border-radius:   0.5rem;
   min-height:      120px;
@@ -103,6 +103,10 @@ body.page-staging footer {
   color:         var(--color-text);
   display:       flex;
   flex-direction: column;
+}
+
+.proyecto-tile picture {
+  display: block;
 }
 
 .proyecto-tile img {
@@ -164,6 +168,10 @@ body.page-proyecto main {
   display:               grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap:                    0.75rem;
+}
+
+.stills-grid picture {
+  display: block;
 }
 
 .stills-grid img {
