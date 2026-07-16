@@ -600,6 +600,7 @@ h1 {
 
 /* ── Carousel ── */
 .carousel {
+  position:      relative; /* stacking context for the crossfade layers */
   display:       block;
   width:         100%;
   aspect-ratio:  16 / 9;
@@ -617,22 +618,27 @@ h1 {
   outline-offset: 2px;
 }
 
-.carousel picture {
-  display: block;
-  width:   100%;
-  height:  100%;
+/* Two stacked layers crossfade by toggling `is-active`; the transition lives
+   entirely in CSS, JS only moves the class once the incoming slide decodes. */
+.carousel-layer {
+  position:   absolute;
+  inset:      0;
+  display:    block;
+  opacity:    0;
+  transition: var(--transition-fade);
 }
 
-.carousel img {
+.carousel-layer.is-active { opacity: 1; }
+
+.carousel-layer img {
   display:    block;
   width:      100%;
   height:     100%;
   object-fit: cover;
-  transition: var(--transition-fade);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .carousel img { transition: none; }
+  .carousel-layer { transition: none; }
 }
 
 /* Dropup — anchored above the button since it sits at the page bottom */

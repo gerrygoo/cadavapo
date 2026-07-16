@@ -66,7 +66,15 @@
     })();
   }
 
-  // ── Carousel (fade, single-element content swap — same shape as role rotation) ──
+  // ── Carousel (two-layer crossfade) ──
+  //
+  // The carousel is two stacked <picture> layers. The visible one carries the
+  // `is-active` class (opacity 1 in CSS); the other sits behind it at opacity 0.
+  // To advance we load the next slide into the *hidden* layer, wait for it to
+  // decode, then just move the `is-active` class over — CSS transitions the two
+  // layers' opacity, so the crossfade is entirely CSS-driven. Because the
+  // visible layer never changes its own source, it can't briefly show a stale
+  // frame the way a single swapping <img> did.
 
   // Carousel images stay up longer than the role text, since there's more to look at.
   var CAROUSEL_HOLD_MIN = 5500;
@@ -75,7 +83,6 @@
   var _carouselSlides = [];
   var _carouselIndex = 0;
   var _carouselTimeout = null;
-  var _carouselFadeTimeout = null;
   var _carouselGeneration = 0;
 
   function shuffle(arr) {
@@ -100,41 +107,42 @@
     return shuffle(slides);
   }
 
-  function renderCarouselSlide(el, slide) {
-    var source = el.querySelector('source[type="image/avif"]');
-    var img = el.querySelector('img');
+  function renderCarouselSlide(layer, slide) {
+    var source = layer.querySelector('source[type="image/avif"]');
+    var img = layer.querySelector('img');
     source.srcset = slide.avif;
     img.src = slide.jpg;
     img.alt = slide.alt;
+    return img;
   }
 
   function showCarouselSlide(el, index) {
     _carouselIndex = (index + _carouselSlides.length) % _carouselSlides.length;
     var slide = _carouselSlides[_carouselIndex];
-    var img = el.querySelector('img');
-    // Each call bumps the generation; any async work from an older call that
-    // resolves late checks its generation and bails, so it can't reveal a
-    // stale slide after a newer advance has taken over.
+
+    var layers = el.querySelectorAll('.carousel-layer');
+    var active = el.querySelector('.carousel-layer.is-active') || layers[0];
+    var incoming = active === layers[0] ? layers[1] : layers[0];
+
+    // Each call bumps the generation; a decode from an older call that resolves
+    // late checks its generation and bails, so it can't hand the class to a
+    // slide a newer advance has already moved past.
     var gen = ++_carouselGeneration;
-    // Cancel any fade-in still pending from a prior call, so an overlapping
-    // call can't briefly reveal that call's slide before this one takes over.
-    if (_carouselFadeTimeout) clearTimeout(_carouselFadeTimeout);
-    img.style.opacity = '0';
-    _carouselFadeTimeout = setTimeout(function () {
-      renderCarouselSlide(el, slide);
-      // Fade in only once the new image has actually decoded — otherwise the
-      // element still shows the previous frame and it flashes back in during
-      // the fade before the new slide finishes loading.
-      var reveal = function () {
-        if (gen !== _carouselGeneration) return;
-        img.style.opacity = '1';
-      };
-      if (img.decode) {
-        img.decode().then(reveal, reveal);
-      } else {
-        reveal();
-      }
-    }, 500); // matches --transition-fade duration
+
+    // Load the next slide into the hidden layer, then crossfade only once it
+    // has decoded — the visible layer keeps its own (already loaded) image the
+    // whole time, so there is no stale frame to flash.
+    var img = renderCarouselSlide(incoming, slide);
+    var crossfade = function () {
+      if (gen !== _carouselGeneration) return;
+      incoming.classList.add('is-active');
+      active.classList.remove('is-active');
+    };
+    if (img.decode) {
+      img.decode().then(crossfade, crossfade);
+    } else {
+      crossfade();
+    }
   }
 
   function startCarouselAutoplay(el) {
@@ -156,11 +164,12 @@
     if (!_carouselSlides.length) return;
 
     // Open on the (already shuffled) first slide instead of the static poster
-    // baked into the HTML, so the carousel isn't identical on every load. The
-    // poster just gets replaced once this slide decodes — no fade, so there's
-    // nothing to flash.
+    // baked into the HTML, so the carousel isn't identical on every load. This
+    // goes straight into the active layer; the poster it replaces is simply
+    // swapped out once the slide decodes.
     _carouselIndex = 0;
-    renderCarouselSlide(el, _carouselSlides[0]);
+    var first = el.querySelector('.carousel-layer.is-active') || el.querySelector('.carousel-layer');
+    renderCarouselSlide(first, _carouselSlides[0]);
 
     el.addEventListener('click', function () {
       showCarouselSlide(el, _carouselIndex + 1);

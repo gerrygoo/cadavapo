@@ -24,9 +24,13 @@
     </section>
 
     <button type="button" class="carousel">
-      <picture>
+      <picture class="carousel-layer is-active">
         <source type="image/avif" srcset="/assets/projects/coffee-mate-nescafe/still-01.avif">
         <img src="/assets/projects/coffee-mate-nescafe/still-01.jpg" alt="Coffee Mate × Nescafé" loading="eager" decoding="async">
+      </picture>
+      <picture class="carousel-layer" aria-hidden="true">
+        <source type="image/avif" srcset="">
+        <img src="" alt="" decoding="async">
       </picture>
     </button>
 
