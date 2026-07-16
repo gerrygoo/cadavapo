@@ -23,14 +23,16 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 ## Luis Ángel - El Flaco (`luis-angel-el-flaco/`)
 
 - Concierto
-- 1 still (`still-01.avif`), pulled from a browser HAR capture at
-  2154×726 — the static crawler only ever captured a 111×47 LQIP placeholder
-  for this image; the HAR capture solved it, no manual save-as needed after all.
-- A 2026-07-16 re-supply attempt (11 named frames) only yielded two usable
-  stills (a higher-res version of the existing angle, plus one new wide/smoke
-  shot); the other nine were duplicated title/credits-card frames — one of
-  which was actually mislabeled Reality Club Cinépolis content, not this
-  project's. Not incorporated yet — pending a clean re-capture.
+- 8 stills (`still-01`–`still-08`), 2026-07-16 replacement of the original
+  single 2154×726 HAR-capture still (superseding both that and the failed
+  re-supply attempt logged below) — Dani supplied 8 full-resolution frames
+  (2858×1198 native) directly from the video, in chronological order:
+  full-stage wide, drummer/arch set, banda group shot, vocalist duet (×3
+  angles), soloist close-up.
+- (Historical note: an earlier 2026-07-16 re-supply attempt of 11 named
+  frames only yielded two usable stills; the other nine were duplicated
+  title/credits-card frames, one of which was mislabeled Reality Club
+  Cinépolis content. Superseded by the 8-still set above.)
 
 ## Reality Club Cinépolis (`reality-club-cinepolis/`)
 
@@ -49,10 +51,16 @@ YouTube embeds on the whole site are on unrelated music-video case studies.
 - Dop: Yordi Planell
 - Dirección de arte: Natalia Aguilera
 - Mexico, 2023
-- 6 stills, full resolution from the site export. A 2026-07-16 re-supply
-  attempt only yielded one usable frame (a duplicate of the existing
-  `still-01` angle) plus five duplicated title/credits-card frames, so it
-  was not incorporated — these stills are still pending a clean re-capture.
+- 7 stills, full resolution. Kept from the original site export: `still-01`
+  (kitchen wide), `still-06` (dim room), `still-07` (BTS, crew in kitchen).
+  2026-07-16: `still-02`–`still-05` replaced with 4 full-resolution frames
+  (2858×1504 native) Dani supplied directly from the video — kitchen (2
+  angles), living room (2 angles) — the site-export versions of those same
+  four compositions (CG kitchen angle, CG living room, real living room) were
+  lower-resolution re-encodes and are superseded. (Historical note: an
+  earlier 2026-07-16 re-supply attempt only yielded one usable frame, a
+  duplicate of `still-01`, plus five duplicated title/credits-card frames;
+  not incorporated.)
 
 ## Didi Food (`didi-food/`)
 
