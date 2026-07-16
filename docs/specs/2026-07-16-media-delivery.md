@@ -5,7 +5,7 @@
 
 ## Context
 
-`docs/superpowers/specs/2026-06-06-danivponce-design.md` explicitly deferred
+`docs/specs/2026-06-06-danivponce-design.md` explicitly deferred
 carousel content as a non-goal ("no carousel content — no assets yet").
 `assets/projects/` now has real stills for 4 projects (see
 `assets/projects/README.md` for credits/provenance), and
