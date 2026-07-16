@@ -165,13 +165,14 @@ body.page-proyecto main {
 }
 
 .stills-grid {
-  display:               grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap:                    0.75rem;
+  columns:    3 220px;
+  column-gap: 0.75rem;
 }
 
 .stills-grid picture {
-  display: block;
+  display:        block;
+  break-inside:   avoid;
+  margin-bottom:  0.75rem;
 }
 
 .stills-grid img {
