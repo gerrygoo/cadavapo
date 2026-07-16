@@ -75,6 +75,7 @@
   var _carouselSlides = [];
   var _carouselIndex = 0;
   var _carouselTimeout = null;
+  var _carouselFadeTimeout = null;
 
   function shuffle(arr) {
     for (var i = arr.length - 1; i > 0; i--) {
@@ -108,10 +109,14 @@
 
   function showCarouselSlide(el, index) {
     _carouselIndex = (index + _carouselSlides.length) % _carouselSlides.length;
+    var slide = _carouselSlides[_carouselIndex];
     var img = el.querySelector('img');
+    // Cancel any fade-in still pending from a prior call, so an overlapping
+    // call can't briefly reveal that call's slide before this one takes over.
+    if (_carouselFadeTimeout) clearTimeout(_carouselFadeTimeout);
     img.style.opacity = '0';
-    setTimeout(function () {
-      renderCarouselSlide(el, _carouselSlides[_carouselIndex]);
+    _carouselFadeTimeout = setTimeout(function () {
+      renderCarouselSlide(el, slide);
       img.style.opacity = '1';
     }, 500); // matches --transition-fade duration
   }
