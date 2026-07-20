@@ -7,6 +7,65 @@ saved as `.png`/`.jpg`); these were corrected in place. When adding a new
 still, run `python3 scripts/generate-image-variants.py <path-to-source>` to
 generate the avif/jpg pair — don't hand-add files with the wrong extension.
 
+**Categorization** (drives which section a project renders under on
+`proyectos.html` — see `docs/plans/2026-07-20-mock-completeness.md`):
+
+- **Diseño de producción** — Dani-led production design on music videos.
+  Currently: the 5 dirs under "Diseño de producción" below.
+- **Otros proyectos (advertising)** — Dani worked as set dresser or
+  similar assist role, typically under Natalia Aguilera. Currently: the
+  4 dirs under "Advertising" below.
+
+---
+
+# Diseño de producción
+
+Dani-led production design. Source is YouTube in every case; reels
+will embed from those URLs. **URL→title mapping is TBD** — five video
+IDs and five titles are known separately but not yet paired. Once
+mapped, add `- Source: https://www.youtube.com/watch?v=…` to each
+sub-section below.
+
+Video IDs pending mapping: `77DRtiPY9b4`, `afoiE74JpL0`,
+`QqonNRbqPZE`, `1ii-qhgpx_Q`, `KiN6by3OiZc`.
+
+## Eden Muñoz, Elder Dayán Díaz — La Plata (`eden-munoz-la-plata/`)
+
+- Video Oficial
+- Source: TBD (pending URL mapping)
+- Stills / reel: pending delivery.
+
+## Eden Muñoz, Víctor Manuelle — Un Montón De Estrellas (`eden-munoz-un-monton-de-estrellas/`)
+
+- Video Oficial
+- Source: TBD (pending URL mapping)
+- Stills / reel: pending delivery.
+
+## Sophia Warren — Purple (`sophia-warren-purple/`)
+
+- Visualizer
+- Source: TBD (pending URL mapping)
+- Stills / reel: pending delivery.
+- Note: if space becomes tight on `proyectos.html`, the three Sophia
+  Warren visualizers (Purple / Static / BOR) can collapse into a single
+  tile that expands to all three.
+
+## Sophia Warren — Static (`sophia-warren-static/`)
+
+- Visualizer
+- Source: TBD (pending URL mapping)
+- Stills / reel: pending delivery.
+
+## Sophia Warren — BOR (`sophia-warren-bor/`)
+
+- Visualizer
+- Source: TBD (pending URL mapping)
+- Stills / reel: pending delivery.
+
+---
+
+# Advertising (set dresser / assist roles under Natalia Aguilera)
+
 Stills below were sourced from a Wix export of `www.nataliaaguilera.com`
 (Dani's former employer — Dani worked as Natalia Aguilera's direct report on
 these projects). Cross-referenced against the project list Dani provided.

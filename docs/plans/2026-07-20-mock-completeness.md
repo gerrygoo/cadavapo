@@ -35,25 +35,39 @@ ficha de proyecto ~35%. Gaps enumerated below.
 
 ## bosquejo-02 — Proyectos (`staging/proyectos.html`)
 
+**Categorization (decided 2026-07-20):**
+
+- *dirección creativa* — no projects yet.
+- *diseño de producción* — the 5 music videos scaffolded under
+  `assets/projects/{eden-munoz-*,sophia-warren-*}/`. All 5 render as
+  separate tiles for now; if space becomes tight, the 3 Sophia Warren
+  visualizers can collapse into a single tile that expands to all three.
+  (Wireframe called for `x2 >` — superseded, sketch is out of date.)
+- *otros proyectos* — folds in **both** (a) Poli's site link and (b)
+  the 4 advertising projects Dani worked on as set dresser under Natalia
+  Aguilera (coffee-mate-nescafe, didi-food, luis-angel-el-flaco,
+  reality-club-cinepolis). No separate "advertising" section on the page.
+
+Concrete tasks:
+
 - [ ] **"dirección creativa" carousel.** Currently a dashed
-  wireframe placeholder ("sin proyectos asignados aún"). Replace with a
-  real transitioning-image carousel where click leads to that project's
-  detail page. Blocked on: dirección-creativa project content — check
-  with Dani whether any projects should live here yet, otherwise leave
-  the placeholder and note it in the file.
-- [ ] **"diseño de producción" — reconcile tile count with wireframe.**
-  Wireframe shows `x2 >`; grid currently renders 4 tiles
-  (coffee-mate-nescafe, didi-food, reality-club-cinepolis,
-  luis-angel-el-flaco). Either update the sketch or trim the grid — ask
-  Dani which two are the canonical "diseño de producción" pieces.
-- [ ] **"diseño de producción" reel.** The wireframe shows a wide top
-  element above the tiles (the reel). Currently a "próximamente"
-  placeholder. Add the reel embed slot (video or looping GIF) once
-  media is delivered — see `docs/specs/2026-07-16-media-delivery.md`.
-- [ ] **"otros proyectos" — link to Poli's site.** Wireframe explicitly
-  notes "link directo a la web de Poli RIP". Replace the three empty
-  `.proyecto-tile-placeholder` divs with three tiles that link out to
-  Poli's site (get URL from Dani).
+  wireframe placeholder ("sin proyectos asignados aún"). Leave the
+  placeholder until Dani assigns content — no work here for now.
+- [ ] **"diseño de producción" — 5 real tiles.** Replace the current 4
+  advertising tiles (which are miscategorized here) with 5 tiles
+  pointing at the new music-video ficha pages
+  (`staging/proyectos/{eden-munoz-la-plata,eden-munoz-un-monton-de-estrellas,sophia-warren-purple,sophia-warren-static,sophia-warren-bor}.html`).
+  Tiles render as `.proyecto-tile-placeholder` (dashed border, no img)
+  until stills land per `docs/specs/2026-07-16-media-delivery.md`.
+- [ ] **"diseño de producción" reel.** Reel slot above the tiles.
+  Blocked on media delivery (Dani supplies a compiled reel or we embed
+  the strongest of the 5 YouTube videos).
+- [ ] **"otros proyectos" — Poli's site link.** Add tiles linking out
+  to Poli's site (get URL from Dani).
+- [ ] **"otros proyectos" — advertising tiles.** Move the 4 existing
+  tiles (coffee-mate-nescafe, didi-food, luis-angel-el-flaco,
+  reality-club-cinepolis) from "diseño de producción" to "otros
+  proyectos". They still point at the same ficha pages.
 - [ ] **Deduplicate nav.** `staging-nav` renders both mid-page and
   implicitly at the top; the wireframe places it once. Pick one location
   and remove the other on this page.
@@ -63,7 +77,14 @@ ficha de proyecto ~35%. Gaps enumerated below.
 ## bosquejo-03 — Ficha de proyecto (`staging/proyectos/*.html`)
 
 Reference file: `staging/proyectos/coffee-mate-nescafe.html`. Apply
-each fix to all four ficha pages.
+each fix to all four existing (advertising) ficha pages AND to the
+5 new music-video ficha pages once they exist (see next section).
+
+- [ ] **Create 5 new ficha pages for the music videos.** Copy the
+  existing template to
+  `staging/proyectos/{eden-munoz-la-plata,eden-munoz-un-monton-de-estrellas,sophia-warren-purple,sophia-warren-static,sophia-warren-bor}.html`.
+  Each with the wireframe layout below; stills/reel blank until media
+  lands.
 
 - [ ] **Role-attribution subtitle.** Wireframe title reads "DIRIGIDO POR
   DANI PONCE / DISEÑO DE PRODUCCIÓN POR DANI PONCE". Add a subtitle
@@ -86,6 +107,22 @@ each fix to all four ficha pages.
 - [ ] **Créditos block.** Wireframe shows a "texto con créditos del
   proyecto" panel separate from the ficha técnica table. Add a
   free-text credits block below the ficha.
+
+---
+
+---
+
+## Postponed / follow-up
+
+- [ ] **URL → title mapping for the 5 music videos.** Video IDs
+  `77DRtiPY9b4`, `afoiE74JpL0`, `QqonNRbqPZE`, `1ii-qhgpx_Q`,
+  `KiN6by3OiZc` need to be paired to
+  `{eden-munoz-la-plata, eden-munoz-un-monton-de-estrellas,
+  sophia-warren-purple, sophia-warren-static, sophia-warren-bor}`.
+  YouTube is proxy-blocked from this environment; Dani can do it in one
+  click-through pass. Once mapped, fill the `Source:` line in each
+  section of `assets/projects/README.md` and swap the reel embed URLs
+  into the ficha pages.
 
 ---
 
