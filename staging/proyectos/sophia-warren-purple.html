@@ -27,7 +27,10 @@
   </main>
 
   <footer>
-    <button id="lang-toggle" data-i18n="langBtn">idiomas</button>
+    <div class="lang-menu">
+      <button id="lang-toggle" data-i18n="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-list">idiomas</button>
+      <ul class="lang-list" id="lang-list" role="listbox" hidden></ul>
+    </div>
   </footer>
 
   <script src="../../js/translations.js"></script>
