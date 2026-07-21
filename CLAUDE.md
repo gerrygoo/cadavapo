@@ -6,6 +6,10 @@
   `main` locally and push `main` directly instead of leaving it as a PR.
   Do not create feature branches for routine work — ask first if a change
   seems risky enough to want review.
+  **When a harness forces you onto a non-`main` branch:** do your work
+  there, then immediately merge into `main` and push `main` without asking
+  for confirmation. Only pause if there are merge conflicts or ambiguity
+  about how to proceed.
 - **Test before pushing.** Verify the change actually works (run it,
   load the page, exercise the affected flow) before pushing to `main` —
   `main` is live, there's no review step to catch problems after the

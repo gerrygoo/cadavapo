@@ -23,10 +23,20 @@
       <picture><source type="image/avif" srcset="../../assets/projects/luis-angel-el-flaco/still-07.avif"><img src="../../assets/projects/luis-angel-el-flaco/still-07.jpg" alt="Luis Ángel — El Flaco, still 7" loading="lazy" decoding="async"></picture>
       <picture><source type="image/avif" srcset="../../assets/projects/luis-angel-el-flaco/still-08.avif"><img src="../../assets/projects/luis-angel-el-flaco/still-08.jpg" alt="Luis Ángel — El Flaco, still 8" loading="lazy" decoding="async"></picture>
     </div>
+
+    <section class="ficha-tecnica">
+      <h2 data-i18n="proyectos.fichaTecnica">ficha técnica</h2>
+      <dl>
+        <div><dt>Tipo</dt><dd>Comercial</dd></div>
+      </dl>
+    </section>
   </main>
 
   <footer>
-    <button id="lang-toggle" data-i18n="langBtn">idiomas</button>
+    <div class="lang-menu">
+      <button id="lang-toggle" data-i18n="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-list">idiomas</button>
+      <ul class="lang-list" id="lang-list" role="listbox" hidden></ul>
+    </div>
   </footer>
 
   <script src="../../js/translations.js"></script>
