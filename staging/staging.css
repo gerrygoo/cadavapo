@@ -33,23 +33,7 @@ body.page-staging .hero .logo-word {
   margin-bottom: calc(min(45vw, 240px) * -0.19);
 }
 
-/* ── Landing page (staging/index.html): header + growing carousel + footer nav ── */
-
-body.page-home {
-  grid-template-rows: auto 1fr auto;
-}
-
-body.page-home > header.hero {
-  max-width: 820px;
-  margin:    0 auto;
-  width:     100%;
-  padding:   1.5rem 2rem 0;
-}
-
-body.page-home main {
-  max-width:       min(1100px, 90vw);
-  justify-content: center;
-}
+/* ── Landing page (staging/index.html): centered logo + button row ── */
 
 .staging-nav {
   display:         flex;
@@ -58,23 +42,29 @@ body.page-home main {
   flex-wrap:       wrap;
 }
 
-.staging-nav a {
+.staging-nav a,
+.staging-nav button {
   border:        1px solid var(--color-border);
   padding:       0.35em 1.1em;
   text-decoration: none;
   color:         var(--color-text);
   font-family:   var(--font-main);
   font-size:     0.9rem;
+  background:    none;
+  cursor:        pointer;
 }
 
-.staging-nav a:hover { border-color: var(--color-text); }
+.staging-nav a:hover,
+.staging-nav button:hover { border-color: var(--color-text); }
 
-.staging-nav a:focus-visible {
+.staging-nav a:focus-visible,
+.staging-nav button:focus-visible {
   outline: 2px solid var(--color-text);
   outline-offset: 2px;
 }
 
-.staging-nav a:active { opacity: 0.8; }
+.staging-nav a:active,
+.staging-nav button:active { opacity: 0.8; }
 
 body.page-staging footer {
   padding:         1.5rem;
@@ -88,21 +78,7 @@ body.page-staging footer {
   flex-wrap:   wrap;
 }
 
-/* ── Proyectos tab (staging/proyectos.html) ── */
-
-.proyectos-group {
-  display:        flex;
-  flex-direction: column;
-  gap:            1rem;
-}
-
-.proyectos-group h2 {
-  font-size:      0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color:          var(--color-muted);
-  font-weight:    normal;
-}
+/* ── Role landing pages (staging/ambientacion.html, diseno-produccion.html, direccion-creativa.html) ── */
 
 .wireframe-placeholder {
   border:          2px dashed var(--color-border);

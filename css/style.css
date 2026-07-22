@@ -580,14 +580,14 @@ h1 {
   font-family: var(--font-main);
 }
 
-#lang-toggle::after {
+[aria-haspopup="listbox"]::after {
   content:     "▾";
   display:     inline-block;
   margin-inline-start: 0.4em;
   font-size:   0.7em;
 }
 
-#lang-toggle[aria-expanded="true"]::after { content: "▴"; }
+[aria-haspopup="listbox"][aria-expanded="true"]::after { content: "▴"; }
 
 #lang-toggle:hover { border-color: var(--color-text); }
 
@@ -666,7 +666,8 @@ h1 {
 
 .lang-list[hidden] { display: none; }
 
-.lang-list button {
+.lang-list button,
+.lang-list a {
   display:       block;
   width:         100%;
   background:    none;
@@ -676,11 +677,14 @@ h1 {
   font-size:     0.85rem;
   font-family:   var(--font-main);
   color:         var(--color-text);
+  text-decoration: none;
   cursor:        pointer;
 }
 
 .lang-list button:hover,
-.lang-list button:focus-visible {
+.lang-list button:focus-visible,
+.lang-list a:hover,
+.lang-list a:focus-visible {
   background: var(--color-border);
   outline:    none;
 }

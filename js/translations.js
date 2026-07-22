@@ -9,14 +9,14 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "sobre mí",
-      projects: "proyectos",
-      contact:  "contacto"
+      about:     "sobre mí",
+      projects:  "proyectos",
+      otherWork: "otros trabajos"
     },
     proyectos: {
       direccionCreativa: "dirección creativa",
       disenoProduccion:  "diseño de producción",
-      otrosProyectos:    "otros proyectos",
+      ambientacion:      "ambientación",
       fichaTecnica:      "ficha técnica",
       volver:            "← volver a proyectos"
     },
@@ -32,14 +32,14 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "about me",
-      projects: "projects",
-      contact:  "contact"
+      about:     "about me",
+      projects:  "projects",
+      otherWork: "other work"
     },
     proyectos: {
       direccionCreativa: "creative direction",
       disenoProduccion:  "production design",
-      otrosProyectos:    "other projects",
+      ambientacion:      "set dressing",
       fichaTecnica:      "credits",
       volver:            "← back to projects"
     },
@@ -58,9 +58,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "عنّي",
-      projects: "مشاريع",
-      contact:  "تواصل"
+      about:     "عنّي",
+      projects:  "مشاريع",
+      otherWork: "أعمال أخرى"
     },
     langBtn: "اللغة"
   },
@@ -74,9 +74,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "kunihusu",
-      projects: "miradi",
-      contact:  "mawasiliano"
+      about:     "kunihusu",
+      projects:  "miradi",
+      otherWork: "kazi nyingine"
     },
     langBtn: "lugha"
   },
@@ -90,9 +90,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "game da ni",
-      projects: "ayyuka",
-      contact:  "tuntuɓa"
+      about:     "game da ni",
+      projects:  "ayyuka",
+      otherWork: "sauran ayyuka"
     },
     langBtn: "harshe"
   },
@@ -108,9 +108,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "关于我",
-      projects: "项目",
-      contact:  "联系"
+      about:     "关于我",
+      projects:  "项目",
+      otherWork: "其他作品"
     },
     langBtn: "语言"
   },
@@ -124,9 +124,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "मेरे बारे में",
-      projects: "परियोजनाएं",
-      contact:  "संपर्क"
+      about:     "मेरे बारे में",
+      projects:  "परियोजनाएं",
+      otherWork: "अन्य कार्य"
     },
     langBtn: "भाषा"
   },
@@ -140,9 +140,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "আমার সম্পর্কে",
-      projects: "প্রকল্প",
-      contact:  "যোগাযোগ"
+      about:     "আমার সম্পর্কে",
+      projects:  "প্রকল্প",
+      otherWork: "অন্য কাজ"
     },
     langBtn: "ভাষা"
   },
@@ -158,9 +158,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "обо мне",
-      projects: "проекты",
-      contact:  "контакты"
+      about:     "обо мне",
+      projects:  "проекты",
+      otherWork: "другие работы"
     },
     langBtn: "язык"
   },
@@ -174,9 +174,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "über mich",
-      projects: "projekte",
-      contact:  "kontakt"
+      about:     "über mich",
+      projects:  "projekte",
+      otherWork: "weitere Arbeiten"
     },
     langBtn: "sprache"
   },
@@ -190,9 +190,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "à propos",
-      projects: "projets",
-      contact:  "contact"
+      about:     "à propos",
+      projects:  "projets",
+      otherWork: "autres travaux"
     },
     langBtn: "langue"
   },
@@ -208,9 +208,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "sobre mim",
-      projects: "projetos",
-      contact:  "contato"
+      about:     "sobre mim",
+      projects:  "projetos",
+      otherWork: "outros trabalhos"
     },
     langBtn: "idioma"
   },
@@ -224,9 +224,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "ñoqamanta",
-      projects: "llamkaykuna",
-      contact:  "rimanakuy"
+      about:     "ñoqamanta",
+      projects:  "llamkaykuna",
+      otherWork: "waq llamkaykuna"
     },
     langBtn: "simi"
   },
@@ -242,9 +242,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "stori bilong mi",
-      projects: "ol projek",
-      contact:  "kontak"
+      about:     "stori bilong mi",
+      projects:  "ol projek",
+      otherWork: "arapela wok"
     },
     langBtn: "tok"
   },
@@ -258,9 +258,9 @@ const T = {
       "set dresser"
     ],
     nav: {
-      about:    "mōku",
-      projects: "kaupapa",
-      contact:  "whakapā"
+      about:     "mōku",
+      projects:  "kaupapa",
+      otherWork: "mahi kē"
     },
     langBtn: "reo"
   }

@@ -7,49 +7,43 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="staging.css">
 </head>
-<body class="page-staging page-home">
-  <header class="hero">
-    <h1><a href="index.html" class="logo-word" aria-label="Dani Ponce">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/0-d.png" alt="" style="--x:0.365%; --y:34.722%; --w:10.677%; --anim: letter-drift-h-1; --dur: 17.3s; --delay: -7.3s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/1-a.png" alt="" style="--x:10.156%; --y:38.426%; --w:11.823%; --anim: letter-drift-h-2; --dur: 14.2s; --delay: -5.9s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/2-n.png" alt="" style="--x:21.51%; --y:32.963%; --w:16.094%; --anim: letter-drift-h-3; --dur: 14.1s; --delay: -18.3s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/3-i.png" alt="" style="--x:38.281%; --y:39.167%; --w:5.312%; --anim: letter-drift-h-4; --dur: 23.6s; --delay: -2.3s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/4-p.png" alt="" style="--x:50.833%; --y:36.111%; --w:8.646%; --anim: letter-drift-h-5; --dur: 22.9s; --delay: -19.8s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/5-o.png" alt="" style="--x:57.552%; --y:40.741%; --w:9.323%; --anim: letter-drift-h-6; --dur: 14.7s; --delay: -17.0s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/6-n.png" alt="" style="--x:66.094%; --y:37.315%; --w:11.302%; --anim: letter-drift-h-7; --dur: 17.0s; --delay: -19.2s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/7-c.png" alt="" style="--x:76.979%; --y:33.333%; --w:12.812%; --anim: letter-drift-h-8; --dur: 21.5s; --delay: -2.8s;">
-      <img class="logo-letter" src="../assets/logo/letters/horizontal/8-e.png" alt="" style="--x:89.427%; --y:36.111%; --w:10.0%; --anim: letter-drift-h-9; --dur: 15.9s; --delay: -16.8s;">
-    </a></h1>
-    <p class="role" aria-live="polite">dirección creativa</p>
-  </header>
-
+<body class="page-staging page-landing">
   <main>
-    <button type="button" class="carousel">
-      <picture class="carousel-layer is-active">
-        <source type="image/avif" srcset="/assets/projects/coffee-mate-nescafe/still-01.avif">
-        <img src="/assets/projects/coffee-mate-nescafe/still-01.jpg" alt="Coffee Mate × Nescafé" loading="eager" decoding="async">
-      </picture>
-      <picture class="carousel-layer" aria-hidden="true">
-        <source type="image/avif" srcset="">
-        <img src="" alt="" decoding="async">
-      </picture>
-    </button>
+    <h1 class="logo-word" role="img" aria-label="Dani Ponce">
+      <img class="logo-letter" src="../assets/logo/letters/0-d.png" alt="" style="--x:26.198%; --y:23.333%; --w:10.729%; --anim: letter-drift-1; --dur: 17.6s; --delay: -18.8s;">
+      <img class="logo-letter" src="../assets/logo/letters/1-a.png" alt="" style="--x:35.99%; --y:27.037%; --w:11.875%; --anim: letter-drift-2; --dur: 15.8s; --delay: -13.5s;">
+      <img class="logo-letter" src="../assets/logo/letters/2-n.png" alt="" style="--x:47.344%; --y:21.574%; --w:16.146%; --anim: letter-drift-3; --dur: 22.3s; --delay: -15.2s;">
+      <img class="logo-letter" src="../assets/logo/letters/3-i.png" alt="" style="--x:64.167%; --y:27.778%; --w:5.312%; --anim: letter-drift-4; --dur: 23.7s; --delay: -12.5s;">
+      <img class="logo-letter" src="../assets/logo/letters/4-p.png" alt="" style="--x:24.271%; --y:51.111%; --w:8.646%; --anim: letter-drift-5; --dur: 22.1s; --delay: -2.1s;">
+      <img class="logo-letter" src="../assets/logo/letters/5-o.png" alt="" style="--x:30.99%; --y:55.741%; --w:9.323%; --anim: letter-drift-6; --dur: 23.5s; --delay: -18.4s;">
+      <img class="logo-letter" src="../assets/logo/letters/6-n.png" alt="" style="--x:39.531%; --y:52.315%; --w:11.302%; --anim: letter-drift-7; --dur: 21.0s; --delay: -10.4s;">
+      <img class="logo-letter" src="../assets/logo/letters/7-c.png" alt="" style="--x:50.417%; --y:48.333%; --w:12.812%; --anim: letter-drift-8; --dur: 17.4s; --delay: -12.2s;">
+      <img class="logo-letter" src="../assets/logo/letters/8-e.png" alt="" style="--x:62.865%; --y:51.111%; --w:10.0%; --anim: letter-drift-9; --dur: 22.5s; --delay: -15.0s;">
+    </h1>
+    <p class="role" aria-live="polite">dirección creativa</p>
+
+    <nav class="staging-nav">
+      <a href="#" data-i18n="nav.about">sobre mí</a>
+
+      <div class="lang-menu">
+        <button id="projects-toggle" data-i18n="nav.projects" aria-haspopup="listbox" aria-expanded="false" aria-controls="projects-list">proyectos</button>
+        <ul class="lang-list" id="projects-list" role="listbox" hidden>
+          <li><a role="option" href="ambientacion.html" data-i18n="proyectos.ambientacion">ambientación</a></li>
+          <li><a role="option" href="diseno-produccion.html" data-i18n="proyectos.disenoProduccion">diseño de producción</a></li>
+          <li><a role="option" href="direccion-creativa.html" data-i18n="proyectos.direccionCreativa">dirección creativa</a></li>
+        </ul>
+      </div>
+
+      <a href="#" data-i18n="nav.otherWork">otros trabajos</a>
+
+      <div class="lang-menu">
+        <button id="lang-toggle" data-i18n="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-list">idiomas</button>
+        <ul class="lang-list" id="lang-list" role="listbox" hidden></ul>
+      </div>
+    </nav>
   </main>
 
-  <footer class="site-footer">
-    <nav class="staging-nav">
-      <a href="#" data-i18n="nav.about"></a>
-      <a href="proyectos.html" data-i18n="nav.projects"></a>
-      <a href="#" data-i18n="nav.contact"></a>
-    </nav>
-    <div class="lang-menu">
-      <button id="lang-toggle" data-i18n="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="lang-list">idiomas</button>
-      <ul class="lang-list" id="lang-list" role="listbox" hidden></ul>
-    </div>
-  </footer>
-
   <script src="../js/translations.js"></script>
-  <script src="../js/projects.js"></script>
   <script src="../js/main.js"></script>
 </body>
 </html>

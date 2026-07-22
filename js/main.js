@@ -25,7 +25,7 @@
       var val = getNestedKey(T[lang], el.dataset.i18n);
       if (val !== undefined) el.textContent = val;
     });
-    initRoleRotation(lang);
+    if (document.body.classList.contains('page-landing')) initRoleRotation(lang);
     updateLangList(lang);
   }
 
@@ -208,15 +208,41 @@
     list.classList.toggle('has-more', overflowing && !atBottom);
   }
 
-  function openLangMenu(list, btn) {
+  function openMenu(list, btn) {
     list.hidden = false;
     btn.setAttribute('aria-expanded', 'true');
     updateScrollFade(list);
   }
 
-  function closeLangMenu(list, btn) {
+  function closeMenu(list, btn) {
     list.hidden = true;
     btn.setAttribute('aria-expanded', 'false');
+  }
+
+  // Wires open/close + outside-click + Escape for any dropdown toggle
+  // button, regardless of what's inside its list (language options,
+  // navigational links, ...).
+  function initDropdown(btn, list) {
+    list.addEventListener('scroll', function () { updateScrollFade(list); });
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (list.hidden) openMenu(list, btn);
+      else closeMenu(list, btn);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!list.hidden && !list.contains(e.target) && e.target !== btn) {
+        closeMenu(list, btn);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !list.hidden) {
+        closeMenu(list, btn);
+        btn.focus();
+      }
+    });
   }
 
   // ── Init ──
@@ -224,39 +250,24 @@
   document.addEventListener('DOMContentLoaded', function () {
     var currentLang = detectLang();
 
-    var btn = document.getElementById('lang-toggle');
-    var list = document.getElementById('lang-list');
+    document.querySelectorAll('[aria-haspopup="listbox"][aria-controls]').forEach(function (btn) {
+      var list = document.getElementById(btn.getAttribute('aria-controls'));
+      if (list) initDropdown(btn, list);
+    });
 
-    if (btn && list) {
-      buildLangList(list);
-      list.addEventListener('scroll', function () { updateScrollFade(list); });
+    var langBtn = document.getElementById('lang-toggle');
+    var langList = document.getElementById('lang-list');
 
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (list.hidden) openLangMenu(list, btn);
-        else closeLangMenu(list, btn);
-      });
+    if (langBtn && langList) {
+      buildLangList(langList);
 
-      list.addEventListener('click', function (e) {
+      langList.addEventListener('click', function (e) {
         var opt = e.target.closest('[data-lang]');
         if (!opt) return;
         currentLang = opt.dataset.lang;
         applyLang(currentLang);
-        closeLangMenu(list, btn);
-        btn.focus();
-      });
-
-      document.addEventListener('click', function (e) {
-        if (!list.hidden && !list.contains(e.target) && e.target !== btn) {
-          closeLangMenu(list, btn);
-        }
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !list.hidden) {
-          closeLangMenu(list, btn);
-          btn.focus();
-        }
+        closeMenu(langList, langBtn);
+        langBtn.focus();
       });
     }
 
