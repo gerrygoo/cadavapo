@@ -14,7 +14,7 @@ const T = {
       otherWork: "otros trabajos"
     },
     proyectos: {
-      direccionCreativa: "dirección creativa",
+      directora:         "directora",
       disenoProduccion:  "diseño de producción",
       decoracion:        "decoración",
       fichaTecnica:      "ficha técnica",
@@ -37,7 +37,7 @@ const T = {
       otherWork: "other work"
     },
     proyectos: {
-      direccionCreativa: "creative direction",
+      directora:         "director",
       disenoProduccion:  "production design",
       decoracion:        "set dressing",
       fichaTecnica:      "credits",
