@@ -26,6 +26,11 @@ body.page-staging .hero {
 
 body.page-staging .hero .logo-word {
   max-width: min(45vw, 240px);
+  /* The horizontal wordmark's letters sit in a narrow band inside a 16:9
+     canvas sized for the stacked two-line logo, leaving dead space below
+     the glyphs. Pull the next element up to close that gap so logo and
+     role text read as a title/subtitle pair. */
+  margin-bottom: calc(min(45vw, 240px) * -0.19);
 }
 
 /* ── Landing page (staging/index.html): header + growing carousel + footer nav ── */
