@@ -16,7 +16,7 @@ const T = {
     proyectos: {
       direccionCreativa: "dirección creativa",
       disenoProduccion:  "diseño de producción",
-      ambientacion:      "ambientación",
+      decoracion:        "decoración",
       fichaTecnica:      "ficha técnica",
       volver:            "← volver a proyectos"
     },
@@ -39,7 +39,7 @@ const T = {
     proyectos: {
       direccionCreativa: "creative direction",
       disenoProduccion:  "production design",
-      ambientacion:      "set dressing",
+      decoracion:        "set dressing",
       fichaTecnica:      "credits",
       volver:            "← back to projects"
     },
