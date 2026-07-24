@@ -559,7 +559,7 @@ h1 {
 }
 
 .role {
-  color:      var(--color-muted);
+  color:      var(--color-text);
   font-size:  clamp(0.9rem, 2.5vw, 1.25rem);
   transition: var(--transition-fade);
   min-height: 1.5em;
@@ -572,7 +572,7 @@ h1 {
 
 #lang-toggle {
   background:  none;
-  border:      1px solid var(--color-border);
+  border:      1px solid var(--color-text);
   padding:     0.3em 1em;
   cursor:      pointer;
   font-size:   0.85rem;
@@ -589,7 +589,7 @@ h1 {
 
 [aria-haspopup="listbox"][aria-expanded="true"]::after { content: "▴"; }
 
-#lang-toggle:hover { border-color: var(--color-text); }
+#lang-toggle:hover { background: rgba(0, 0, 0, 0.08); }
 
 #lang-toggle:focus-visible {
   outline: 2px solid var(--color-text);
@@ -699,6 +699,7 @@ body.page-landing {
 }
 
 body.page-landing main {
+  position:        relative;
   display:         flex;
   flex-direction:  column;
   align-items:     center;
@@ -709,7 +710,36 @@ body.page-landing main {
 }
 
 body.page-landing footer {
+  position:        relative;
   padding:         1.5rem;
   display:         flex;
   justify-content: center;
+}
+
+/* Full-bleed looping background video. Painted before .page-landing's other
+   children in DOM order, so default stacking (auto z-index) already puts it
+   behind them — no z-index needed, which also avoids it disappearing behind
+   body's own background (a negative z-index would paint below that). */
+.bg-video {
+  position:   fixed;
+  inset:      0;
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  filter:     brightness(0.8);
+  pointer-events: none;
+}
+
+/* Source footage is landscape (1280x720). On a portrait viewport, covering
+   the frame that way crops most of the width away. Rotating the video 90°
+   and swapping the fill dimensions instead lets its long axis run along the
+   viewport's long axis, matching a vertical frame much more closely. */
+@media (orientation: portrait) {
+  .bg-video {
+    top:       50%;
+    left:      50%;
+    width:     100vh;
+    height:    100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
 }
