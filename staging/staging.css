@@ -35,6 +35,14 @@ body.page-staging .hero .logo-word {
 
 /* ── Landing page (staging/index.html): centered logo + button row ── */
 
+body.page-landing .logo-word {
+  /* Same dead-space compensation as .hero .logo-word below, scaled for this
+     page's larger (unshrunk) logo box: the stacked wordmark's glyphs leave
+     empty space below them in the 16:9 canvas, so pull the role text up to
+     sit closer to the title. */
+  margin-bottom: calc(min(80vw, 520px) * -0.08);
+}
+
 .staging-nav {
   display:         flex;
   justify-content: center;
