@@ -39,14 +39,25 @@ of truth so future sessions don't have to rediscover them.
   └── DIRECTOR/                                 1riENnPT0lxJPgSajBJx6jJ5mAsw4oG7M
       ├── 1. ERADE KAFI/                        1SW3wMzjhUmJX8E-4948yZZ3JZc9OQaZS  → erade-kafi (7 webm, ~300KB–1.7MB each — fully ingested 2026-08-02)
       ├── 2. HOY ERANDI/                        1FHFtLQaGhnHB810vU9gfuFCagIRDDlvU  → hoy-erandi (11 webm; one file `4.web` has a typo'd extension, treated as webm — fully ingested 2026-08-02)
-      ├── 3. FANTASMA ASTRAL BY VICENTE/        1x17BmCcDgOIB8a97YvrJpnPZWZ4UK8Ck  → fantasma-astral (7 **raw GIFs, 4–8.5MB each** — partially ingested 2026-08-02, 2/7; NOT webm despite the original assumption below)
-      ├── 4. PRESA BY ALAMO/                    1EmyEdjJTrxNlhtmhochI7bbXXJghF4Ff  → presa-alamo-paraiso (7 **raw GIFs, 8.5–83MB each** — ingestion failed 2026-08-02, all but one file over the Drive MCP's 10MB download limit)
-      ├── 5. SATELITE/                          1V5bcOuLc_NlLJh1AqHz7FEUH3Z9NrRwv  → satelite-futura-club (8 **raw GIFs, 5.2–19.5MB each** — partially ingested 2026-08-02, 2/8)
-      ├── 6. HEROES BY VICENTE/                 1y9zQCnWYZ6mqb5ZIyhYvXs99pb9XPn0_  → heroes-vicente-jauregui (4 **raw GIFs, 38–49MB each** — ingestion failed 2026-08-02, all over the 10MB download limit)
+      ├── 3. FANTASMA ASTRAL BY VICENTE/        1x17BmCcDgOIB8a97YvrJpnPZWZ4UK8Ck  → fantasma-astral (7 **raw GIFs, 4–8.5MB each** — fully ingested 2026-08-02 (follow-up pass, local download); NOT webm despite the original assumption below)
+      ├── 4. PRESA BY ALAMO/                    1EmyEdjJTrxNlhtmhochI7bbXXJghF4Ff  → presa-alamo-paraiso (7 **raw GIFs, 8.5–83MB each** — fully ingested 2026-08-02 (follow-up pass, local download))
+      ├── 5. SATELITE/                          1V5bcOuLc_NlLJh1AqHz7FEUH3Z9NrRwv  → satelite-futura-club (8 **raw GIFs, 5.2–19.5MB each** — fully ingested 2026-08-02 (follow-up pass, local download))
+      ├── 6. HEROES BY VICENTE/                 1y9zQCnWYZ6mqb5ZIyhYvXs99pb9XPn0_  → heroes-vicente-jauregui (4 **raw GIFs, 38–49MB each** — fully ingested 2026-08-02 (follow-up pass, local download))
       ├── 7. WESTBOUND/                         1Cdb27J_5UEf7kIXDnd5M9aHZBiDXEUTA  → westbound-khameleon (6 webm, ~290KB–1.3MB each — fully ingested 2026-08-02; this is the one folder among 3–7 that actually matched the original webm assumption)
-      ├── ARCHIVO DIGITAL/                      1lTUBDLmf-SMnJh3sVkL4fwYr_zLgtlkL  → archivo-digital (7 **raw GIFs, 16–65MB each, ~290MB total** — needs real transcoding; ingestion failed 2026-08-02, all over the 10MB download limit)
-      └── LA VERTICALIDAD ETC/                  17Gyq54ypY8JcOnupALrB3osW37eNx6I3  → la-verticalidad-desahuciada (10 usable **raw GIFs, 7.3–41.5MB each**, plus 1 GIF Dani's own filename marks as excluded and 1 screenshot PNG — ingestion failed 2026-08-02, all but one usable file over the 10MB download limit)
+      ├── ARCHIVO DIGITAL/                      1lTUBDLmf-SMnJh3sVkL4fwYr_zLgtlkL  → archivo-digital (7 **raw GIFs, 16–65MB each, ~290MB total** — fully ingested 2026-08-02 (follow-up pass, local download))
+      └── LA VERTICALIDAD ETC/                  17Gyq54ypY8JcOnupALrB3osW37eNx6I3  → la-verticalidad-desahuciada (9 usable **raw GIFs, 7.3–41.5MB each**, plus 1 GIF Dani's own filename marks as excluded and 1 screenshot PNG — fully ingested 2026-08-02 (follow-up pass, local download))
   ```
+
+  **2026-08-02 follow-up pass:** the Drive MCP's 10MB-per-file download
+  limit (see the enumeration correction below) fully blocked these 6
+  folders in the first ingestion pass. Later the same day the user
+  downloaded the entire Drive folder locally via the Drive web UI
+  (to `~/Downloads/DANIVPONCE.XYZ`), which has no such size limit — every
+  remaining source file converted cleanly from there. See
+  `docs/plans/2026-08-02-director-role-and-video-sync.md`'s "Follow-up
+  pass" section for the full breakdown, including two bugs found and fixed
+  in `scripts/generate-video-variants.py` (a GIF alpha-pixel-format issue,
+  and a `--all` bug that re-encoded already-ingested clips).
 
   No MP4s exist anywhere in this folder as of this writing.
 

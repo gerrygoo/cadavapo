@@ -68,11 +68,14 @@ Slugs → doc titles:
 
 ## Handoff: actual batch ingestion (deferrable)
 
-**Status: executed 2026-08-02.** 5 of 11 Drive subfolders fully ingested,
-2 partially, 4 failed (mostly a Drive MCP download-tool hard limit, not a
-process failure) — see "Per-file ingestion status" at the bottom of this
-doc for the full breakdown and "What's left for a future pass" for how to
-finish the rest.
+**Status: fully executed 2026-08-02.** First pass: 5 of 11 Drive subfolders
+fully ingested, 2 partially, 4 failed (mostly a Drive MCP download-tool hard
+limit, not a process failure). Follow-up pass same day, after the user
+downloaded the full Drive folder locally (bypassing the MCP limit
+entirely): the remaining 6 folders closed out, so **all 11 Drive subfolders
+are now fully ingested**. See "Per-file ingestion status" below for the
+first-pass breakdown and "Follow-up pass" further down for how the rest
+closed out.
 
 **This section is a complete, self-contained briefing** for whoever (agent
 or human) runs the actual download+convert+commit pass — it does not
@@ -349,17 +352,52 @@ Wired into `staging/proyectos/ghetto-kids-en-el-ghetto-2.html`.
 
 Wired into `staging/proyectos/ghetto-kids-en-el-ghetto-3.html`.
 
-### What's left for a future pass
+### Follow-up pass: remaining 6 folders closed out (2026-08-02, later same day)
 
-- `presa-alamo-paraiso`, `heroes-vicente-jauregui`, `la-verticalidad-desahuciada`,
-  `archivo-digital` need their source files downloaded through a different
-  path (Drive web UI, `rclone`, or the Drive desktop app — see the original
-  handoff section above) since most of their files exceed the Drive MCP
-  download tool's hard 10MB-per-file limit. Once downloaded to local disk by
-  any means, `python3 scripts/generate-video-variants.py <file>` and the
-  `assets/director/<slug>/` / ficha-page wiring pattern above both still
-  apply unchanged.
-- `fantasma-astral` and `satelite-futura-club` have a handful of specific
-  files (listed above, all under 10MB) that failed purely from Drive MCP
-  session flakiness during this pass, not a hard limit — worth a quick
-  retry from a fresh session before falling back to manual download.
+**Status: fully closed.** The user downloaded the entire `DANIVPONCE.XYZ`
+Drive folder locally (via the Drive web UI, to `~/Downloads/DANIVPONCE.XYZ`),
+sidestepping the Drive MCP's 10MB-per-file download limit entirely. With
+`ffmpeg` installed locally, all remaining source GIFs were converted and
+wired in:
+
+- `fantasma-astral`: 5 remaining clips ingested (`1,3,5,6,7.gif` →
+  `clip-01/03/05/06/07`), now **7/7 complete**.
+- `satelite-futura-club`: 6 remaining clips ingested (`1,2,4,6,7,8.gif` →
+  `clip-01/02/04/06/07/08`), now **8/8 complete**.
+- `presa-alamo-paraiso`: **7/7**, all new (`1,2,3,3.2,4,5,7.gif` →
+  `clip-01`..`clip-07`).
+- `heroes-vicente-jauregui`: **4/4**, all new (`(1),(2),(4),"3 ".gif` →
+  `clip-01`..`clip-04`).
+- `archivo-digital`: **7/7**, all new (`1`..`7.gif` → `clip-01`..`clip-07`).
+- `la-verticalidad-desahuciada`: **9/9 usable clips**, all new (`2,4,6,8,9,
+  10,11,12,animation(12).gif` → `clip-01`..`clip-09`; the "ESTE NO VA" gif
+  and the screenshot PNG stayed excluded, per the original enumeration).
+
+All 6 corresponding `staging/proyectos/*.html` pages now show the full
+`stills-grid` of `media-progressive` clips instead of the
+`wireframe-placeholder` div (or, for `fantasma-astral`/`satelite-futura-club`,
+the earlier partial gallery). `la-verticalidad-desahuciada.html` still
+separately flags "no hay link de YouTube en el documento fuente" — unrelated
+to the clips, still unresolved.
+
+**Two real bugs found and fixed in `scripts/generate-video-variants.py`
+along the way:**
+
+1. Some raw GIFs decode to an alpha-bearing pixel format (`gbrap`) that
+   `libvpx-vp9` refuses outright ("Pixel format 'gbrap' is not widely
+   supported"). Fixed by forcing `format=yuv420p` in the scale filter chain
+   — safe since every source here is opaque, silent motion footage with no
+   real transparency to preserve.
+2. `--all` treated already-converted `.webm` outputs as fresh sources
+   (`.webm` is in `SOURCE_EXTENSIONS`), silently re-encoding every
+   already-ingested clip a second time on each `--all` run — pure
+   generation loss, no benefit. Fixed `find_all_sources()` to skip a
+   `.webm` that already has a sibling `.placeholder.txt` (i.e. is already a
+   finished output). This bug bit once during this pass — 133 already-committed
+   files got re-encoded — caught via `git status` before committing and
+   reverted with `git restore` back to the last-committed versions.
+
+Nothing is left outstanding from the original ingestion scope. The two
+still-open items from the original "Gaps found" list above ("Short and
+feature films", "Robe Grill") remain out of scope — no Drive assets exist
+for them.

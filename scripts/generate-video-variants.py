@@ -65,7 +65,10 @@ def generate_variants(src_path):
     webm_tmp = base.with_name(base.name + ".tmp.webm")
     run([
         "ffmpeg", "-y", "-i", str(src_path),
-        "-vf", scale, "-an",
+        # some source GIFs decode to an alpha pixel format (gbrap) that
+        # libvpx-vp9 refuses outright — force yuv420p since every source is
+        # opaque footage anyway (no real transparency to preserve).
+        "-vf", f"{scale},format=yuv420p", "-an",
         "-c:v", "libvpx-vp9", "-crf", str(WEBM_CRF), "-b:v", "0",
         str(webm_tmp),
     ])
@@ -111,6 +114,11 @@ def find_all_sources():
         if f.suffix.lower() not in SOURCE_EXTENSIONS:
             continue
         base = f.with_suffix("")
+        # a .webm alongside its own .placeholder.txt is already a finished
+        # output, not a source to (re-)encode — re-running --all shouldn't
+        # put already-ingested clips through a second lossy encode pass.
+        if f.suffix.lower() == ".webm" and base.with_suffix(".placeholder.txt").exists():
+            continue
         if base in seen_basenames:
             continue
         seen_basenames.add(base)
