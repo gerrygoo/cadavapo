@@ -190,9 +190,14 @@
   function loadProgressiveVideo(video) {
     video.addEventListener('canplay', function () {
       video.classList.add('is-loaded');
+      video.play().catch(function () {}); // muted autoplay can still be blocked in rare cases
     }, { once: true });
     video.src = video.dataset.src;
     video.removeAttribute('data-src');
+    // `preload="none"` suppresses the implicit fetch that setting `src` would
+    // otherwise trigger — without an explicit load() call here, Chromium never
+    // requests the video bytes at all and the element sits at readyState 0.
+    video.load();
   }
 
   function initProgressiveVideos() {
