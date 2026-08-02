@@ -193,7 +193,8 @@ body.page-proyecto main {
   column-gap: 0.75rem;
 }
 
-.stills-grid picture {
+.stills-grid picture,
+.stills-grid .media-progressive {
   display:        block;
   break-inside:   avoid;
   margin-bottom:  0.75rem;
@@ -203,6 +204,32 @@ body.page-proyecto main {
   display:   block;
   width:     100%;
   height:    auto;
+}
+
+/* Three-tier progressive video loading (docs/specs/2026-08-02-video-ingestion.md):
+   tier 0 is an inline blurred-JPEG data-URI set via `style` on this element
+   (paints on first byte, zero network cost); tier 1 is the <video poster>
+   fetched immediately; tier 2 is the video itself, deferred until it nears
+   the viewport (js/main.js), then crossfaded in over the poster. */
+.media-progressive {
+  position:         relative;
+  overflow:         hidden;
+  background-size:  cover;
+  background-position: center;
+}
+
+.media-video {
+  display:    block;
+  width:      100%;
+  height:     auto;
+  opacity:    0;
+  transition: var(--transition-fade);
+}
+
+.media-video.is-loaded { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .media-video { transition: none; }
 }
 
 .ficha-tecnica h2 {

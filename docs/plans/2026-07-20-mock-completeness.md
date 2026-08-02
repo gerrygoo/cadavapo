@@ -114,15 +114,18 @@ each fix to all four existing (advertising) ficha pages AND to the
 
 ## Postponed / follow-up
 
-- [ ] **URL → title mapping for the 5 music videos.** Video IDs
-  `77DRtiPY9b4`, `afoiE74JpL0`, `QqonNRbqPZE`, `1ii-qhgpx_Q`,
-  `KiN6by3OiZc` need to be paired to
-  `{eden-munoz-la-plata, eden-munoz-un-monton-de-estrellas,
-  sophia-warren-purple, sophia-warren-static, sophia-warren-bor}`.
-  YouTube is proxy-blocked from this environment; Dani can do it in one
-  click-through pass. Once mapped, fill the `Source:` line in each
+- [x] **URL → title mapping for the 5 music videos — 4 of 5 resolved
+  2026-08-02** via Dani's portfolio Google Doc (see
+  `docs/specs/2026-08-02-video-ingestion.md` §1 for the doc link/id):
+  `77DRtiPY9b4` → eden-munoz-la-plata, `afoiE74JpL0` →
+  eden-munoz-un-monton-de-estrellas, `QqonNRbqPZE` → sophia-warren-purple,
+  `1ii-qhgpx_Q` → sophia-warren-static. Fill the `Source:` line in each
   section of `assets/projects/README.md` and swap the reel embed URLs
-  into the ficha pages.
+  into those 4 ficha pages.
+  - [ ] **`sophia-warren-bor` / `KiN6by3OiZc` stays unmapped** — the doc
+    never mentions a "BOR" title at all (only Purple and Static appear
+    under Sophia Warren). Confirm with Dani directly whether BOR is a
+    real third project or should be dropped/renamed before mapping it.
 
 ---
 

@@ -179,6 +179,42 @@
     startCarouselAutoplay(el);
   }
 
+  // ── Progressive video loading (tier 2 of docs/specs/2026-08-02-video-ingestion.md) ──
+  //
+  // `.media-video` elements ship with `preload="none"` and their real source
+  // in `data-src`, so the browser never fetches video bytes up front. An
+  // IntersectionObserver assigns `src` only once a clip nears the viewport;
+  // once it can play, it crossfades in over its poster via the `is-loaded`
+  // class, the same opacity-transition idiom the carousel's `is-active` uses.
+
+  function loadProgressiveVideo(video) {
+    video.addEventListener('canplay', function () {
+      video.classList.add('is-loaded');
+    }, { once: true });
+    video.src = video.dataset.src;
+    video.removeAttribute('data-src');
+  }
+
+  function initProgressiveVideos() {
+    var videos = document.querySelectorAll('.media-video[data-src]');
+    if (!videos.length) return;
+
+    if (!window.IntersectionObserver) {
+      videos.forEach(loadProgressiveVideo);
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        loadProgressiveVideo(entry.target);
+        obs.unobserve(entry.target);
+      });
+    }, { rootMargin: '200px' });
+
+    videos.forEach(function (video) { observer.observe(video); });
+  }
+
   // ── Language menu (dropup) ──
 
   function buildLangList(list) {
@@ -273,6 +309,7 @@
 
     applyLang(currentLang);
     initCarousel();
+    initProgressiveVideos();
   });
 
 })();

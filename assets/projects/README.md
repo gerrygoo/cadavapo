@@ -32,19 +32,22 @@ Video IDs pending mapping: `77DRtiPY9b4`, `afoiE74JpL0`,
 ## Eden Muñoz, Elder Dayán Díaz — La Plata (`eden-munoz-la-plata/`)
 
 - Video Oficial
-- Source: TBD (pending URL mapping)
+- Source: https://www.youtube.com/watch?v=77DRtiPY9b4 (mapped 2026-08-02
+  via Dani's portfolio doc, see `docs/specs/2026-08-02-video-ingestion.md`)
 - Stills / reel: pending delivery.
 
 ## Eden Muñoz, Víctor Manuelle — Un Montón De Estrellas (`eden-munoz-un-monton-de-estrellas/`)
 
 - Video Oficial
-- Source: TBD (pending URL mapping)
+- Source: https://www.youtube.com/watch?v=afoiE74JpL0 (mapped 2026-08-02
+  via Dani's portfolio doc)
 - Stills / reel: pending delivery.
 
 ## Sophia Warren — Purple (`sophia-warren-purple/`)
 
 - Visualizer
-- Source: TBD (pending URL mapping)
+- Source: https://www.youtube.com/watch?v=QqonNRbqPZE (mapped 2026-08-02
+  via Dani's portfolio doc)
 - Stills / reel: pending delivery.
 - Note: if space becomes tight on `proyectos.html`, the three Sophia
   Warren visualizers (Purple / Static / BOR) can collapse into a single
@@ -53,13 +56,18 @@ Video IDs pending mapping: `77DRtiPY9b4`, `afoiE74JpL0`,
 ## Sophia Warren — Static (`sophia-warren-static/`)
 
 - Visualizer
-- Source: TBD (pending URL mapping)
+- Source: https://www.youtube.com/watch?v=1ii-qhgpx_Q (mapped 2026-08-02
+  via Dani's portfolio doc)
 - Stills / reel: pending delivery.
 
 ## Sophia Warren — BOR (`sophia-warren-bor/`)
 
 - Visualizer
-- Source: TBD (pending URL mapping)
+- Source: TBD — **not mentioned in Dani's portfolio doc at all** (only
+  Purple and Static appear under Sophia Warren; see
+  `docs/plans/2026-08-02-director-role-and-video-sync.md`). Confirm with
+  Dani whether "BOR" is a real third title before mapping `KiN6by3OiZc`
+  to it.
 - Stills / reel: pending delivery.
 
 ---
