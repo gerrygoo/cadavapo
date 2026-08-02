@@ -34,21 +34,35 @@ of truth so future sessions don't have to rediscover them.
   │   └── (1 PNG screenshot only — not a real asset, skip)
   ├── ARTE/                                     1N3yaG5mrCcdsp8Q12Z6SpJOAm3dGADrh
   │   └── video musical/                        1wRdnS2BGXZAAcEwSoqIvSMvUnQYh-yuT
-  │       ├── EL MAILLA EZYA/                   1zMTTnsetX3aYcQQsom-k9pRbXv3nn-1B  → ghetto-kids-en-el-ghetto-2
-  │       └── GHETTO, NSQK/                      14cOoy8v-2lpjSMI10mEhakYhnMByLh7l  → ghetto-kids-en-el-ghetto-3
+  │       ├── EL MAILLA EZYA/                   1zMTTnsetX3aYcQQsom-k9pRbXv3nn-1B  → ghetto-kids-en-el-ghetto-2 (7 webm, ~400KB–900KB each — fully ingested 2026-08-02)
+  │       └── GHETTO, NSQK/                      14cOoy8v-2lpjSMI10mEhakYhnMByLh7l  → ghetto-kids-en-el-ghetto-3 (9 webm, ~390KB–1.1MB each — fully ingested 2026-08-02)
   └── DIRECTOR/                                 1riENnPT0lxJPgSajBJx6jJ5mAsw4oG7M
-      ├── 1. ERADE KAFI/                        1SW3wMzjhUmJX8E-4948yZZ3JZc9OQaZS  → erade-kafi (7 webm, already ~300KB–1.7MB each)
-      ├── 2. HOY ERANDI/                        1FHFtLQaGhnHB810vU9gfuFCagIRDDlvU  → hoy-erandi (11 webm; one file `4.web` has a typo'd extension — treat as webm)
-      ├── 3. FANTASMA ASTRAL BY VICENTE/        1x17BmCcDgOIB8a97YvrJpnPZWZ4UK8Ck  → fantasma-astral (not yet enumerated)
-      ├── 4. PRESA BY ALAMO/                    1EmyEdjJTrxNlhtmhochI7bbXXJghF4Ff  → presa-alamo-paraiso (not yet enumerated)
-      ├── 5. SATELITE/                          1V5bcOuLc_NlLJh1AqHz7FEUH3Z9NrRwv  → satelite-futura-club (not yet enumerated)
-      ├── 6. HEROES BY VICENTE/                 1y9zQCnWYZ6mqb5ZIyhYvXs99pb9XPn0_  → heroes-vicente-jauregui (not yet enumerated)
-      ├── 7. WESTBOUND/                         1Cdb27J_5UEf7kIXDnd5M9aHZBiDXEUTA  → westbound-khameleon (not yet enumerated)
-      ├── ARCHIVO DIGITAL/                      1lTUBDLmf-SMnJh3sVkL4fwYr_zLgtlkL  → archivo-digital (7 **raw GIFs, 16–65MB each, ~290MB total** — needs real transcoding)
-      └── LA VERTICALIDAD ETC/                  17Gyq54ypY8JcOnupALrB3osW37eNx6I3  → la-verticalidad-desahuciada (not yet enumerated)
+      ├── 1. ERADE KAFI/                        1SW3wMzjhUmJX8E-4948yZZ3JZc9OQaZS  → erade-kafi (7 webm, ~300KB–1.7MB each — fully ingested 2026-08-02)
+      ├── 2. HOY ERANDI/                        1FHFtLQaGhnHB810vU9gfuFCagIRDDlvU  → hoy-erandi (11 webm; one file `4.web` has a typo'd extension, treated as webm — fully ingested 2026-08-02)
+      ├── 3. FANTASMA ASTRAL BY VICENTE/        1x17BmCcDgOIB8a97YvrJpnPZWZ4UK8Ck  → fantasma-astral (7 **raw GIFs, 4–8.5MB each** — partially ingested 2026-08-02, 2/7; NOT webm despite the original assumption below)
+      ├── 4. PRESA BY ALAMO/                    1EmyEdjJTrxNlhtmhochI7bbXXJghF4Ff  → presa-alamo-paraiso (7 **raw GIFs, 8.5–83MB each** — ingestion failed 2026-08-02, all but one file over the Drive MCP's 10MB download limit)
+      ├── 5. SATELITE/                          1V5bcOuLc_NlLJh1AqHz7FEUH3Z9NrRwv  → satelite-futura-club (8 **raw GIFs, 5.2–19.5MB each** — partially ingested 2026-08-02, 2/8)
+      ├── 6. HEROES BY VICENTE/                 1y9zQCnWYZ6mqb5ZIyhYvXs99pb9XPn0_  → heroes-vicente-jauregui (4 **raw GIFs, 38–49MB each** — ingestion failed 2026-08-02, all over the 10MB download limit)
+      ├── 7. WESTBOUND/                         1Cdb27J_5UEf7kIXDnd5M9aHZBiDXEUTA  → westbound-khameleon (6 webm, ~290KB–1.3MB each — fully ingested 2026-08-02; this is the one folder among 3–7 that actually matched the original webm assumption)
+      ├── ARCHIVO DIGITAL/                      1lTUBDLmf-SMnJh3sVkL4fwYr_zLgtlkL  → archivo-digital (7 **raw GIFs, 16–65MB each, ~290MB total** — needs real transcoding; ingestion failed 2026-08-02, all over the 10MB download limit)
+      └── LA VERTICALIDAD ETC/                  17Gyq54ypY8JcOnupALrB3osW37eNx6I3  → la-verticalidad-desahuciada (10 usable **raw GIFs, 7.3–41.5MB each**, plus 1 GIF Dani's own filename marks as excluded and 1 screenshot PNG — ingestion failed 2026-08-02, all but one usable file over the 10MB download limit)
   ```
 
   No MP4s exist anywhere in this folder as of this writing.
+
+  **2026-08-02 enumeration correction:** when this doc was first written,
+  folders 3–7 were assumed to hold pre-compressed webm clips like
+  `ERADE KAFI`/`HOY ERANDI` (based on `WESTBOUND`'s naming pattern looking
+  similar). Actual enumeration showed only `WESTBOUND` matches that
+  assumption — `FANTASMA ASTRAL`, `PRESA BY ALAMO`, `SATELITE`, and
+  `HEROES BY VICENTE` are raw-GIF folders in the same size class as
+  `ARCHIVO DIGITAL`. See
+  `docs/plans/2026-08-02-director-role-and-video-sync.md`'s per-file status
+  table for the full ingestion results and a new finding: the Drive MCP's
+  download tool has a **hard 10MB-per-file limit** with no workaround (files
+  over it fail immediately, with no fallback content to decode), which is
+  why most of these newly-discovered GIF folders could not be ingested in
+  this pass.
 
 ## 2. Format standard: WebM/VP9, 720p cap, video-only
 

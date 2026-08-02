@@ -11,9 +11,14 @@ danivponce.xyz", id `1VBSueYSDK-AJa_-UXKdlnAokAjP1DQ-39GDHIjwkJOk`) for
 credits/titles, and the shared Drive folder "DANIVPONCE.XYZ" →
 `DIRECTOR/` (id `1riENnPT0lxJPgSajBJx6jJ5mAsw4oG7M`) for raw footage — see
 `docs/specs/2026-08-02-video-ingestion.md` for the full folder-ID map.
-Clips have not been ingested into this tree yet as of 2026-08-02; see
-`docs/plans/2026-08-02-director-role-and-video-sync.md` for the ingestion
-handoff and per-file status.
+As of 2026-08-02, `erade-kafi/`, `hoy-erandi/`, and `westbound-khameleon/`
+are fully ingested; `fantasma-astral/` and `satelite-futura-club/` are
+partially ingested (some source GIFs exceed the Drive MCP download tool's
+per-file limit); `presa-alamo-paraiso/`, `heroes-vicente-jauregui/`, and
+`la-verticalidad-desahuciada/` are still empty (source files too large to
+download in this pass). See
+`docs/plans/2026-08-02-director-role-and-video-sync.md`'s per-file status
+table for the full breakdown, and `archivo-digital/`'s status there too.
 
 ---
 
