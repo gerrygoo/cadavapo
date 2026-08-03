@@ -24,8 +24,60 @@
       <p class="role" aria-live="polite" data-i18n="proyectos.disenoProduccion">diseño de producción</p>
     </section>
 
-    <div class="wireframe-placeholder">
-      * carrusel con imágenes — clic lleva a otra página (sin proyectos asignados aún)
+    <div class="proyectos-filter staging-nav" role="group" aria-label="Filtrar por categoría">
+      <button type="button" data-filter="all" aria-pressed="true" data-i18n="proyectos.filterAll">todos</button>
+      <button type="button" data-filter="videoclip" aria-pressed="false" data-i18n="proyectos.categoriaVideoclip">videoclips</button>
+      <button type="button" data-filter="comercial" aria-pressed="false" data-i18n="proyectos.categoriaComercial">comercial</button>
+    </div>
+
+    <div class="proyectos-categories" data-filter="all">
+      <section class="proyectos-category" data-category="videoclip">
+        <h2 class="proyectos-category-title" data-i18n="proyectos.categoriaVideoclip">videoclips</h2>
+        <div class="proyectos-grid">
+          <a class="proyecto-tile" href="proyectos/bellakath-minina.html">
+            <span>Bellakath — Minina</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/eden-munoz-la-plata.html">
+            <span>Eden Muñoz, Elder Dayán Díaz — La Plata</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/eden-munoz-un-monton-de-estrellas.html">
+            <span>Eden Muñoz, Víctor Manuelle — Un Montón De Estrellas</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/ghetto-kids-en-el-ghetto-2.html">
+            <span>Ghetto Kids, El Malilla, EMJAY — En El Ghetto #2</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/ghetto-kids-en-el-ghetto-3.html">
+            <span>Ghetto Kids, Nsqk — En El Ghetto #3</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/sophia-warren-bor.html">
+            <span>Sophia Warren — BOR</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/sophia-warren-purple.html">
+            <span>Sophia Warren — Purple</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/sophia-warren-static.html">
+            <span>Sophia Warren — Static</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="proyectos-category" data-category="comercial">
+        <h2 class="proyectos-category-title" data-i18n="proyectos.categoriaComercial">comercial</h2>
+        <div class="proyectos-grid">
+          <a class="proyecto-tile" href="proyectos/coffee-mate-nescafe.html">
+            <span>Coffee Mate — Nescafé</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/didi-food.html">
+            <span>Didi Food</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/luis-angel-el-flaco.html">
+            <span>Luis Ángel — El Flaco</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/reality-club-cinepolis.html">
+            <span>Reality Club — Cinépolis</span>
+          </a>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -38,5 +90,20 @@
 
   <script src="../js/translations.js"></script>
   <script src="../js/main.js"></script>
+  <script>
+    (function () {
+      var filterBar = document.querySelector('.proyectos-filter');
+      var categories = document.querySelector('.proyectos-categories');
+      if (!filterBar || !categories) return;
+      filterBar.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-filter]');
+        if (!btn) return;
+        categories.dataset.filter = btn.dataset.filter;
+        filterBar.querySelectorAll('button').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

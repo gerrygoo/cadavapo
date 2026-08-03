@@ -21,7 +21,8 @@ const T = {
       volver:            "← volver a proyectos",
       filterAll:         "todos",
       categoriaVideoclip: "videoclips",
-      categoriaNoFiccion: "no ficción"
+      categoriaNoFiccion: "no ficción",
+      categoriaComercial: "comercial"
     },
     langBtn: "idiomas"
   },
@@ -47,7 +48,8 @@ const T = {
       volver:            "← back to projects",
       filterAll:         "all",
       categoriaVideoclip: "music video",
-      categoriaNoFiccion: "non-fiction explorations"
+      categoriaNoFiccion: "non-fiction explorations",
+      categoriaComercial: "commercial"
     },
     langBtn: "language"
   },

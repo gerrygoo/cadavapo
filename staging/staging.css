@@ -134,8 +134,9 @@ body.page-staging footer {
    into one filterable list instead (see @media (orientation: portrait)
    below and the .bg-video precedent higher in css/style.css). */
 @media (orientation: portrait) {
-  .proyectos-categories[data-filter="videoclip"] .proyectos-category[data-category="no-ficcion"],
-  .proyectos-categories[data-filter="no-ficcion"] .proyectos-category[data-category="videoclip"] {
+  .proyectos-categories[data-filter="videoclip"] .proyectos-category:not([data-category="videoclip"]),
+  .proyectos-categories[data-filter="no-ficcion"] .proyectos-category:not([data-category="no-ficcion"]),
+  .proyectos-categories[data-filter="comercial"] .proyectos-category:not([data-category="comercial"]) {
     display: none;
   }
 }
