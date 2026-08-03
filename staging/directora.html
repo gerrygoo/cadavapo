@@ -24,34 +24,51 @@
       <p class="role" aria-live="polite" data-i18n="proyectos.directora">directora</p>
     </section>
 
-    <div class="proyectos-grid">
-      <a class="proyecto-tile" href="proyectos/erade-kafi.html">
-        <span>El refinado arte de extrañar — Kafi</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/hoy-erandi.html">
-        <span>Hoy — E-randi</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/westbound-khameleon.html">
-        <span>Westbound — Khameleon</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/heroes-vicente-jauregui.html">
-        <span>Héroes — Vicente Jauregui</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/presa-alamo-paraiso.html">
-        <span>Presa — Alamo Paraiso</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/fantasma-astral.html">
-        <span>Fantasma astral — Vicente Jauregui</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/satelite-futura-club.html">
-        <span>Satélite — Futura Club</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/archivo-digital.html">
-        <span>Archivo Digital</span>
-      </a>
-      <a class="proyecto-tile" href="proyectos/la-verticalidad-desahuciada.html">
-        <span>La Verticalidad Desahuciada</span>
-      </a>
+    <div class="proyectos-filter staging-nav" role="group" aria-label="Filtrar por categoría">
+      <button type="button" data-filter="all" aria-pressed="true" data-i18n="proyectos.filterAll">todos</button>
+      <button type="button" data-filter="videoclip" aria-pressed="false" data-i18n="proyectos.categoriaVideoclip">videoclips</button>
+      <button type="button" data-filter="no-ficcion" aria-pressed="false" data-i18n="proyectos.categoriaNoFiccion">no ficción</button>
+    </div>
+
+    <div class="proyectos-categories" data-filter="all">
+      <section class="proyectos-category" data-category="videoclip">
+        <h2 class="proyectos-category-title" data-i18n="proyectos.categoriaVideoclip">videoclips</h2>
+        <div class="proyectos-grid">
+          <a class="proyecto-tile" href="proyectos/erade-kafi.html">
+            <span>El refinado arte de extrañar — Kafi</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/hoy-erandi.html">
+            <span>Hoy — E-randi</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/westbound-khameleon.html">
+            <span>Westbound — Khameleon</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/heroes-vicente-jauregui.html">
+            <span>Héroes — Vicente Jauregui</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/presa-alamo-paraiso.html">
+            <span>Presa — Alamo Paraiso</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/fantasma-astral.html">
+            <span>Fantasma astral — Vicente Jauregui</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/satelite-futura-club.html">
+            <span>Satélite — Futura Club</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="proyectos-category" data-category="no-ficcion">
+        <h2 class="proyectos-category-title" data-i18n="proyectos.categoriaNoFiccion">no ficción</h2>
+        <div class="proyectos-grid">
+          <a class="proyecto-tile" href="proyectos/archivo-digital.html">
+            <span>Archivo Digital</span>
+          </a>
+          <a class="proyecto-tile" href="proyectos/la-verticalidad-desahuciada.html">
+            <span>La Verticalidad Desahuciada</span>
+          </a>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -64,5 +81,20 @@
 
   <script src="../js/translations.js"></script>
   <script src="../js/main.js"></script>
+  <script>
+    (function () {
+      var filterBar = document.querySelector('.proyectos-filter');
+      var categories = document.querySelector('.proyectos-categories');
+      if (!filterBar || !categories) return;
+      filterBar.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-filter]');
+        if (!btn) return;
+        categories.dataset.filter = btn.dataset.filter;
+        filterBar.querySelectorAll('button').forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

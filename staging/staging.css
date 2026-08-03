@@ -100,6 +100,57 @@ body.page-staging footer {
   text-align:      center;
 }
 
+.proyectos-filter {
+  position:        sticky;
+  top:             0;
+  z-index:         5;
+  display:         flex;
+  justify-content: center;
+  gap:             0.5rem;
+  flex-wrap:       wrap;
+  background:      var(--color-bg);
+  padding:         0.5rem 0;
+}
+
+.proyectos-filter button[aria-pressed="true"] { background: rgba(0, 0, 0, 0.08); }
+
+.proyectos-categories {
+  display:        flex;
+  flex-direction: column;
+  gap:            2rem;
+}
+
+.proyectos-category-title {
+  font-size:      0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:          var(--color-muted);
+  font-weight:    normal;
+  margin-bottom:  0.75rem;
+}
+
+/* Source footage/layout is designed for a landscape frame; on a portrait
+   viewport there's no room for two side-by-side categories, so stack them
+   into one filterable list instead (see @media (orientation: portrait)
+   below and the .bg-video precedent higher in css/style.css). */
+@media (orientation: portrait) {
+  .proyectos-categories[data-filter="videoclip"] .proyectos-category[data-category="no-ficcion"],
+  .proyectos-categories[data-filter="no-ficcion"] .proyectos-category[data-category="videoclip"] {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) {
+  .proyectos-filter { display: none; }
+
+  .proyectos-categories {
+    display:               grid;
+    grid-template-columns: 1fr 1fr;
+    gap:                    2rem;
+    align-items:           start;
+  }
+}
+
 .proyectos-grid {
   display:               grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

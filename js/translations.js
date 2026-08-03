@@ -18,7 +18,10 @@ const T = {
       disenoProduccion:  "diseño de producción",
       decoracion:        "decoración",
       fichaTecnica:      "ficha técnica",
-      volver:            "← volver a proyectos"
+      volver:            "← volver a proyectos",
+      filterAll:         "todos",
+      categoriaVideoclip: "videoclips",
+      categoriaNoFiccion: "no ficción"
     },
     langBtn: "idiomas"
   },
@@ -41,7 +44,10 @@ const T = {
       disenoProduccion:  "production design",
       decoracion:        "set dressing",
       fichaTecnica:      "credits",
-      volver:            "← back to projects"
+      volver:            "← back to projects",
+      filterAll:         "all",
+      categoriaVideoclip: "music video",
+      categoriaNoFiccion: "non-fiction explorations"
     },
     langBtn: "language"
   },
