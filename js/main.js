@@ -235,12 +235,11 @@
     var toolbar = document.querySelector('.stills-toolbar');
     if (!toolbar) return;
 
-    applyStillsView(localStorage.getItem('stillsView') || 'grid');
+    applyStillsView('grid');
 
     toolbar.addEventListener('click', function (e) {
       var btn = e.target.closest('.stills-view-btn');
       if (!btn) return;
-      localStorage.setItem('stillsView', btn.dataset.view);
       applyStillsView(btn.dataset.view);
     });
   }
