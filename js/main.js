@@ -220,6 +220,31 @@
     videos.forEach(function (video) { observer.observe(video); });
   }
 
+  // ── Stills view toggle (grid / list) ──
+
+  function applyStillsView(view) {
+    document.querySelectorAll('.stills-grid').forEach(function (grid) {
+      grid.classList.toggle('is-list', view === 'list');
+    });
+    document.querySelectorAll('.stills-view-btn').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.view === view));
+    });
+  }
+
+  function initStillsView() {
+    var toolbar = document.querySelector('.stills-toolbar');
+    if (!toolbar) return;
+
+    applyStillsView(localStorage.getItem('stillsView') || 'grid');
+
+    toolbar.addEventListener('click', function (e) {
+      var btn = e.target.closest('.stills-view-btn');
+      if (!btn) return;
+      localStorage.setItem('stillsView', btn.dataset.view);
+      applyStillsView(btn.dataset.view);
+    });
+  }
+
   // ── Language menu (dropup) ──
 
   function buildLangList(list) {
@@ -315,6 +340,7 @@
     applyLang(currentLang);
     initCarousel();
     initProgressiveVideos();
+    initStillsView();
   });
 
 })();

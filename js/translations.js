@@ -22,7 +22,9 @@ const T = {
       filterAll:         "todos",
       categoriaVideoclip: "videoclips",
       categoriaNoFiccion: "no ficción",
-      categoriaComercial: "comercial"
+      categoriaComercial: "comercial",
+      vistaCuadricula:   "cuadrícula",
+      vistaLista:        "lista"
     },
     langBtn: "idiomas"
   },
@@ -49,7 +51,9 @@ const T = {
       filterAll:         "all",
       categoriaVideoclip: "music video",
       categoriaNoFiccion: "non-fiction explorations",
-      categoriaComercial: "commercial"
+      categoriaComercial: "commercial",
+      vistaCuadricula:   "grid",
+      vistaLista:        "list"
     },
     langBtn: "language"
   },
