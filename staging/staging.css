@@ -229,8 +229,20 @@ body.page-proyecto main {
 .back-link:hover { color: var(--color-text); }
 
 .proyecto-titulo {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.15em;
+}
+
+.proyecto-titulo-title {
   font-size:   clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 700;
+}
+
+.proyecto-titulo-artist {
+  font-size:   clamp(1rem, 3vw, 1.25rem);
+  font-weight: 400;
+  color:       var(--color-muted);
 }
 
 .proyecto-video {
