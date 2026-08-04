@@ -178,9 +178,16 @@ body.page-staging footer {
   object-fit: cover;
 }
 
-.proyecto-tile span {
-  padding:   0.5em 0.75em;
-  font-size: 0.85rem;
+.proyecto-tile .proyecto-text {
+  padding:        0.5em 0.75em;
+  font-size:      0.85rem;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.15em;
+}
+
+.proyecto-tile .proyecto-text strong {
+  font-weight: 600;
 }
 
 .proyecto-tile:hover { border-color: var(--color-text); }
