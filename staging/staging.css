@@ -192,6 +192,35 @@ body.page-staging footer {
 
 .proyecto-tile:hover { border-color: var(--color-text); }
 
+/* Hover poster-flash (js/main.js initProyectoTileFlash): background-image
+   gets swapped on an interval while `.is-flashing` is set, so the tile
+   needs a fixed floor height for the effect to read as a background rather
+   than a sliver — set unconditionally (not just on hover) so hovering
+   never reflows the grid. */
+.proyecto-tile[data-posters] {
+  position:            relative;
+  min-height:          140px;
+  background-size:     cover;
+  background-position: center;
+}
+
+.proyecto-tile[data-posters]::before {
+  content:    '';
+  position:   absolute;
+  inset:      0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity:    0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.proyecto-tile[data-posters].is-flashing::before { opacity: 1; }
+
+.proyecto-tile[data-posters] .proyecto-text {
+  position: relative;
+  z-index:  1;
+}
+
 .proyecto-tile:focus-visible {
   outline: 2px solid var(--color-text);
   outline-offset: 2px;

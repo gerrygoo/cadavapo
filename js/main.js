@@ -244,6 +244,68 @@
     });
   }
 
+  // ── Project-tile poster flash (hover) ──
+  //
+  // `.proyecto-tile[data-posters]` carries a comma-separated list of poster
+  // JPG paths (video tier-1 posters, or plain stills for image-only
+  // projects). On hover, cycle the tile's `background-image` through that
+  // list on a fast interval — a hard-cut flipbook rather than the
+  // crossfade idiom the carousel/progressive-video layers use, since the
+  // effect here is meant to read as a strobe preview, not a slideshow.
+
+  var TILE_FLASH_INTERVAL_MS = 220; // kept below ~4Hz — see WCAG general flash guidance
+
+  function initProyectoTileFlash() {
+    var tiles = document.querySelectorAll('.proyecto-tile[data-posters]');
+    if (!tiles.length) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    tiles.forEach(function (tile) {
+      var posters = tile.dataset.posters.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+      if (posters.length < 2) return;
+
+      var preloadPromise = null;
+      var timer = null;
+      var index = 0;
+
+      function preload() {
+        if (!preloadPromise) {
+          preloadPromise = Promise.all(posters.map(function (src) {
+            return new Promise(function (resolve) {
+              var img = new Image();
+              img.onload = img.onerror = resolve;
+              img.src = src;
+            });
+          }));
+        }
+        return preloadPromise;
+      }
+
+      function start() {
+        preload().then(function () {
+          if (timer || !tile.matches(':hover')) return; // pointer left before preload finished
+          index = 0;
+          tile.style.backgroundImage = 'url(' + posters[0] + ')';
+          tile.classList.add('is-flashing');
+          timer = setInterval(function () {
+            index = (index + 1) % posters.length;
+            tile.style.backgroundImage = 'url(' + posters[index] + ')';
+          }, TILE_FLASH_INTERVAL_MS);
+        });
+      }
+
+      function stop() {
+        clearInterval(timer);
+        timer = null;
+        tile.classList.remove('is-flashing');
+        tile.style.backgroundImage = '';
+      }
+
+      tile.addEventListener('mouseenter', start);
+      tile.addEventListener('mouseleave', stop);
+    });
+  }
+
   // ── Language menu (dropup) ──
 
   function buildLangList(list) {
@@ -340,6 +402,7 @@
     initCarousel();
     initProgressiveVideos();
     initStillsView();
+    initProyectoTileFlash();
   });
 
 })();
