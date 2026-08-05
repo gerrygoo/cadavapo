@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image transition lab</title>
+  <style>
+    body {
+      background:    #111;
+      color:         #eee;
+      font-family:   system-ui, sans-serif;
+      display:       flex;
+      flex-direction: column;
+      align-items:   center;
+      gap:           1.5rem;
+      padding:       2rem;
+    }
+    .stage {
+      position:    relative;
+      width:       min(90vw, 720px);
+      aspect-ratio: 16 / 9;
+      border:      2px solid #444;
+      cursor:      pointer;
+      overflow:    hidden;
+    }
+    canvas { display: block; width: 100%; height: 100%; }
+    .controls-panel {
+      display:        flex;
+      flex-direction: column;
+      gap:            1.25rem;
+      width:          min(90vw, 720px);
+    }
+    .controls-group {
+      display:               grid;
+      grid-template-columns: auto 1fr auto;
+      gap:                    0.4rem 0.75rem;
+      align-items:           center;
+      font-size:             0.85rem;
+      border:                1px solid #333;
+      padding:               0.6rem 1rem 0.9rem;
+      transition:            opacity 0.15s ease;
+    }
+    .controls-group legend {
+      padding:        0 0.4em;
+      color:          #999;
+      font-size:      0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .controls-group.is-inactive { opacity: 0.4; }
+    .controls-group output { text-align: right; font-variant-numeric: tabular-nums; }
+    .controls-actions {
+      grid-column:  1 / -1;
+      display:      flex;
+      align-items:  center;
+      gap:          0.6rem;
+      flex-wrap:    wrap;
+    }
+    #yamlStatus { font-size: 0.75rem; color: #999; }
+    button {
+      background:    #eee;
+      color:         #111;
+      border:        none;
+      padding:       0.5em 1.2em;
+      font-size:     0.9rem;
+      cursor:        pointer;
+    }
+    p { font-size: 0.8rem; color: #999; max-width: 600px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1 style="font-size:1rem; font-weight:normal;">Image transition lab — click the frame or wait for autoplay</h1>
+
+  <div class="stage" id="stage">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div class="controls-panel">
+    <fieldset class="controls-group">
+      <legend>match strategy</legend>
+      <label for="matcher">strategy</label>
+      <select id="matcher"></select>
+      <span></span>
+
+      <label for="blockGrid">block grid (short axis)</label>
+      <input type="range" id="blockGrid" min="1" max="30" step="1" value="12">
+      <output id="blockGrid-val">12</output>
+
+      <label for="colorWeight">color weight</label>
+      <input type="range" id="colorWeight" min="0" max="3" step="0.05" value="1.0">
+      <output id="colorWeight-val">1.0</output>
+
+      <label for="spatialWeight">spatial weight</label>
+      <input type="range" id="spatialWeight" min="0" max="3" step="0.05" value="0.5">
+      <output id="spatialWeight-val">0.5</output>
+    </fieldset>
+
+    <fieldset class="controls-group" id="sobelGroup">
+      <legend>sobel edge matching — greedyEdgeColorSpatial only</legend>
+      <label for="edgeWeight">edge weight</label>
+      <input type="range" id="edgeWeight" min="0" max="3" step="0.05" value="1.0">
+      <output id="edgeWeight-val">1.0</output>
+
+      <label for="edgeGamma">edge gamma (cost curve)</label>
+      <input type="range" id="edgeGamma" min="0.25" max="4" step="0.05" value="1.0">
+      <output id="edgeGamma-val">1.0</output>
+    </fieldset>
+
+    <fieldset class="controls-group">
+      <legend>timing</legend>
+      <label for="duration">duration (ms)</label>
+      <input type="range" id="duration" min="200" max="2500" step="10" value="800">
+      <output id="duration-val">800</output>
+
+      <label for="phaseTiming">color-vs-movement preset</label>
+      <select id="phaseTiming"></select>
+      <span></span>
+
+      <label for="moveStart">move window start</label>
+      <input type="range" id="moveStart" min="0" max="1" step="0.01" value="0">
+      <output id="moveStart-val">0</output>
+
+      <label for="moveEnd">move window end</label>
+      <input type="range" id="moveEnd" min="0" max="1" step="0.01" value="1">
+      <output id="moveEnd-val">1</output>
+
+      <label for="colorStart">color window start</label>
+      <input type="range" id="colorStart" min="0" max="1" step="0.01" value="0">
+      <output id="colorStart-val">0</output>
+
+      <label for="colorEnd">color window end</label>
+      <input type="range" id="colorEnd" min="0" max="1" step="0.01" value="1">
+      <output id="colorEnd-val">1</output>
+    </fieldset>
+
+    <fieldset class="controls-group">
+      <legend>easing</legend>
+      <label for="positionEasing">position easing</label>
+      <select id="positionEasing"></select>
+      <span></span>
+
+      <label for="colorEasing">color easing</label>
+      <select id="colorEasing"></select>
+      <span></span>
+    </fieldset>
+
+    <fieldset class="controls-group">
+      <legend>config persistence</legend>
+      <div class="controls-actions">
+        <button type="button" id="saveYaml">Save config as YAML</button>
+        <button type="button" id="loadYamlBtn">Load YAML…</button>
+        <input type="file" id="loadYamlFile" accept=".yaml,.yml,text/yaml" style="display:none">
+        <span id="yamlStatus"></span>
+      </div>
+    </fieldset>
+  </div>
+
+  <button id="next">Next transition</button>
+  <p>Not supported: <span id="support-msg">checking…</span></p>
+
+  <script src="../js/webgl-transition.js"></script>
+  <script>
+    (function () {
+      var IMAGES = [
+        '../assets/director/erade-kafi/video-01.jpg',
+        '../assets/director/erade-kafi/video-02.jpg',
+        '../assets/director/erade-kafi/video-03.jpg',
+        '../assets/director/erade-kafi/video-04.jpg',
+        '../assets/director/erade-kafi/video-05.jpg',
+        '../assets/director/presa-alamo-paraiso/clip-01.jpg',
+        '../assets/director/presa-alamo-paraiso/clip-02.jpg',
+        '../assets/director/presa-alamo-paraiso/clip-03.jpg',
+        '../assets/projects/coffee-mate-nescafe/still-01.jpg',
+        '../assets/projects/coffee-mate-nescafe/still-03.jpg'
+      ];
+
+      var supportMsg = document.getElementById('support-msg');
+      if (!WebGLTransition.isSupported()) {
+        supportMsg.textContent = 'WebGL is not available in this browser.';
+        return;
+      }
+      supportMsg.textContent = 'none — WebGL OK';
+
+      var canvas = document.getElementById('canvas');
+      var transition = new WebGLTransition(canvas, {
+        blockGrid: 12,
+        colorWeight: 1.0,
+        spatialWeight: 0.5,
+        duration: 800
+      });
+
+      var index = 0;
+      var busy = false;
+
+      // Maps each slider id to the instance's internal property name.
+      var PROP_MAP = {
+        blockGrid: '_blocksShort',
+        colorWeight: '_colorWeight',
+        spatialWeight: '_spatialWeight',
+        edgeWeight: '_edgeWeight',
+        edgeGamma: '_edgeGamma',
+        duration: '_duration'
+      };
+
+      function setSlider(id, value) {
+        document.getElementById(id).value = value;
+        document.getElementById(id + '-val').textContent = value;
+      }
+
+      function wireSlider(id, isFloat) {
+        var input = document.getElementById(id);
+        var out = document.getElementById(id + '-val');
+        input.addEventListener('input', function () {
+          var v = isFloat ? parseFloat(input.value) : parseInt(input.value, 10);
+          out.textContent = input.value;
+          transition[PROP_MAP[id]] = v;
+        });
+      }
+      wireSlider('blockGrid', true);
+      wireSlider('colorWeight', true);
+      wireSlider('spatialWeight', true);
+      wireSlider('edgeWeight', true);
+      wireSlider('edgeGamma', true);
+      wireSlider('duration', false);
+
+      // The edgeWeight/edgeGamma sliders only affect greedyEdgeColorSpatial
+      // — dim their fieldset (rather than hiding it) when a different
+      // matcher is selected, so it's clear at a glance which params are
+      // Sobel-specific without the panel jumping around as you switch.
+      function updateSobelGroupState() {
+        var active = document.getElementById('matcher').value === 'greedyEdgeColorSpatial';
+        document.getElementById('sobelGroup').classList.toggle('is-inactive', !active);
+      }
+
+      // Populates a <select> from a WebGLTransition registry object and
+      // wires it to reassign the given instance property live — used for
+      // matchers, positionEasings, colorEasings below. Add a new entry to
+      // the registry (see js/webgl-transition.js) and it shows up here
+      // automatically. phaseTiming gets its own wiring further down since
+      // it also has to stay in sync with the custom window sliders.
+      function wireRegistrySelect(selectId, registry, prop) {
+        var select = document.getElementById(selectId);
+        Object.keys(registry).forEach(function (name) {
+          var opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name;
+          select.appendChild(opt);
+        });
+        select.addEventListener('change', function () {
+          transition[prop] = registry[select.value];
+        });
+      }
+      wireRegistrySelect('matcher', WebGLTransition.matchers, '_matchFn');
+      wireRegistrySelect('positionEasing', WebGLTransition.positionEasings, '_positionEasingFn');
+      wireRegistrySelect('colorEasing', WebGLTransition.colorEasings, '_colorEasingFn');
+      document.getElementById('matcher').addEventListener('change', updateSobelGroupState);
+      document.getElementById('positionEasing').value = 'smoothstep';
+      document.getElementById('colorEasing').value = 'linear';
+      updateSobelGroupState();
+
+      // Phase timing: a preset dropdown (from the WebGLTransition.phaseTimings
+      // registry) plus four raw window sliders, so the move/color windows
+      // can be tuned continuously rather than picked from three fixed
+      // presets. Choosing a preset snaps the sliders to match it; dragging a
+      // slider builds a one-off custom window object and flips the dropdown
+      // to a disabled "custom" marker so it's clear the preset no longer
+      // reflects what's actually playing.
+      var phaseTimingSelect = document.getElementById('phaseTiming');
+      Object.keys(WebGLTransition.phaseTimings).forEach(function (name) {
+        var opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        phaseTimingSelect.appendChild(opt);
+      });
+      var customPhaseOpt = document.createElement('option');
+      customPhaseOpt.value = '__custom__';
+      customPhaseOpt.textContent = 'custom (sliders below)';
+      customPhaseOpt.disabled = true;
+      phaseTimingSelect.appendChild(customPhaseOpt);
+
+      function writePhaseSliders(win) {
+        setSlider('moveStart', win.move[0]);
+        setSlider('moveEnd', win.move[1]);
+        setSlider('colorStart', win.color[0]);
+        setSlider('colorEnd', win.color[1]);
+      }
+      function readPhaseSliders() {
+        return {
+          move: [parseFloat(document.getElementById('moveStart').value), parseFloat(document.getElementById('moveEnd').value)],
+          color: [parseFloat(document.getElementById('colorStart').value), parseFloat(document.getElementById('colorEnd').value)]
+        };
+      }
+      phaseTimingSelect.addEventListener('change', function () {
+        var preset = WebGLTransition.phaseTimings[phaseTimingSelect.value];
+        if (!preset) return;
+        transition._phaseTiming = preset;
+        writePhaseSliders(preset);
+      });
+      ['moveStart', 'moveEnd', 'colorStart', 'colorEnd'].forEach(function (id) {
+        var input = document.getElementById(id);
+        input.addEventListener('input', function () {
+          document.getElementById(id + '-val').textContent = input.value;
+          transition._phaseTiming = readPhaseSliders();
+          phaseTimingSelect.value = '__custom__';
+        });
+      });
+      phaseTimingSelect.value = 'during';
+      writePhaseSliders(WebGLTransition.phaseTimings.during);
+
+      // ── YAML config persistence ──
+      // No backend and no build tooling in this repo, so this is a small
+      // hand-rolled serializer/parser rather than a pulled-in library — it
+      // only needs to round-trip the flat/one-level-nested shape this page
+      // itself produces (see buildConfig below), not arbitrary YAML.
+      function buildConfig() {
+        return {
+          matcher: document.getElementById('matcher').value,
+          blockGrid: transition._blocksShort,
+          colorWeight: transition._colorWeight,
+          spatialWeight: transition._spatialWeight,
+          edgeWeight: transition._edgeWeight,
+          edgeGamma: transition._edgeGamma,
+          duration: transition._duration,
+          phaseTimingPreset: phaseTimingSelect.value,
+          phaseTiming: transition._phaseTiming,
+          positionEasing: document.getElementById('positionEasing').value,
+          colorEasing: document.getElementById('colorEasing').value
+        };
+      }
+
+      function toYAML(value, indent) {
+        indent = indent || 0;
+        var pad = new Array(indent + 1).join('  ');
+        if (Array.isArray(value)) return '[' + value.join(', ') + ']';
+        if (value !== null && typeof value === 'object') {
+          return Object.keys(value).map(function (key) {
+            var v = value[key];
+            if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
+              return pad + key + ':\n' + toYAML(v, indent + 1);
+            }
+            return pad + key + ': ' + toYAML(v, indent);
+          }).join('\n');
+        }
+        return String(value);
+      }
+
+      function fromYAML(text) {
+        var lines = text.split('\n').filter(function (line) {
+          return line.trim() !== '' && line.trim()[0] !== '#';
+        });
+        var root = {};
+        var stack = [{ indent: -1, obj: root }];
+        lines.forEach(function (line) {
+          var indent = line.match(/^ */)[0].length / 2;
+          var trimmed = line.trim();
+          var colonIdx = trimmed.indexOf(':');
+          var key = trimmed.slice(0, colonIdx).trim();
+          var rawVal = trimmed.slice(colonIdx + 1).trim();
+
+          while (stack.length > 1 && stack[stack.length - 1].indent >= indent) stack.pop();
+          var parent = stack[stack.length - 1].obj;
+
+          if (rawVal === '') {
+            var child = {};
+            parent[key] = child;
+            stack.push({ indent: indent, obj: child });
+          } else if (rawVal[0] === '[') {
+            parent[key] = rawVal.slice(1, -1).split(',').map(function (s) { return parseFloat(s.trim()); });
+          } else if (rawVal !== '' && !isNaN(parseFloat(rawVal)) && isFinite(rawVal)) {
+            parent[key] = parseFloat(rawVal);
+          } else {
+            parent[key] = rawVal;
+          }
+        });
+        return root;
+      }
+
+      function applyConfig(config) {
+        document.getElementById('matcher').value = config.matcher;
+        transition._matchFn = WebGLTransition.matchers[config.matcher];
+        updateSobelGroupState();
+
+        setSlider('blockGrid', config.blockGrid);
+        setSlider('colorWeight', config.colorWeight);
+        setSlider('spatialWeight', config.spatialWeight);
+        setSlider('edgeWeight', config.edgeWeight);
+        setSlider('edgeGamma', config.edgeGamma);
+        setSlider('duration', config.duration);
+        transition._blocksShort = config.blockGrid;
+        transition._colorWeight = config.colorWeight;
+        transition._spatialWeight = config.spatialWeight;
+        transition._edgeWeight = config.edgeWeight;
+        transition._edgeGamma = config.edgeGamma;
+        transition._duration = config.duration;
+
+        document.getElementById('positionEasing').value = config.positionEasing;
+        transition._positionEasingFn = WebGLTransition.positionEasings[config.positionEasing];
+        document.getElementById('colorEasing').value = config.colorEasing;
+        transition._colorEasingFn = WebGLTransition.colorEasings[config.colorEasing];
+
+        if (config.phaseTiming) {
+          transition._phaseTiming = config.phaseTiming;
+          writePhaseSliders(config.phaseTiming);
+        }
+        if (config.phaseTimingPreset && WebGLTransition.phaseTimings[config.phaseTimingPreset]) {
+          phaseTimingSelect.value = config.phaseTimingPreset;
+        } else {
+          phaseTimingSelect.value = '__custom__';
+        }
+      }
+
+      document.getElementById('saveYaml').addEventListener('click', function () {
+        var yamlText = '# WebGL transition tuning config\n' + toYAML(buildConfig(), 0) + '\n';
+        var blob = new Blob([yamlText], { type: 'text/yaml' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'webgl-transition-config.yaml';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        document.getElementById('yamlStatus').textContent = 'Saved.';
+      });
+
+      document.getElementById('loadYamlBtn').addEventListener('click', function () {
+        document.getElementById('loadYamlFile').click();
+      });
+      document.getElementById('loadYamlFile').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          try {
+            applyConfig(fromYAML(reader.result));
+            document.getElementById('yamlStatus').textContent = 'Loaded ' + file.name;
+          } catch (err) {
+            document.getElementById('yamlStatus').textContent = 'Failed to parse ' + file.name + ': ' + err.message;
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
+
+      function advance() {
+        if (busy) return;
+        busy = true;
+        index = (index + 1) % IMAGES.length;
+        transition.transitionTo(IMAGES[index]).then(function () { busy = false; });
+      }
+
+      transition.setImage(IMAGES[0]).then(function () {
+        document.getElementById('stage').addEventListener('click', advance);
+        setInterval(advance, 3200);
+      });
+    })();
+  </script>
+</body>
+</html>
