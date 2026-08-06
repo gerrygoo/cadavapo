@@ -13,10 +13,10 @@
 // isSupported() can be false (old browsers, GPU blocklists, context
 // limits), and a live context can still be lost mid-session.
 //
-// Four independently pluggable stages, each a registry on WebGLTransition
+// Five independently pluggable stages, each a registry on WebGLTransition
 // (swap live via transition._matchFn / _positionEasingFn / _colorEasingFn /
-// _phaseTiming, or pass matchFn/positionEasing/colorEasing/phaseTiming to
-// the constructor):
+// _phaseTiming / _staggerFn, or pass matchFn/positionEasing/colorEasing/
+// phaseTiming/staggerFn to the constructor):
 //   - WebGLTransition.matchers        — "find destination block" strategies.
 //   - WebGLTransition.positionEasings — how a block's *position* interpolates
 //     from src to dst center over the movement phase.
@@ -25,6 +25,9 @@
 //   - WebGLTransition.phaseTimings    — how the movement phase and color
 //     phase line up against overall transition progress (concurrent, or one
 //     before/after the other).
+//   - WebGLTransition.staggers        — how much each block's own move/color
+//     phase is delayed relative to its neighbors, as a function of the
+//     block's *source* grid position (see "Stagger" below).
 //
 // Usage:
 //   var t = new WebGLTransition(canvasEl);
@@ -68,6 +71,10 @@
     'attribute vec2 aLocalOffset;',
     'attribute vec2 aSrcCenter;',
     'attribute vec2 aDstCenter;',
+    // Per-block delay, in [0,1], from the active stagger strategy (see
+    // `staggers` below) — 0 blocks react to uMoveT/uColorT immediately, 1
+    // blocks wait until the very end of the phase to start.
+    'attribute float aStagger;',
     'uniform vec2 uCellSize;',
     'uniform vec4 uFromRect;',
     'uniform vec4 uToRect;',
@@ -77,11 +84,24 @@
     // all the "what does the curve/timing look like" tuning lives in one
     // place (JS), not split across shader and JS.
     'uniform float uMoveT;',
+    'uniform float uMoveStagger;', // 0 = every block shares uMoveT exactly
+    'uniform float uColorStagger;',
     'varying vec2 vSrcUV;',
     'varying vec2 vDstUV;',
     'varying float vAlpha;',
+    'varying float vStagger;',
+    // Remaps the shared, already-eased uMoveT/uColorT into a per-block local
+    // progress: a block with delay `d` only starts advancing once uMoveT
+    // passes `d * amount`, then races to catch up to 1 by the time uMoveT
+    // hits 1 — so `amount` controls how much of the phase is "spent" on the
+    // wave sweeping across blocks vs. actually moving them.
+    'float staggerLocal(float t, float delay, float amount) {',
+    '  float start = delay * amount;',
+    '  return clamp((t - start) / max(0.0001, 1.0 - start), 0.0, 1.0);',
+    '}',
     'void main() {',
-    '  vec2 center = mix(aSrcCenter, aDstCenter, uMoveT);',
+    '  float moveLocal = staggerLocal(uMoveT, aStagger, uMoveStagger);',
+    '  vec2 center = mix(aSrcCenter, aDstCenter, moveLocal);',
     '  vec2 pos = center + aLocalOffset * uCellSize;',
     '  gl_Position = vec4(pos * 2.0 - 1.0, 0.0, 1.0);',
 
@@ -93,12 +113,13 @@
     // than just cross-fading against the flat background layer.
     '  vec2 dstSampleUv = aDstCenter + aLocalOffset * uCellSize;',
     '  vDstUV = dstSampleUv * uToRect.zw + uToRect.xy;',
-    // Blocks fade out only once they've essentially arrived (driven by
-    // `uMoveT`, not raw progress) — fading on raw progress let blocks turn
-    // transparent while still visibly mid-slide, which read as the
-    // destination image "winning the race" before motion had actually
-    // settled.
-    '  vAlpha = 1.0 - smoothstep(0.94, 1.0, uMoveT);',
+    // Blocks fade out only once they've essentially arrived (driven by the
+    // block's own local move progress, not raw progress) — fading on raw
+    // progress let blocks turn transparent while still visibly mid-slide,
+    // which read as the destination image "winning the race" before motion
+    // had actually settled.
+    '  vAlpha = 1.0 - smoothstep(0.94, 1.0, moveLocal);',
+    '  vStagger = aStagger;',
     '}'
   ].join('\n');
 
@@ -107,13 +128,20 @@
     'varying vec2 vSrcUV;',
     'varying vec2 vDstUV;',
     'varying float vAlpha;',
+    'varying float vStagger;',
     'uniform sampler2D uFrom;',
     'uniform sampler2D uTo;',
     'uniform float uColorT;', // color/value-fade phase, independent of uMoveT
+    'uniform float uColorStagger;',
+    'float staggerLocal(float t, float delay, float amount) {',
+    '  float start = delay * amount;',
+    '  return clamp((t - start) / max(0.0001, 1.0 - start), 0.0, 1.0);',
+    '}',
     'void main() {',
     '  vec3 fromColor = texture2D(uFrom, vSrcUV).rgb;',
     '  vec3 toColor = texture2D(uTo, vDstUV).rgb;',
-    '  vec3 color = mix(fromColor, toColor, uColorT);',
+    '  float colorLocal = staggerLocal(uColorT, vStagger, uColorStagger);',
+    '  vec3 color = mix(fromColor, toColor, colorLocal);',
     '  gl_FragColor = vec4(color, vAlpha);',
     '}'
   ].join('\n');
@@ -413,6 +441,38 @@
     return Math.min(1, Math.max(0, (p - a) / (b - a)));
   }
 
+  // ── Stagger: how much each block's own move/color phase is delayed
+  // relative to its neighbors, as a function of the block's *source* grid
+  // position. Returns a [0,1] delay consumed by the shader's `staggerLocal`
+  // (see SWARM_VERTEX_SRC above) — 0 means "react immediately with
+  // everyone else", 1 means "wait until the very end of the phase before
+  // starting to move/color at all". The actual visual strength is the
+  // uMoveStagger/uColorStagger "amount" uniforms (0 = feature off, every
+  // block gets delay*amount = 0); this registry only shapes *which* blocks
+  // get delayed relative to each other. Swappable like matchers, via the
+  // `staggerFn` constructor option or by reassigning transition._staggerFn.
+  var staggers = {
+    none: function () { return 0; },
+    wipeLeftRight: function (col, row, gridCols) {
+      return gridCols <= 1 ? 0 : col / (gridCols - 1);
+    },
+    wipeTopBottom: function (col, row, gridCols, gridRows) {
+      return gridRows <= 1 ? 0 : row / (gridRows - 1);
+    },
+    radialOut: function (col, row, gridCols, gridRows) {
+      var cx = (gridCols - 1) / 2, cy = (gridRows - 1) / 2;
+      var dist = Math.sqrt((col - cx) * (col - cx) + (row - cy) * (row - cy));
+      var maxDist = Math.sqrt(cx * cx + cy * cy) || 1;
+      return dist / maxDist;
+    },
+    radialIn: function (col, row, gridCols, gridRows) {
+      return 1 - staggers.radialOut(col, row, gridCols, gridRows);
+    },
+    random: function () {
+      return Math.random();
+    }
+  };
+
   var LOCAL_OFFSETS = [
     -0.5, -0.5, 0.5, -0.5, -0.5, 0.5,
     0.5, -0.5, 0.5, 0.5, -0.5, 0.5
@@ -422,11 +482,13 @@
     return [(col + 0.5) / gridCols, 1.0 - (row + 0.5) / gridRows];
   }
 
-  // Builds the interleaved [localOffset(2), srcCenter(2), dstCenter(2)] x 6
-  // verts-per-block buffer that drives the swarm pass.
-  function buildSwarmBuffer(mapping, gridCols, gridRows) {
+  // Builds the interleaved [localOffset(2), srcCenter(2), dstCenter(2),
+  // stagger(1)] x 6 verts-per-block buffer that drives the swarm pass.
+  // `staggerFn(col, row, gridCols, gridRows)` is evaluated once per block
+  // against its *source* position — see `staggers` below.
+  function buildSwarmBuffer(mapping, gridCols, gridRows, staggerFn) {
     var n = gridCols * gridRows;
-    var floatsPerVertex = 6;
+    var floatsPerVertex = 7;
     var buf = new Float32Array(n * 6 * floatsPerVertex);
     var w = 0;
     for (var i = 0; i < n; i++) {
@@ -435,6 +497,7 @@
       var j = mapping[i];
       var dc = j % gridCols, dr = (j / gridCols) | 0;
       var dstCenter = blockCenterUV(dc, dr, gridCols, gridRows);
+      var stagger = staggerFn(sc, sr, gridCols, gridRows);
       for (var v = 0; v < 6; v++) {
         buf[w++] = LOCAL_OFFSETS[v * 2];
         buf[w++] = LOCAL_OFFSETS[v * 2 + 1];
@@ -442,6 +505,7 @@
         buf[w++] = srcCenter[1];
         buf[w++] = dstCenter[0];
         buf[w++] = dstCenter[1];
+        buf[w++] = stagger;
       }
     }
     return buf;
@@ -468,6 +532,9 @@
     this._positionEasingFn = opts.positionEasing || positionEasings.smoothstep;
     this._colorEasingFn = opts.colorEasing || colorEasings.linear;
     this._phaseTiming = opts.phaseTiming || phaseTimings.during;
+    this._staggerFn = opts.staggerFn || staggers.none;
+    this._moveStagger = opts.moveStagger != null ? opts.moveStagger : 0;
+    this._colorStagger = opts.colorStagger != null ? opts.colorStagger : 0;
     this._contextLost = false;
 
     gl.enable(gl.BLEND);
@@ -490,6 +557,8 @@
       uToRect: gl.getUniformLocation(this._swarmProgram, 'uToRect'),
       uMoveT: gl.getUniformLocation(this._swarmProgram, 'uMoveT'),
       uColorT: gl.getUniformLocation(this._swarmProgram, 'uColorT'),
+      uMoveStagger: gl.getUniformLocation(this._swarmProgram, 'uMoveStagger'),
+      uColorStagger: gl.getUniformLocation(this._swarmProgram, 'uColorStagger'),
       uFrom: gl.getUniformLocation(this._swarmProgram, 'uFrom'),
       uTo: gl.getUniformLocation(this._swarmProgram, 'uTo')
     };
@@ -568,16 +637,19 @@
     gl.useProgram(this._swarmProgram);
     gl.bindBuffer(gl.ARRAY_BUFFER, this._swarmBuf);
 
-    var stride = 6 * 4;
+    var stride = 7 * 4;
     var aLocalOffset = gl.getAttribLocation(this._swarmProgram, 'aLocalOffset');
     var aSrcCenter = gl.getAttribLocation(this._swarmProgram, 'aSrcCenter');
     var aDstCenter = gl.getAttribLocation(this._swarmProgram, 'aDstCenter');
+    var aStagger = gl.getAttribLocation(this._swarmProgram, 'aStagger');
     gl.enableVertexAttribArray(aLocalOffset);
     gl.vertexAttribPointer(aLocalOffset, 2, gl.FLOAT, false, stride, 0);
     gl.enableVertexAttribArray(aSrcCenter);
     gl.vertexAttribPointer(aSrcCenter, 2, gl.FLOAT, false, stride, 8);
     gl.enableVertexAttribArray(aDstCenter);
     gl.vertexAttribPointer(aDstCenter, 2, gl.FLOAT, false, stride, 16);
+    gl.enableVertexAttribArray(aStagger);
+    gl.vertexAttribPointer(aStagger, 1, gl.FLOAT, false, stride, 24);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this._texFrom);
@@ -592,6 +664,8 @@
     gl.uniform2fv(u.uCellSize, this._cellSize);
     gl.uniform1f(u.uMoveT, moveT);
     gl.uniform1f(u.uColorT, colorT);
+    gl.uniform1f(u.uMoveStagger, this._moveStagger);
+    gl.uniform1f(u.uColorStagger, this._colorStagger);
 
     gl.drawArrays(gl.TRIANGLES, 0, this._swarmCount * 6);
   };
@@ -677,7 +751,7 @@
         edgeWeight: self._edgeWeight,
         edgeGamma: self._edgeGamma
       });
-      var buf = buildSwarmBuffer(mapping, gridCols, gridRows);
+      var buf = buildSwarmBuffer(mapping, gridCols, gridRows, self._staggerFn);
 
       var gl = self._gl;
       gl.bindBuffer(gl.ARRAY_BUFFER, self._swarmBuf);
@@ -738,6 +812,7 @@
   WebGLTransition.positionEasings = positionEasings;
   WebGLTransition.colorEasings = colorEasings;
   WebGLTransition.phaseTimings = phaseTimings;
+  WebGLTransition.staggers = staggers;
 
   global.WebGLTransition = WebGLTransition;
 })(window);

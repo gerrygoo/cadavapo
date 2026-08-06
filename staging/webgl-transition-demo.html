@@ -145,6 +145,21 @@
     </fieldset>
 
     <fieldset class="controls-group">
+      <legend>stagger / cascade</legend>
+      <label for="stagger">strategy</label>
+      <select id="stagger"></select>
+      <span></span>
+
+      <label for="moveStagger">move stagger amount</label>
+      <input type="range" id="moveStagger" min="0" max="1" step="0.01" value="0">
+      <output id="moveStagger-val">0</output>
+
+      <label for="colorStagger">color stagger amount</label>
+      <input type="range" id="colorStagger" min="0" max="1" step="0.01" value="0">
+      <output id="colorStagger-val">0</output>
+    </fieldset>
+
+    <fieldset class="controls-group">
       <legend>config persistence</legend>
       <div class="controls-actions">
         <button type="button" id="saveYaml">Save config as YAML</button>
@@ -199,7 +214,9 @@
         spatialWeight: '_spatialWeight',
         edgeWeight: '_edgeWeight',
         edgeGamma: '_edgeGamma',
-        duration: '_duration'
+        duration: '_duration',
+        moveStagger: '_moveStagger',
+        colorStagger: '_colorStagger'
       };
 
       function setSlider(id, value) {
@@ -222,6 +239,8 @@
       wireSlider('edgeWeight', true);
       wireSlider('edgeGamma', true);
       wireSlider('duration', false);
+      wireSlider('moveStagger', true);
+      wireSlider('colorStagger', true);
 
       // The edgeWeight/edgeGamma sliders only affect greedyEdgeColorSpatial
       // — dim their fieldset (rather than hiding it) when a different
@@ -253,9 +272,11 @@
       wireRegistrySelect('matcher', WebGLTransition.matchers, '_matchFn');
       wireRegistrySelect('positionEasing', WebGLTransition.positionEasings, '_positionEasingFn');
       wireRegistrySelect('colorEasing', WebGLTransition.colorEasings, '_colorEasingFn');
+      wireRegistrySelect('stagger', WebGLTransition.staggers, '_staggerFn');
       document.getElementById('matcher').addEventListener('change', updateSobelGroupState);
       document.getElementById('positionEasing').value = 'smoothstep';
       document.getElementById('colorEasing').value = 'linear';
+      document.getElementById('stagger').value = 'none';
       updateSobelGroupState();
 
       // Phase timing: a preset dropdown (from the WebGLTransition.phaseTimings
@@ -324,7 +345,10 @@
           phaseTimingPreset: phaseTimingSelect.value,
           phaseTiming: transition._phaseTiming,
           positionEasing: document.getElementById('positionEasing').value,
-          colorEasing: document.getElementById('colorEasing').value
+          colorEasing: document.getElementById('colorEasing').value,
+          stagger: document.getElementById('stagger').value,
+          moveStagger: transition._moveStagger,
+          colorStagger: transition._colorStagger
         };
       }
 
@@ -397,6 +421,19 @@
         transition._positionEasingFn = WebGLTransition.positionEasings[config.positionEasing];
         document.getElementById('colorEasing').value = config.colorEasing;
         transition._colorEasingFn = WebGLTransition.colorEasings[config.colorEasing];
+
+        if (config.stagger) {
+          document.getElementById('stagger').value = config.stagger;
+          transition._staggerFn = WebGLTransition.staggers[config.stagger];
+        }
+        if (config.moveStagger != null) {
+          setSlider('moveStagger', config.moveStagger);
+          transition._moveStagger = config.moveStagger;
+        }
+        if (config.colorStagger != null) {
+          setSlider('colorStagger', config.colorStagger);
+          transition._colorStagger = config.colorStagger;
+        }
 
         if (config.phaseTiming) {
           transition._phaseTiming = config.phaseTiming;
