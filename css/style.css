@@ -580,14 +580,14 @@ h1 {
   font-family: var(--font-main);
 }
 
-[aria-haspopup="listbox"]::after {
+button[aria-expanded][aria-controls]::after {
   content:     "▾";
   display:     inline-block;
   margin-inline-start: 0.4em;
   font-size:   0.7em;
 }
 
-[aria-haspopup="listbox"][aria-expanded="true"]::after { content: "▴"; }
+button[aria-expanded="true"][aria-controls]::after { content: "▴"; }
 
 #lang-toggle:hover { background: rgba(0, 0, 0, 0.08); }
 
@@ -689,7 +689,7 @@ h1 {
   outline:    none;
 }
 
-.lang-list button[aria-selected="true"] { font-weight: 700; }
+.lang-list button[aria-current="true"] { font-weight: 700; }
 
 /* ── Landing page layout ── */
 body.page-landing {

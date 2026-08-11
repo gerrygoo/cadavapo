@@ -24,7 +24,11 @@ const T = {
       categoriaNoFiccion: "no ficción",
       categoriaComercial: "comercial",
       vistaCuadricula:   "cuadrícula",
-      vistaLista:        "lista"
+      vistaLista:        "lista",
+      pausarClips:       "pausar clips",
+      reproducirClips:   "reproducir clips",
+      vistaGaleria:      "Vista de galería",
+      filtrarCategoria:  "Filtrar por categoría"
     },
     langBtn: "idiomas"
   },
@@ -49,11 +53,15 @@ const T = {
       fichaTecnica:      "credits",
       volver:            "← back to projects",
       filterAll:         "all",
-      categoriaVideoclip: "music video",
-      categoriaNoFiccion: "non-fiction explorations",
+      categoriaVideoclip: "music videos",
+      categoriaNoFiccion: "non-fiction",
       categoriaComercial: "commercial",
       vistaCuadricula:   "grid",
-      vistaLista:        "list"
+      vistaLista:        "list",
+      pausarClips:       "pause clips",
+      reproducirClips:   "play clips",
+      vistaGaleria:      "Gallery view",
+      filtrarCategoria:  "Filter by category"
     },
     langBtn: "language"
   },

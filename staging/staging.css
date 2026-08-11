@@ -204,11 +204,15 @@ body.page-staging footer {
   background-position: center;
 }
 
+/* The scrim only darkens what's *behind* the label, so the label has to
+   invert with it — left at the default near-black it measured 1.66:1 over a
+   typical frame and 1.01:1 over a dark one, i.e. invisible. Against a 0.6
+   black scrim, white clears AA even over a blown-out white frame (5.7:1). */
 .proyecto-tile[data-posters]::before {
   content:    '';
   position:   absolute;
   inset:      0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.6);
   opacity:    0;
   transition: opacity 0.15s ease;
   pointer-events: none;
@@ -220,6 +224,8 @@ body.page-staging footer {
   position: relative;
   z-index:  1;
 }
+
+.proyecto-tile[data-posters].is-flashing .proyecto-text { color: #ffffff; }
 
 .proyecto-tile:focus-visible {
   outline: 2px solid var(--color-text);
@@ -248,11 +254,16 @@ body.page-proyecto main {
   gap:            2rem;
 }
 
+/* inline-flex + min-height rather than bare text: at 0.85rem the link was a
+   113x16 hit target, under WCAG 2.5.8's 24x24 floor. */
 .back-link {
   color:           var(--color-muted);
   text-decoration: none;
   font-size:       0.85rem;
   align-self:      flex-start;
+  display:         inline-flex;
+  align-items:     center;
+  min-height:      24px;
 }
 
 .back-link:hover { color: var(--color-text); }

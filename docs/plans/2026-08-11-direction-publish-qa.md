@@ -32,21 +32,21 @@ in motion, accessibility, and untranslated content.
   Dani". Either supply the reel or drop the placeholder block; it cannot
   ship as-is.
 
-- [ ] **Hover poster-flash text is unreadable.** `.proyecto-text` is
+- [x] **Hover poster-flash text is unreadable.** `.proyecto-text` is
   `#111111` over a `rgba(0,0,0,0.55)` scrim over a photo — dark on dark.
   Measured contrast: **3.98:1** over a bright frame, **1.66:1** over a
   mid-grey one, **1.01:1** over a dark one (i.e. invisible). The scrim
   darkens the background but the text never lightens to match. Fix: white
   text while `.is-flashing` (`staging.css:207-222`).
 
-- [ ] **Poster-flash exceeds the seizure threshold.** Measured **4.50 Hz**;
+- [x] **Poster-flash exceeds the seizure threshold.** Measured **4.50 Hz**;
   WCAG 2.3.1's general flash threshold is 3 Hz, and these are full-frame
   luminance changes, which is exactly what the threshold targets. The
   comment at `js/main.js:256` asserts "kept below ~4Hz" and is wrong twice
   over — 220 ms is 4.54 Hz. Raise `TILE_FLASH_INTERVAL_MS` to ≥340 ms and
   correct the comment.
 
-- [ ] **Dropdown ARIA is invalid.** `<ul role="listbox"><li><button
+- [x] **Dropdown ARIA is invalid.** `<ul role="listbox"><li><button
   role="option">` trips four axe violations on *every* page —
   `aria-required-children` and `aria-required-parent` (critical),
   `listitem` and `aria-input-field-name` (serious) — because `<li>` is not
@@ -59,14 +59,14 @@ in motion, accessibility, and untranslated content.
   (`js/main.js:311-322`, `staging/index.html:33-36`, and the `lang-list`
   markup on every page).
 
-- [ ] **`prefers-reduced-motion` is only half-wired.** Honored by the logo
+- [x] **`prefers-reduced-motion` is only half-wired.** Honored by the logo
   drift, the carousel and the tile flash; **ignored** by the 7 looping
   clips on a project page, by `.bg-video` on the landing page, and by the
   role-text rotator (verified still rotating under `reducedMotion:
   'reduce'`). `initProgressiveVideos` and `initRoleRotation` need the same
   `matchMedia` guard the other three already use.
 
-- [ ] **No way to stop the motion (WCAG 2.2.2).** A project page autoplays
+- [x] **No way to stop the motion (WCAG 2.2.2).** A project page autoplays
   7 looping clips, none with `controls`, and offers no pause affordance.
   Anything that starts automatically and runs past 5 s needs one.
 
@@ -79,7 +79,7 @@ in motion, accessibility, and untranslated content.
   `Producción`, `Dirección de fotografía`, …) and entirely Spanish values.
   Only the page chrome carries `data-i18n`.
 
-- [ ] **Two `aria-label`s never translate at all** — `"Vista de galería"`
+- [x] **Two `aria-label`s never translate at all** — `"Vista de galería"`
   (`stills-toolbar`) and `"Filtrar por categoría"` (`proyectos-filter`);
   neither has a `data-i18n` binding.
 
@@ -120,7 +120,7 @@ in motion, accessibility, and untranslated content.
   arte de extrañar` are sentence-cased. Spanish convention is sentence
   case, but these are work titles — confirm before changing.
 
-- [ ] **EN category labels.** `music video` is singular for 7 items
+- [x] **EN category labels.** `music video` is singular for 7 items
   (→ `music videos`); `non-fiction explorations` is long enough to wrap
   the filter chip onto a second row at 390px.
 
@@ -159,10 +159,10 @@ in motion, accessibility, and untranslated content.
   to see why the selection stopped mattering. Largely dissolves once the
   breakpoint above is width-based.
 
-- [ ] **`.back-link` is a 113×16px target** on all 9 project pages —
+- [x] **`.back-link` is a 113×16px target** on all 9 project pages —
   under the WCAG 2.5.8 24×24 minimum.
 
-- [ ] **Landing page has no `<h1>`.** `role="img"` on the `<h1>`
+- [x] **Landing page has no `<h1>`.** `role="img"` on the `<h1>`
   (`index.html:14`, `staging/index.html:15`) strips its heading
   semantics; axe reports `page-has-heading-one`. Also `aria-live="polite"`
   on `.role` announces a new role every 3–4 s indefinitely to screen

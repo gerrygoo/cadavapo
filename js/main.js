@@ -25,6 +25,12 @@
       var val = getNestedKey(T[lang], el.dataset.i18n);
       if (val !== undefined) el.textContent = val;
     });
+    // Group labels are announced but never rendered, so they need the same
+    // treatment as visible copy — otherwise they stay Spanish in every language.
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+      var val = getNestedKey(T[lang], el.dataset.i18nAria);
+      if (val !== undefined) el.setAttribute('aria-label', val);
+    });
     if (document.body.classList.contains('page-landing')) initRoleRotation(lang);
     updateLangList(lang);
   }
@@ -41,6 +47,10 @@
 
   var _roleTimeout = null;
 
+  function prefersReducedMotion() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
   function initRoleRotation(lang) {
     var el = document.querySelector('.role');
     if (!el) return;
@@ -52,6 +62,10 @@
 
     el.textContent = roles[0];
     el.style.opacity = '1';
+
+    // Rotating on a timer is motion, and it's also why `.role` can't be a live
+    // region — it would announce a new role every few seconds forever.
+    if (prefersReducedMotion()) return;
 
     (function scheduleNext() {
       _roleTimeout = setTimeout(function () {
@@ -187,7 +201,24 @@
   // once it can play, it crossfades in over its poster via the `is-loaded`
   // class, the same opacity-transition idiom the carousel's `is-active` uses.
 
+  // When we aren't going to play a clip, reveal the element without fetching
+  // any video bytes: `<video poster>` (tier 1) paints on its own, which is
+  // exactly the still we want. Deliberately *not* done by loading the video
+  // and leaving it paused — with `preload="none"` a load() that is never
+  // followed by play() doesn't actually fetch, so the element would sit at
+  // readyState 0 behind opacity 0 and the viewer would keep staring at the
+  // blurred tier-0 background.
+  function revealPosterOnly(video) {
+    video.classList.add('is-loaded');
+  }
+
   function loadProgressiveVideo(video) {
+    if (!video.dataset.src) {           // bytes already fetched on an earlier pass
+      if (!_clipsPaused) video.play().catch(function () {});
+      return;
+    }
+    if (_clipsPaused) { revealPosterOnly(video); return; }
+
     video.addEventListener('canplay', function () {
       video.classList.add('is-loaded');
       video.play().catch(function () {}); // muted autoplay can still be blocked in rare cases
@@ -198,6 +229,50 @@
     // otherwise trigger — without an explicit load() call here, Chromium never
     // requests the video bytes at all and the element sits at readyState 0.
     video.load();
+  }
+
+  // WCAG 2.2.2: a project page autoplays every clip in the gallery on a loop,
+  // which is motion that starts on its own and never stops, so there has to be
+  // a way to stop it. Seeded from prefers-reduced-motion at startup, but it is
+  // the single source of truth from then on — pressing "play clips" has to be
+  // able to override the media query, otherwise a reduced-motion visitor has no
+  // way to opt back in and never gets to see the work move at all.
+  var _clipsPaused = false;
+
+  function applyClipsPaused(paused) {
+    _clipsPaused = paused;
+    document.querySelectorAll('.media-video').forEach(function (v) {
+      if (paused) { v.pause(); return; }
+      // Resuming has to cover clips that were only ever revealed as posters
+      // while paused; the observer already let those go, and it won't re-fire
+      // for anything that is on screen right now. Offscreen ones stay deferred.
+      var r = v.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < window.innerHeight + 200) loadProgressiveVideo(v);
+    });
+    document.querySelectorAll('.clips-toggle').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(paused));
+      var key = paused ? 'proyectos.reproducirClips' : 'proyectos.pausarClips';
+      btn.dataset.i18n = key;
+      var val = getNestedKey(T[document.documentElement.lang] || {}, key);
+      if (val !== undefined) btn.textContent = val;
+    });
+  }
+
+  function initClipsToggle() {
+    // Seed the default even when there's no toolbar to hang a control on, so
+    // reduced-motion is still honored on any page that grows clips later.
+    _clipsPaused = prefersReducedMotion();
+
+    var toolbar = document.querySelector('.stills-toolbar');
+    if (!toolbar || !document.querySelector('.media-video')) return;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'clips-toggle';
+    toolbar.insertBefore(btn, toolbar.firstChild);
+    btn.addEventListener('click', function () { applyClipsPaused(!_clipsPaused); });
+
+    applyClipsPaused(_clipsPaused);
   }
 
   function initProgressiveVideos() {
@@ -213,7 +288,10 @@
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         loadProgressiveVideo(entry.target);
-        obs.unobserve(entry.target);
+        // Only stop watching once the bytes were actually requested. While
+        // clips are paused we merely show the poster and leave `data-src` in
+        // place, so the clip still needs a later pass to load for real.
+        if (!entry.target.dataset.src) obs.unobserve(entry.target);
       });
     }, { rootMargin: '200px' });
 
@@ -253,7 +331,11 @@
   // crossfade idiom the carousel/progressive-video layers use, since the
   // effect here is meant to read as a strobe preview, not a slideshow.
 
-  var TILE_FLASH_INTERVAL_MS = 220; // kept below ~4Hz — see WCAG general flash guidance
+  // WCAG 2.3.1's general flash threshold is 3 Hz, and swapping a full-frame
+  // still is a large-area luminance change — exactly what that threshold is
+  // about. 340ms is 2.94 Hz. (This was 220ms, i.e. 4.5 Hz, under a comment
+  // claiming it was under 4.)
+  var TILE_FLASH_INTERVAL_MS = 340;
 
   function initProyectoTileFlash() {
     var tiles = document.querySelectorAll('.proyecto-tile[data-posters]');
@@ -308,12 +390,17 @@
 
   // ── Language menu (dropup) ──
 
+  // These menus are disclosures, not listboxes: a button toggles a plain list
+  // of controls. Marking them up as listbox/option was invalid (an <li> can't
+  // be a listbox child, so the options' required parent wasn't their parent)
+  // and promised arrow-key navigation that was never implemented. `aria-current`
+  // marks the active language — `aria-selected` is only meaningful inside a
+  // listbox/grid/tablist.
   function buildLangList(list) {
     Object.keys(T).forEach(function (lang) {
       var li = document.createElement('li');
       var opt = document.createElement('button');
       opt.type = 'button';
-      opt.setAttribute('role', 'option');
       opt.dataset.lang = lang;
       opt.textContent = T[lang].name || lang;
       li.appendChild(opt);
@@ -325,7 +412,8 @@
     var list = document.getElementById('lang-list');
     if (!list) return;
     list.querySelectorAll('button').forEach(function (opt) {
-      opt.setAttribute('aria-selected', String(opt.dataset.lang === lang));
+      if (opt.dataset.lang === lang) opt.setAttribute('aria-current', 'true');
+      else opt.removeAttribute('aria-current');
     });
   }
 
@@ -377,7 +465,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var currentLang = detectLang();
 
-    document.querySelectorAll('[aria-haspopup="listbox"][aria-controls]').forEach(function (btn) {
+    document.querySelectorAll('button[aria-expanded][aria-controls]').forEach(function (btn) {
       var list = document.getElementById(btn.getAttribute('aria-controls'));
       if (list) initDropdown(btn, list);
     });
@@ -400,6 +488,7 @@
 
     applyLang(currentLang);
     initCarousel();
+    initClipsToggle(); // before the videos load, so it can hold them paused
     initProgressiveVideos();
     initStillsView();
     initProyectoTileFlash();
