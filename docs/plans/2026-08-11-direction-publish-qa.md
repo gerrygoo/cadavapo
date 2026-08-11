@@ -138,7 +138,7 @@ in motion, accessibility, and untranslated content.
   image anywhere in the grid. Most visible problem for the promotion;
   needs a static poster on the tile, with the flash as hover enhancement.
 
-- [ ] **Orientation is the wrong axis for the grid breakpoint.**
+- [x] **Orientation is the wrong axis for the grid breakpoint.**
   `staging.css:136,144` switches on `orientation`, so a 768px iPad in
   portrait gets the *narrow* single-column layout while a 568px phone in
   landscape gets the *two-column* grid — the narrower device gets the
@@ -146,7 +146,7 @@ in motion, accessibility, and untranslated content.
   `orientation` for `.bg-video` in `css/style.css`, where it is genuinely
   the right test.
 
-- [ ] **Filter state silently stops applying on rotation.** Traced:
+- [x] **Filter state silently stops applying on rotation.** Traced:
 
   ```
   filtered to no-ficcion   390×844  filterBar=true   filter=no-ficcion  tiles=2

@@ -129,24 +129,27 @@ body.page-staging footer {
   margin-bottom:  0.75rem;
 }
 
-/* Source footage/layout is designed for a landscape frame; on a portrait
-   viewport there's no room for two side-by-side categories, so stack them
-   into one filterable list instead (see @media (orientation: portrait)
-   below and the .bg-video precedent higher in css/style.css). */
-@media (orientation: portrait) {
-  .proyectos-categories[data-filter="videoclip"] .proyectos-category:not([data-category="videoclip"]),
-  .proyectos-categories[data-filter="no-ficcion"] .proyectos-category:not([data-category="no-ficcion"]),
-  .proyectos-categories[data-filter="comercial"] .proyectos-category:not([data-category="comercial"]) {
-    display: none;
-  }
+/* Filtering is width-independent: the bar stays available at every size, so
+   rotating a phone can't silently strip the control that set the current
+   filter (it used to be `display:none` in landscape, which left the
+   selection applied-but-uneditable in one orientation and re-applied on the
+   way back). What the width decides is only how many categories sit
+   side by side. `orientation` was the wrong axis for that — it made a 768px
+   iPad in portrait narrower than a 568px phone in landscape. It stays the
+   right test for .bg-video in css/style.css, which really is about frame
+   shape rather than available width. */
+.proyectos-categories[data-filter="videoclip"] .proyectos-category:not([data-category="videoclip"]),
+.proyectos-categories[data-filter="no-ficcion"] .proyectos-category:not([data-category="no-ficcion"]),
+.proyectos-categories[data-filter="comercial"] .proyectos-category:not([data-category="comercial"]) {
+  display: none;
 }
 
-@media (orientation: landscape) {
-  .proyectos-filter { display: none; }
-
+/* auto-fit rather than a fixed 1fr 1fr: when a filter hides a category, the
+   surviving one reflows to full width instead of stranding an empty column. */
+@media (min-width: 700px) {
   .proyectos-categories {
     display:               grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap:                    2rem;
     align-items:           start;
   }
