@@ -26,7 +26,7 @@ in motion, accessibility, and untranslated content.
 
 ## Blockers
 
-- [ ] **Wireframe note is still user-visible.**
+- [x] **Wireframe note is still user-visible.**
   `staging/proyectos/la-verticalidad-desahuciada.html:19` renders "reel
   pendiente — no hay link de YouTube en el documento fuente, confirmar con
   Dani". Either supply the reel or drop the placeholder block; it cannot
@@ -74,19 +74,26 @@ in motion, accessibility, and untranslated content.
 
 ## Content / i18n
 
-- [ ] **Project detail pages are ~90% untranslated.** In English the page
-  shows "credits" followed by 18 Spanish labels (`Dirección`,
-  `Producción`, `Dirección de fotografía`, …) and entirely Spanish values.
-  Only the page chrome carries `data-i18n`.
+- [x] **Project detail pages are ~90% untranslated.** In English the page
+  showed "credits" followed by 18 Spanish labels (`Dirección`,
+  `Producción`, `Dirección de fotografía`, …). All 111 `<dt>` labels across
+  every project page now carry a `creditos.*` key. Scoped to labels by
+  decision: credited names stay as each production credited them, and the
+  values are still Spanish — including the `Tipo` values ("Videoclip",
+  "Exploración de no ficción · 5'55\"") and the two synopses. Worth a second
+  pass if the English page should read fully English.
 
 - [x] **Two `aria-label`s never translate at all** — `"Vista de galería"`
   (`stills-toolbar`) and `"Filtrar por categoría"` (`proyectos-filter`);
   neither has a `data-i18n` binding.
 
-- [ ] **The Spanish role list is 3/5 English.** `js/translations.js:4-10`:
-  `dirección creativa`, `artista audiovisual`, then `production designer`,
-  `art historian`, `set dresser`. Same three untranslated entries in all
-  15 languages.
+- [x] **The Spanish role list is 3/5 English.** Was `dirección creativa`,
+  `artista audiovisual`, then `production designer`, `art historian`,
+  `set dresser`. Spanish now uses this file's own established terms for the
+  same work (`diseño de producción`, `decoración de set`) plus
+  `historiadora del arte`. **Dani should confirm the wording** — these are
+  her own professional titles. The other 13 languages still carry the same
+  three English entries; out of scope for this promotion.
 
 - [ ] **Non-ES/EN languages render worse than untranslated.** No language
   beyond `es`/`en` has a `proyectos` block, so `getNestedKey` returns
@@ -96,7 +103,7 @@ in motion, accessibility, and untranslated content.
   wrong way. Either gate `dir` on translation coverage or hide the
   untranslated languages from the picker.
 
-- [ ] **`&` vs `y`** — four pages join credits with `&`
+- [x] **`&` vs `y`** — four pages join credits with `&`
   (`erade-kafi`, `hoy-erandi`, `heroes-vicente-jauregui`,
   `la-verticalidad-desahuciada`), four with `y` (`presa-alamo-paraiso`,
   `fantasma-astral`, `satelite-futura-club`, `archivo-digital`). Pick one.
@@ -106,11 +113,11 @@ in motion, accessibility, and untranslated content.
   `Daniela V. Ponce` (archivo). Defensible if it mirrors how each
   production credited her; needs her call.
 
-- [ ] **Same person, two names on one page.** `fantasma-astral.html`:
+- [x] **Same person, two names on one page.** `fantasma-astral.html`:
   `Aza Arroyo` under Producción, `Azael Arroyo` under Dirección de
   fotografía and Edición.
 
-- [ ] **Same role, two labels.** `BTS` (westbound) vs `Behind the scenes`
+- [x] **Same role, two labels.** `BTS` (westbound) vs `Behind the scenes`
   (erade-kafi); `PA` (fantasma) vs `Asistencia de producción` (presa).
   (`Gaffer`, `Data manager`, `Picture car` are standard loanwords in
   Mexican crew credits — leaving those.)
@@ -132,11 +139,12 @@ in motion, accessibility, and untranslated content.
 
 ## Layout
 
-- [ ] **Tiles are empty boxes on every touch device.** The `data-posters`
-  imagery is bound to `mouseenter` only, so on a phone all 9 tiles render
-  as blank 140px rectangles with corner text — there is no resting-state
-  image anywhere in the grid. Most visible problem for the promotion;
-  needs a static poster on the tile, with the flash as hover enhancement.
+- [x] **Tiles are empty boxes on every touch device** — *reviewed, keeping
+  as-is.* The `data-posters` imagery is bound to `mouseenter` only, so on a
+  phone all 9 tiles render as blank rectangles with corner text. Raised as
+  the most visible issue for the promotion; Dani confirmed the text-only
+  grid is the intended minimal look and the flash is a pointer-only bonus.
+  Recorded here so it doesn't get re-reported as a defect.
 
 - [x] **Orientation is the wrong axis for the grid breakpoint.**
   `staging.css:136,144` switches on `orientation`, so a 768px iPad in

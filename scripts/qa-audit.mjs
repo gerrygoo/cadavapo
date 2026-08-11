@@ -195,21 +195,29 @@ console.log('══════ MOTION ══════\n');
   if (await tile.count()) {
     await tile.hover();
     await page.waitForTimeout(1200);
-    const c = await page.evaluate(async () => {
+    // Timestamp each swap and take the median gap rather than counting swaps
+    // in a fixed window: a window straddling a partial interval quantises to
+    // whole swaps, which lands either side of 3 Hz run to run on a rate this
+    // close to the threshold.
+    const gaps = await page.evaluate(async () => {
       const t = document.querySelector('.proyecto-tile[data-posters]');
-      let n = 0, last = t.style.backgroundImage;
+      const stamps = [];
+      let last = t.style.backgroundImage;
       const t0 = performance.now();
       await new Promise((res) => {
         const id = setInterval(() => {
-          if (t.style.backgroundImage !== last) { n++; last = t.style.backgroundImage; }
-          if (performance.now() - t0 > 2000) { clearInterval(id); res(); }
-        }, 10);
+          if (t.style.backgroundImage !== last) { stamps.push(performance.now()); last = t.style.backgroundImage; }
+          if (performance.now() - t0 > 3000) { clearInterval(id); res(); }
+        }, 5);
       });
-      return { n, s: (performance.now() - t0) / 1000 };
+      return stamps.slice(1).map((s, i) => s - stamps[i]);
     });
-    const hz = c.n / c.s;
-    console.log(`── tile poster-flash: ${hz.toFixed(2)} Hz (WCAG 2.3.1 threshold is 3 Hz)`);
-    if (hz > 3) { failures++; console.log('   ! above the general flash threshold'); }
+    if (gaps.length) {
+      const median = gaps.sort((a, b) => a - b)[Math.floor(gaps.length / 2)];
+      const hz = 1000 / median;
+      console.log(`── tile poster-flash: ${hz.toFixed(2)} Hz (median gap ${Math.round(median)}ms, n=${gaps.length}; WCAG 2.3.1 threshold is 3 Hz)`);
+      if (hz > 3) { failures++; console.log('   ! above the general flash threshold'); }
+    }
   }
   await ctx.close();
 }

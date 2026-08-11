@@ -4,9 +4,11 @@ const T = {
     roles: [
       "dirección creativa",
       "artista audiovisual",
-      "production designer",
-      "art historian",
-      "set dresser"
+      // Wording taken from this file's own established terms for the same
+      // work — see proyectos.disenoProduccion / proyectos.decoracion.
+      "diseño de producción",
+      "historiadora del arte",
+      "decoración de set"
     ],
     nav: {
       about:     "sobre mí",
@@ -29,6 +31,40 @@ const T = {
       reproducirClips:   "reproducir clips",
       vistaGaleria:      "Vista de galería",
       filtrarCategoria:  "Filtrar por categoría"
+    },
+    // Ficha técnica labels. Only the labels are translated — the values are
+    // credited names, which stay as the production credited them.
+    creditos: {
+      tipo:                "Tipo",
+      direccion:           "Dirección",
+      produccion:          "Producción",
+      productoraEjecutiva: "Productora ejecutiva",
+      asistenciaDireccion: "Asistencia de dirección",
+      direccionFotografia: "Dirección de fotografía",
+      asistenciaCamara:    "Asistencia de cámara",
+      asistenteCamara1:    "1er asistente de cámara",
+      asistenteCamara2:    "2do asistente de cámara",
+      gaffer:              "Gaffer",
+      dataManager:         "Data manager",
+      coreografia:         "Coreografía",
+      bailarines:          "Bailarines",
+      modelo:              "Modelo",
+      modelos:             "Modelos",
+      extras:              "Extras",
+      estilismo:           "Estilismo",
+      maquillaje:          "Maquillaje",
+      disenoProduccion:    "Diseño de producción",
+      disenoGrafico:       "Diseño gráfico",
+      disenoSonoro:        "Diseño sonoro",
+      animacion:           "Animación",
+      edicion:             "Edición",
+      color:               "Color",
+      behindTheScenes:     "Behind the scenes",
+      pictureCar:          "Picture car",
+      asistenciaProduccion:"Asistencia de producción",
+      materialArchivo:     "Material de archivo",
+      sinopsis:            "Sinopsis",
+      locacionAno:         "Locación / Año"
     },
     langBtn: "idiomas"
   },
@@ -62,6 +98,38 @@ const T = {
       reproducirClips:   "play clips",
       vistaGaleria:      "Gallery view",
       filtrarCategoria:  "Filter by category"
+    },
+    creditos: {
+      tipo:                "Type",
+      direccion:           "Director",
+      produccion:          "Production",
+      productoraEjecutiva: "Executive producer",
+      asistenciaDireccion: "Assistant director",
+      direccionFotografia: "Cinematography",
+      asistenciaCamara:    "Camera assistance",
+      asistenteCamara1:    "1st assistant camera",
+      asistenteCamara2:    "2nd assistant camera",
+      gaffer:              "Gaffer",
+      dataManager:         "Data manager",
+      coreografia:         "Choreography",
+      bailarines:          "Dancers",
+      modelo:              "Model",
+      modelos:             "Models",
+      extras:              "Extras",
+      estilismo:           "Styling",
+      maquillaje:          "Makeup",
+      disenoProduccion:    "Production design",
+      disenoGrafico:       "Graphic design",
+      disenoSonoro:        "Sound design",
+      animacion:           "Animation",
+      edicion:             "Editing",
+      color:               "Color",
+      behindTheScenes:     "Behind the scenes",
+      pictureCar:          "Picture car",
+      asistenciaProduccion:"Production assistance",
+      materialArchivo:     "Archive material",
+      sinopsis:            "Synopsis",
+      locacionAno:         "Location / Year"
     },
     langBtn: "language"
   },
