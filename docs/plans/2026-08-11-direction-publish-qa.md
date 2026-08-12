@@ -4,13 +4,11 @@
 (`staging/directora.html` + the 9 `staging/proyectos/*.html` it links) from
 `staging/` to the live site.
 
+**Status: shipped 2026-08-11.** The defects below were cleared and the
+section was promoted — see "Promotion" at the end of this document for what
+that involved and what it changed.
+
 **Scope:** `staging/`, `css/style.css`, `js/main.js`, `js/translations.js`.
-Promotion itself is a separate step and is not covered here — note that
-`staging.css` has accumulated real visual styles (`.proyecto-tile`,
-`.stills-grid`, `.ficha-tecnica`, `.proyecto-titulo`, `.media-progressive`,
-…), so promoting is a *merge into `css/style.css`*, not a file move, and the
-wireframe-only rules (`.wireframe-placeholder`, `.proyecto-tile-placeholder`)
-should be left behind.
 
 **Method (2026-08-11):** `scripts/qa-audit.mjs` — headless Chromium over
 4 pages × 10 viewports, plus axe-core with the disclosure menus opened, a
@@ -226,7 +224,16 @@ in motion, accessibility, and untranslated content.
   what it wants instead. That one should be confirmed on a real phone
   before changing, since it's on the live landing page.
 
-- [ ] **Tier 1 of the progressive-video system never displays.** Found while
+- [x] **Tier 1 of the progressive-video system never displays.** *Fixed
+  2026-08-11 (b6a55ff).* The reveal moved off the video's `canplay` and onto
+  the poster: `revealPosterOnly` is now called when the clip is observed, and
+  waits on an `Image()` load of the poster so a failed or absent poster leaves
+  the tier-0 blur up rather than fading in an empty box. Re-measured at
+  120 kB/s: **t=3987ms at readyState 0** (poster showing) versus t=5145ms at
+  readyState 3 before. The poster→first-frame swap after that happens inside
+  the element, so there is no second fade to manage. Original finding:
+
+- [ ] ~~**Tier 1 of the progressive-video system never displays.**~~ Found while
   adding the pause control. `is-loaded` is toggled on the *video's*
   `canplay`, so the element sits at `opacity: 0` until video data arrives
   and the poster JPEG — already downloaded — is never shown on its own.
@@ -240,7 +247,7 @@ in motion, accessibility, and untranslated content.
 
 ---
 
-## Consolidated backlog (2026-08-11)
+## Consolidated backlog (updated 2026-08-11, after promotion)
 
 Everything still open across all three plan documents, in one place. Each
 line says which document owns it.
@@ -249,6 +256,7 @@ line says which document owns it.
 
 | Item | Owner doc |
 |---|---|
+| **`about` — the copy has never been written.** Was listed as actionable; it isn't. Left out of the live nav entirely rather than shipping `href="#"`. | mock-completeness |
 | Title casing: `La Verticalidad Desahuciada` vs `Fantasma astral` | this |
 | `sophia-warren-bor` / `KiN6by3OiZc` — real title, or drop/rename? | director-role |
 | Advertising tiles listed on *both* `diseno-produccion` and `decoracion` — intended? | mock-completeness |
@@ -263,17 +271,48 @@ line says which document owns it.
 
 | Item | Owner doc |
 |---|---|
-| Tier 1 poster never displays (above) | this |
 | `dvh` fallback for the three straightforward `100vh` uses | this |
 | `.bg-video` `lvh` — needs a real phone first | this |
-| `about` nav link is still `href="#"` | mock-completeness |
-| 6 pages still render `wireframe-placeholder` (none on the direction path) | mock-completeness |
+| 6 pages still render `wireframe-placeholder` — all under the two unshipped roles | mock-completeness |
 | Click-to-expand / lightbox on stills | mock-completeness |
 | 13 partial languages apply `dir="rtl"` over Spanish fallback text | this |
 | Visual-regression baselines (see below) | this |
 | Lighthouse run (axe leg is clean; Lighthouse itself unrun) | mock-completeness |
 
-**Promotion mechanics, when the direction section ships:** `staging.css`
-carries real visual styles now, so it is a *merge into `css/style.css`*,
-not a file move — and `.wireframe-placeholder` / `.proyecto-tile-placeholder`
-must be left behind.
+---
+
+## Promotion — done 2026-08-11 (b6a55ff)
+
+The direction section is live: `directora.html` and `proyectos/*.html` (9)
+at the site root, reachable from a nav on `index.html`, which until now had
+no outbound links at all.
+
+It went as this document predicted — a *merge* of `staging.css` into
+`css/style.css` rather than a file move — plus four decisions worth
+recording:
+
+- **`staging.css` is back to being scaffolding.** Only
+  `.wireframe-placeholder` and `.proyecto-tile-placeholder` stayed. Its
+  header comment now says what it is, so the next person doesn't inherit
+  the same lie the old "spacing only" comment told.
+- **`page-staging` → `page-site`, `staging-nav` → `nav-pills`.** The staged
+  pages were renamed too, so both surfaces share the merged stylesheet and
+  no live page carries "staging" in its markup.
+- **The staged copies of the 9 promoted pages were deleted**, not kept.
+  Nothing but `staging/index.html` referenced them, and two copies of 111
+  hand-checked credit rows would have drifted apart. `staging/index.html`
+  now links to the live `../directora.html`.
+- **The live nav differs from the staged one in two places** — no `sobre mí`
+  (no copy exists), and `proyectos` is a plain link rather than a
+  single-item dropdown. Restore the disclosure menu when a second role
+  ships.
+
+`scripts/qa-audit.mjs` now resolves its targets per mode, since the two no
+longer hold the same pages: `--live` audits the direction section, and the
+default staging run picked up `diseno-produccion.html` and two of its
+project pages, **which had never been audited before** — both clean.
+
+**Still staged, not promoted:** `diseno-produccion.html`, `decoracion.html`,
+and the 12 project pages under them. 6 of those still render
+`wireframe-placeholder`, and `decoracion.html` has no filter bar or
+categories, so it is a further step behind.

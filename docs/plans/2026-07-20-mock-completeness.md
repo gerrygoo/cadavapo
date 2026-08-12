@@ -42,10 +42,15 @@ ficha de proyecto ~35%. Gaps enumerated below.
   markup in `staging/` is `decoracion.html`. The CSS and `initCarousel()`
   still exist and still work, but nothing on the promotion path uses them.
 - [ ] **Give `about` a real destination.** Still `href="#"` in
-  `staging/index.html:29` — a visibly dead nav link. `contacto` from the
+  `staging/index.html` — a visibly dead nav link. `contacto` from the
   original item no longer exists in the nav; `otros trabajos` points at
-  `https://pdi.rip/`. **This is the one bosquejo-01 gap that still blocks a
-  clean launch of the landing page.**
+  `https://pdi.rip/`.
+  **Reclassified 2026-08-11: this needs Dani, it is not actionable.** The
+  design spec (`docs/specs/2026-06-06-danivponce-design.md:14`) records that
+  the about copy was never written, so there is nothing to link *to*. When
+  the direction section was promoted the link was simply left out of the
+  live nav — a missing link beats a dead one on the front page — and it
+  survives only on the staged landing page.
 
 ---
 

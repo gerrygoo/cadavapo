@@ -154,21 +154,27 @@ on the tier-0 blur forever. When we don't intend to play, reveal the element
 without assigning `src` at all: `<video poster>` paints on its own and costs
 no video bytes. `js/main.js:revealPosterOnly` does this.
 
-**Tier 1 currently has no independent stage.** As built, `is-loaded` is
-toggled on the *video's* `canplay`, so the element stays at `opacity: 0`
-until video data arrives — meaning the poster JPEG, which downloaded long
-before, is never shown on its own. Measured on a 120 kB/s throttle: the
-element first became visible at **t=5145ms, at readyState 3**. The visitor
-watches a 16px blurred placeholder for five seconds while a sharp poster
-sits decoded and hidden. The three tiers described above are, in the normal
-playback path, really two.
+**Tier 1 had no independent stage until 2026-08-11.** As originally built,
+`is-loaded` was toggled on the *video's* `canplay`, so the element stayed at
+`opacity: 0` until video data arrived — meaning the poster JPEG, which
+downloaded long before, was never shown on its own. Measured on a 120 kB/s
+throttle: the element first became visible at **t=5145ms, at readyState 3**.
+The visitor watched a 16px blurred placeholder for five seconds while a
+sharp poster sat decoded and hidden. The three tiers described above were,
+in the normal playback path, really two.
 
-Fixing it is small — reveal at observe time rather than at `canplay`, and
-let the video paint over its own poster within the same element — but note
-the spec's "fades the `<video>` in over the poster" is not literally
-achievable: poster and video are the same element, so there is no crossfade
-between them, only a swap. Tracked as an open item in
-`2026-08-11-direction-publish-qa.md`.
+Now `revealPosterOnly` is called when the clip is observed, and the same
+throttled measurement gives **t=3987ms at readyState 0** — the poster is
+what appears, and video arrival no longer gates visibility. It waits on an
+`Image()` load of the poster first: revealing before the poster can paint
+would just fade an empty box in over the tier-0 blur, and a missing or
+broken poster now correctly leaves the blur up.
+
+Note that this spec's "fades the `<video>` in over the poster" is not
+literally achievable, and the fix doesn't attempt it: poster and video are
+the same element, so there is no crossfade between them, only a swap the
+browser performs internally when playback starts. The single fade we do
+control is tier 0 → tier 1.
 
 ## 4. Generation pipeline: `scripts/generate-video-variants.py`
 

@@ -34,13 +34,19 @@
 - **`/staging` first.** New layout/design work (wireframes, page structure,
   visual iteration) lands in `staging/` first and gets validated there
   before being carried over to the live pages (`index.html`, etc.).
-  - **`staging.css` was meant to be spacing-only; it no longer is.** It has
-    accumulated genuine visual styles (`.proyecto-tile`, `.stills-grid`,
-    `.ficha-tecnica`, `.proyecto-titulo`, `.media-progressive`, …). Keep
-    *new* shared visual styles in `css/style.css`, and treat promoting a
-    staged page as a **merge of `staging.css` into `css/style.css`**, not a
-    file move — leaving the wireframe-only rules
-    (`.wireframe-placeholder`, `.proyecto-tile-placeholder`) behind.
+  - **Keep `staging.css` to scaffolding.** It drifted into holding real
+    visual styles once already, and promoting the direction section
+    (2026-08-11) meant unpicking that: everything genuine moved into
+    `css/style.css` and only `.wireframe-placeholder` /
+    `.proyecto-tile-placeholder` stayed. Put *new* shared visual styles in
+    `css/style.css` from the start, and treat promoting a staged page as a
+    **merge into `css/style.css`**, not a file move.
+  - **Don't leave a promoted page in `staging/` too.** Delete the staged
+    copy and repoint whatever linked to it at the live page. Two copies of
+    the same page drift, and nothing warns you.
+  - **Live pages must not carry staging names.** `page-staging` /
+    `staging-nav` became `page-site` / `nav-pills` at promotion time; keep
+    it that way.
 - **Working on multiple things at once: use git worktrees, not feature
   branches.** Add a worktree per concurrent task with a throwaway local
   branch (`git worktree add ../cadavapo-<task> -b scratch/<task>`), do the
