@@ -138,6 +138,38 @@ independent of any specific clip landing — it ships regardless of whether
 the actual ingestion batch (§5) completes in this environment or gets
 deferred.
 
+### Implementation notes (added 2026-08-11, after the QA pass)
+
+Two things about tier 2 that are easy to get wrong and cost real debugging
+time — both learned the hard way while adding the pause control in
+`2026-08-11-direction-publish-qa.md`:
+
+**`preload="none"` means `load()` alone does not fetch.** Setting `src` and
+calling `load()` gets the element to `networkState 2` (loading) but it can
+sit at `readyState 0` indefinitely; what actually drives the fetch to
+completion is the `play()` call. So any change that conditionally skips
+`play()` — a pause control, a reduced-motion guard — must not simply gate
+playback, or the clip never loads *and* never reveals, stranding the viewer
+on the tier-0 blur forever. When we don't intend to play, reveal the element
+without assigning `src` at all: `<video poster>` paints on its own and costs
+no video bytes. `js/main.js:revealPosterOnly` does this.
+
+**Tier 1 currently has no independent stage.** As built, `is-loaded` is
+toggled on the *video's* `canplay`, so the element stays at `opacity: 0`
+until video data arrives — meaning the poster JPEG, which downloaded long
+before, is never shown on its own. Measured on a 120 kB/s throttle: the
+element first became visible at **t=5145ms, at readyState 3**. The visitor
+watches a 16px blurred placeholder for five seconds while a sharp poster
+sits decoded and hidden. The three tiers described above are, in the normal
+playback path, really two.
+
+Fixing it is small — reveal at observe time rather than at `canplay`, and
+let the video paint over its own poster within the same element — but note
+the spec's "fades the `<video>` in over the poster" is not literally
+achievable: poster and video are the same element, so there is no crossfade
+between them, only a swap. Tracked as an open item in
+`2026-08-11-direction-publish-qa.md`.
+
 ## 4. Generation pipeline: `scripts/generate-video-variants.py`
 
 Same shape as `scripts/generate-image-variants.py`: a one-off script (not a

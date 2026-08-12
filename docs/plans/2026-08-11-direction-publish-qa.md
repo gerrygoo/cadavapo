@@ -225,3 +225,55 @@ in motion, accessibility, and untranslated content.
   toolbar collapses mid-scroll, and `lvh` (largest viewport) is probably
   what it wants instead. That one should be confirmed on a real phone
   before changing, since it's on the live landing page.
+
+- [ ] **Tier 1 of the progressive-video system never displays.** Found while
+  adding the pause control. `is-loaded` is toggled on the *video's*
+  `canplay`, so the element sits at `opacity: 0` until video data arrives
+  and the poster JPEG — already downloaded — is never shown on its own.
+  Measured on a 120 kB/s throttle: first visible at **t=5145ms, readyState
+  3**. So the viewer watches the 16px tier-0 blur for five seconds with a
+  sharp poster decoded and hidden behind it. The three tiers in
+  `docs/specs/2026-08-02-video-ingestion.md` §3 are really two in the normal
+  playback path. Fix is small (reveal at observe time, not at `canplay`);
+  see that spec's "Implementation notes" for why the spec's "fade the video
+  in over the poster" isn't literally achievable.
+
+---
+
+## Consolidated backlog (2026-08-11)
+
+Everything still open across all three plan documents, in one place. Each
+line says which document owns it.
+
+**Needs Dani — nothing can proceed without an answer:**
+
+| Item | Owner doc |
+|---|---|
+| Title casing: `La Verticalidad Desahuciada` vs `Fantasma astral` | this |
+| `sophia-warren-bor` / `KiN6by3OiZc` — real title, or drop/rename? | director-role |
+| Advertising tiles listed on *both* `diseno-produccion` and `decoracion` — intended? | mock-completeness |
+| "diseño de producción" reel — compiled reel, or embed one of the 5? | mock-completeness |
+| Poli's site URL for "otros trabajos" | mock-completeness |
+| Stills carousel vs. grid (the grid/list toggle may already settle it) | mock-completeness |
+| Separate free-text "créditos" block — still wanted now the ficha is full? | mock-completeness |
+| Wireframe "row of thumbnails" reel treatment — still wanted? | mock-completeness |
+| Short/feature films + "Robe Grill" — undocumented anywhere | director-role |
+
+**Actionable without input:**
+
+| Item | Owner doc |
+|---|---|
+| Tier 1 poster never displays (above) | this |
+| `dvh` fallback for the three straightforward `100vh` uses | this |
+| `.bg-video` `lvh` — needs a real phone first | this |
+| `about` nav link is still `href="#"` | mock-completeness |
+| 6 pages still render `wireframe-placeholder` (none on the direction path) | mock-completeness |
+| Click-to-expand / lightbox on stills | mock-completeness |
+| 13 partial languages apply `dir="rtl"` over Spanish fallback text | this |
+| Visual-regression baselines (see below) | this |
+| Lighthouse run (axe leg is clean; Lighthouse itself unrun) | mock-completeness |
+
+**Promotion mechanics, when the direction section ships:** `staging.css`
+carries real visual styles now, so it is a *merge into `css/style.css`*,
+not a file move — and `.wireframe-placeholder` / `.proyecto-tile-placeholder`
+must be left behind.

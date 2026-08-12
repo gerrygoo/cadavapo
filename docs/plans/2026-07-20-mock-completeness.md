@@ -11,104 +11,96 @@ in `staging/` first). Shared behavior/styles still live in
 **Baseline coverage (2026-07-20):** landing ~60%, proyectos ~40%,
 ficha de proyecto ~35%. Gaps enumerated below.
 
+> **Status review 2026-08-11.** This plan predates two structural changes and
+> had drifted badly out of sync with the repo (20 boxes open, 1 checked,
+> while most of the work had in fact shipped). Every item below was
+> re-checked against the actual files and is now marked one of:
+> **done** (verified in the repo), **superseded** (the plan's premise no
+> longer holds), or still open. The two changes that invalidated whole
+> sections:
+>
+> 1. **`staging/proyectos.html` never happened.** The single projects page
+>    was replaced by per-role pages — `staging/{directora,diseno-produccion,
+>    decoracion}.html` — so bosquejo-02's categorisation tasks are moot as
+>    written. What survives of that section is folded into "Still open".
+> 2. **`staging.css` is no longer spacing-only.** It now carries real
+>    visual styles (`.proyecto-tile`, `.stills-grid`, `.ficha-tecnica`,
+>    `.proyecto-titulo`, `.media-progressive`, …). Graduation is therefore a
+>    *merge into `css/style.css`*, not a file move. See
+>    `2026-08-11-direction-publish-qa.md`.
+
 ---
 
 ## bosquejo-01 — Landing (`staging/index.html`)
 
-- [ ] **Restore rotating role text.** `<p class="role" aria-live="polite">`
-  is present on live `index.html` but was removed from
-  `staging/index.html` when the carousel was added. Add it back under the
-  logo; the fade rotation already runs from `js/main.js` as long as the
-  element exists.
-- [ ] **Wire the carousel layer swap.** `staging/index.html` has two
-  `.carousel-layer` `picture` elements but the second one has empty
-  `src`/`srcset`. Confirm `js/projects.js` actually rotates
-  stills across the two layers; if not, wire it. Success = stills visibly
-  cross-fade in the browser without console errors.
-- [ ] **Give `about` and `contacto` real destinations.** Both nav links
-  are `href="#"`. Either create placeholder pages
-  (`staging/sobre-mi.html`, `staging/contacto.html`) matching the
-  wireframe's "imágen fija + texto + PDF de CV" / "imágen fija +
-  imágenes y texto" specs, or downgrade the nav until those pages exist.
+- [x] **Restore rotating role text.** — done; `<p class="role">` is present
+  and `initRoleRotation` drives it. (The `aria-live="polite"` the original
+  item called for was later *removed* on purpose: the text rotates on a
+  timer, so a live region announced a new role every few seconds forever.)
+- [x] **Wire the carousel layer swap.** — **superseded.** The landing page
+  no longer has a carousel; it has the nav. The only remaining `.carousel`
+  markup in `staging/` is `decoracion.html`. The CSS and `initCarousel()`
+  still exist and still work, but nothing on the promotion path uses them.
+- [ ] **Give `about` a real destination.** Still `href="#"` in
+  `staging/index.html:29` — a visibly dead nav link. `contacto` from the
+  original item no longer exists in the nav; `otros trabajos` points at
+  `https://pdi.rip/`. **This is the one bosquejo-01 gap that still blocks a
+  clean launch of the landing page.**
 
 ---
 
-## bosquejo-02 — Proyectos (`staging/proyectos.html`)
+## bosquejo-02 — Proyectos — **superseded as a section**
 
-**Categorization (decided 2026-07-20):**
+The categorisation decided on 2026-07-20 assumed one `proyectos.html` with
+*dirección creativa* / *diseño de producción* / *otros proyectos* headings.
+The site instead has a page per role. Recording the outcome of each task so
+the reasoning isn't lost, rather than pretending they're still pending:
 
-- *dirección creativa* — no projects yet.
-- *diseño de producción* — the 5 music videos scaffolded under
-  `assets/projects/{eden-munoz-*,sophia-warren-*}/`. All 5 render as
-  separate tiles for now; if space becomes tight, the 3 Sophia Warren
-  visualizers can collapse into a single tile that expands to all three.
-  (Wireframe called for `x2 >` — superseded, sketch is out of date.)
-- *otros proyectos* — folds in **both** (a) Poli's site link and (b)
-  the 4 advertising projects Dani worked on as set dresser under Natalia
-  Aguilera (coffee-mate-nescafe, didi-food, luis-angel-el-flaco,
-  reality-club-cinepolis). No separate "advertising" section on the page.
-
-Concrete tasks:
-
-- [ ] **"dirección creativa" carousel.** Currently a dashed
-  wireframe placeholder ("sin proyectos asignados aún"). Leave the
-  placeholder until Dani assigns content — no work here for now.
-- [ ] **"diseño de producción" — 5 real tiles.** Replace the current 4
-  advertising tiles (which are miscategorized here) with 5 tiles
-  pointing at the new music-video ficha pages
-  (`staging/proyectos/{eden-munoz-la-plata,eden-munoz-un-monton-de-estrellas,sophia-warren-purple,sophia-warren-static,sophia-warren-bor}.html`).
-  Tiles render as `.proyecto-tile-placeholder` (dashed border, no img)
-  until stills land per `docs/specs/2026-07-16-media-delivery.md`.
-- [ ] **"diseño de producción" reel.** Reel slot above the tiles.
-  Blocked on media delivery (Dani supplies a compiled reel or we embed
-  the strongest of the 5 YouTube videos).
-- [ ] **"otros proyectos" — Poli's site link.** Add tiles linking out
-  to Poli's site (get URL from Dani).
-- [ ] **"otros proyectos" — advertising tiles.** Move the 4 existing
-  tiles (coffee-mate-nescafe, didi-food, luis-angel-el-flaco,
-  reality-club-cinepolis) from "diseño de producción" to "otros
-  proyectos". They still point at the same ficha pages.
-- [ ] **Deduplicate nav.** `staging-nav` renders both mid-page and
-  implicitly at the top; the wireframe places it once. Pick one location
-  and remove the other on this page.
+- [x] **"dirección creativa" carousel** — superseded. That role became
+  `staging/directora.html`, and it is no longer empty: 9 fully-credited
+  projects, delivered by `2026-08-02-director-role-and-video-sync.md`.
+- [x] **"diseño de producción" — 5 real tiles** — done; all five ficha
+  pages exist (`eden-munoz-{la-plata,un-monton-de-estrellas}`,
+  `sophia-warren-{purple,static,bor}`).
+- [ ] **"diseño de producción" reel** — still open, still blocked on Dani
+  supplying a compiled reel (or a decision to embed the strongest of the 5).
+- [ ] **Poli's site link** — still open, still needs the URL from Dani.
+- [x] **Advertising tiles moved out of "diseño de producción"** —
+  superseded, and worth a look: the 4 advertising projects
+  (`coffee-mate-nescafe`, `didi-food`, `luis-angel-el-flaco`,
+  `reality-club-cinepolis`) are now listed on **both**
+  `diseno-produccion.html` *and* `decoracion.html`. That may well be
+  correct — Dani did both jobs on those shoots — but it is duplication
+  rather than the "move" this item asked for. **Confirm with Dani whether
+  both listings are intended.**
+- [x] **Deduplicate nav** — done; each page renders `staging-nav` once.
 
 ---
 
 ## bosquejo-03 — Ficha de proyecto (`staging/proyectos/*.html`)
 
-Reference file: `staging/proyectos/coffee-mate-nescafe.html`. Apply
-each fix to all four existing (advertising) ficha pages AND to the
-5 new music-video ficha pages once they exist (see next section).
-
-- [ ] **Create 5 new ficha pages for the music videos.** Copy the
-  existing template to
-  `staging/proyectos/{eden-munoz-la-plata,eden-munoz-un-monton-de-estrellas,sophia-warren-purple,sophia-warren-static,sophia-warren-bor}.html`.
-  Each with the wireframe layout below; stills/reel blank until media
-  lands.
-
-- [ ] **Role-attribution subtitle.** Wireframe title reads "DIRIGIDO POR
-  DANI PONCE / DISEÑO DE PRODUCCIÓN POR DANI PONCE". Add a subtitle
-  under `.proyecto-titulo` for each project's role (varies per
-  project — director / production designer / etc.).
-- [ ] **Reel slot.** Wireframe shows a row of thumbnails representing
-  the reel above the stills. Add a reel embed slot (or looping preview)
-  per project where one exists.
-- [ ] **Stills: carousel vs. grid.** Wireframe describes a carousel of
-  GIFs and/or stills; current implementation is a static masonry grid.
-  Decide with Dani: keep the grid (more scannable), or swap to a
-  carousel (matches sketch). Note the choice in this file when made.
-- [ ] **Click-to-expand on thumbnails.** Wireframe says clicking a
-  thumbnail leads to ficha técnica y/o vista ampliada. Current images
-  aren't interactive. Add a lightbox / expand-on-click behavior.
-- [ ] **Ficha técnica: fill it out.** Every page currently has only
-  `<dt>Dirección</dt><dd>Nico Ureta</dd>` (and only for
-  coffee-mate-nescafe). Collect year, client, director, DP, production
-  designer (Dani), full credits per project.
-- [ ] **Créditos block.** Wireframe shows a "texto con créditos del
-  proyecto" panel separate from the ficha técnica table. Add a
-  free-text credits block below the ficha.
-
----
+- [x] **Create 5 new ficha pages for the music videos.** — done.
+- [x] **Role-attribution subtitle.** — done differently. Rather than a
+  role subtitle, the heading splits into title + artist
+  (`.proyecto-titulo-title` / `.proyecto-titulo-artist`, 18 pages). The
+  role is carried by which role page you arrived from. Closing as solved.
+- [ ] **Reel slot.** Partially done — 20 of 21 project pages embed a
+  YouTube reel. Remaining gap is the "row of thumbnails" treatment the
+  wireframe showed, which was never built; the stills grid sits where it
+  would have gone. Decide whether that's still wanted.
+- [ ] **Stills: carousel vs. grid.** Still undecided with Dani. Current
+  implementation is a masonry grid with a grid/list toggle — note that the
+  toggle is a third option the wireframe didn't have, and it may already
+  settle this.
+- [ ] **Click-to-expand on thumbnails.** Still open; stills are not
+  interactive. (Related: the clips are `<video>` elements now, so "expand"
+  means a lightbox that plays, not just a larger JPEG.)
+- [x] **Ficha técnica: fill it out.** — done, and then some: 111 `<dt>`
+  credits across 21 pages, all now i18n-keyed
+  (`2026-08-11-direction-publish-qa.md`).
+- [ ] **Créditos block.** Still open — no free-text credits panel separate
+  from the ficha table. May be redundant now that the ficha is complete;
+  worth confirming before building.
 
 ---
 
@@ -119,23 +111,29 @@ each fix to all four existing (advertising) ficha pages AND to the
   `docs/specs/2026-08-02-video-ingestion.md` §1 for the doc link/id):
   `77DRtiPY9b4` → eden-munoz-la-plata, `afoiE74JpL0` →
   eden-munoz-un-monton-de-estrellas, `QqonNRbqPZE` → sophia-warren-purple,
-  `1ii-qhgpx_Q` → sophia-warren-static. Fill the `Source:` line in each
-  section of `assets/projects/README.md` and swap the reel embed URLs
-  into those 4 ficha pages.
-  - [ ] **`sophia-warren-bor` / `KiN6by3OiZc` stays unmapped** — the doc
-    never mentions a "BOR" title at all (only Purple and Static appear
-    under Sophia Warren). Confirm with Dani directly whether BOR is a
-    real third project or should be dropped/renamed before mapping it.
+  `1ii-qhgpx_Q` → sophia-warren-static.
+  - [ ] **`sophia-warren-bor` / `KiN6by3OiZc` stays unmapped** — confirmed
+    still unmapped 2026-08-11 (no embed on the page). The doc never mentions
+    a "BOR" title. Ask Dani whether it's a real third project or should be
+    dropped/renamed. Duplicated in
+    `2026-08-02-director-role-and-video-sync.md`; that copy is the live one.
 
 ---
 
 ## Graduation criteria
 
-Before carrying `staging/` over to the live pages (`index.html`,
-`proyectos.html`, `proyectos/*.html`):
+Before carrying `staging/` over to the live pages:
 
-- [ ] All boxes above checked, OR the remaining gaps are explicitly
-  accepted (noted here with rationale).
-- [ ] Manual pass per CLAUDE.md testing standards: browser check in
-  ES + EN, mobile + desktop, no console errors, all image paths resolve.
-- [ ] Lighthouse a11y pass ≥ 95 on each staged page.
+- [ ] All boxes above checked, OR the remaining gaps explicitly accepted
+  (noted here with rationale).
+- [ ] **Six pages still render `wireframe-placeholder`** and cannot ship:
+  `sophia-warren-{purple,static,bor}`, `eden-munoz-{la-plata,un-monton-de-estrellas}`,
+  `bellakath-minina`. (None are on the direction path — the director pages
+  are clear as of 2026-08-11.)
+- [x] Manual pass per CLAUDE.md testing standards: browser check in ES + EN,
+  mobile + desktop, no console errors, all image paths resolve. — automated
+  as `scripts/qa-audit.mjs`; run it rather than doing this by hand.
+- [ ] Lighthouse a11y pass ≥ 95 on each staged page. The axe-core leg of
+  `qa-audit.mjs` reports 0 violations on the four direction pages, which is
+  most of what Lighthouse's a11y score measures, but Lighthouse itself has
+  not been run.

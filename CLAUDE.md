@@ -14,11 +14,33 @@
   load the page, exercise the affected flow) before pushing to `main` —
   `main` is live, there's no review step to catch problems after the
   fact.
+  - **Run `node scripts/qa-audit.mjs`** for anything touching layout, CSS,
+    or `js/main.js`. It sweeps 4 pages × 10 viewports for overflow/overlap/
+    clipping/target-size, runs axe-core with the disclosure menus opened,
+    checks that `prefers-reduced-motion` actually suppresses every
+    self-starting animation, and traces a rotation. Install deps ad hoc:
+    `npm install --no-save playwright@1.57.0 axe-core`. **Pin 1.57.0** —
+    newer Playwright wants a Chromium build that isn't in the local cache
+    and will fail with "Executable doesn't exist".
+  - **A green headless run is not sufficient on its own.** It reports
+    structure, not appearance, and it cannot see anything gated on real
+    playback. A pause-control change once passed the whole suite while
+    leaving every clip stuck behind `opacity: 0` on a real page. Load the
+    affected page in an actual browser too.
+  - **Watch for `visibility: "hidden"` when driving Chrome.** A backgrounded
+    tab starves media decoding, so videos sit at `readyState 0` forever and
+    look broken when they aren't. Check `document.visibilityState` before
+    concluding a media bug is real.
 - **`/staging` first.** New layout/design work (wireframes, page structure,
   visual iteration) lands in `staging/` first and gets validated there
   before being carried over to the live pages (`index.html`, etc.).
-  `staging/` only adds spacing/layout on top of the shared `css/style.css`
-  — no new visual styles of its own.
+  - **`staging.css` was meant to be spacing-only; it no longer is.** It has
+    accumulated genuine visual styles (`.proyecto-tile`, `.stills-grid`,
+    `.ficha-tecnica`, `.proyecto-titulo`, `.media-progressive`, …). Keep
+    *new* shared visual styles in `css/style.css`, and treat promoting a
+    staged page as a **merge of `staging.css` into `css/style.css`**, not a
+    file move — leaving the wireframe-only rules
+    (`.wireframe-placeholder`, `.proyecto-tile-placeholder`) behind.
 - **Working on multiple things at once: use git worktrees, not feature
   branches.** Add a worktree per concurrent task with a throwaway local
   branch (`git worktree add ../cadavapo-<task> -b scratch/<task>`), do the
