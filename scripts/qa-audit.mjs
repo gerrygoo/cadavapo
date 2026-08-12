@@ -9,7 +9,11 @@
 // Requires playwright + axe-core. They are not repo dependencies (there is no
 // build step here); install them ad hoc when you want to run this:
 //
-//   npm install --no-save playwright axe-core && npx playwright install chromium
+//   npm install --no-save playwright@1.57.0 axe-core
+//
+// Pin 1.57.0: it matches the chromium build already in the local Playwright
+// cache. Installing latest wants a newer one and fails with "Executable
+// doesn't exist" until you download it, for no benefit here.
 //
 // What it checks, per page × viewport:
 //   - horizontal document overflow (the classic "why does my phone scroll sideways")
@@ -29,13 +33,30 @@ const require = createRequire(import.meta.url);
 const axeSrc = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 
 const ORIGIN = process.env.QA_ORIGIN || 'http://localhost:8000';
-const ROOT = process.argv.includes('--live') ? ORIGIN : `${ORIGIN}/staging`;
+const LIVE = process.argv.includes('--live');
+const ROOT = LIVE ? ORIGIN : `${ORIGIN}/staging`;
+
+// The direction section shipped, so its pages live at the site root and are
+// only reachable in --live mode; what's left under staging/ is the two roles
+// that haven't shipped. Each mode therefore needs its own representative set
+// rather than the same paths under a different prefix.
+const TARGETS = LIVE
+  ? {
+      role:    [`${ROOT}/directora.html`,                            'directora'],
+      clips:   [`${ROOT}/proyectos/erade-kafi.html`,                 'proyecto (con video)'],
+      noVideo: [`${ROOT}/proyectos/la-verticalidad-desahuciada.html`, 'proyecto (sin video)'],
+    }
+  : {
+      role:    [`${ROOT}/diseno-produccion.html`,                       'diseño de producción'],
+      clips:   [`${ROOT}/proyectos/ghetto-kids-en-el-ghetto-2.html`,    'proyecto (con video)'],
+      noVideo: [`${ROOT}/proyectos/didi-food.html`,                     'proyecto (sin video)'],
+    };
 
 const PAGES = [
   ['landing', `${ROOT}/index.html`],
-  ['directora', `${ROOT}/directora.html`],
-  ['proyecto (con video)', `${ROOT}/proyectos/erade-kafi.html`],
-  ['proyecto (sin video)', `${ROOT}/proyectos/la-verticalidad-desahuciada.html`],
+  [TARGETS.role[1], TARGETS.role[0]],
+  [TARGETS.clips[1], TARGETS.clips[0]],
+  [TARGETS.noVideo[1], TARGETS.noVideo[0]],
 ];
 
 // Rotation pairs are deliberately adjacent so a phone flip is covered both ways.
@@ -83,7 +104,7 @@ const LAYOUT_PROBE = () => {
 
   const boxes = [];
   for (const el of document.querySelectorAll(
-    '.proyecto-tile, .proyectos-filter, .proyectos-category, .hero, .stills-toolbar, .proyecto-titulo, .ficha-tecnica, .proyecto-video, .media-progressive, .back-link, footer, .staging-nav'
+    '.proyecto-tile, .proyectos-filter, .proyectos-category, .hero, .stills-toolbar, .proyecto-titulo, .ficha-tecnica, .proyecto-video, .media-progressive, .back-link, footer, .nav-pills'
   )) {
     if (getComputedStyle(el).display === 'none') continue;
     const r = el.getBoundingClientRect();
@@ -100,7 +121,7 @@ const LAYOUT_PROBE = () => {
   }
 
   for (const el of document.querySelectorAll(
-    '.proyecto-text, .proyecto-titulo-title, .proyecto-titulo-artist, .role, .proyectos-category-title, dd, dt, .staging-nav a, .staging-nav button'
+    '.proyecto-text, .proyecto-titulo-title, .proyecto-titulo-artist, .role, .proyectos-category-title, dd, dt, .nav-pills a, .nav-pills button'
   )) {
     if (el.scrollWidth > el.clientWidth + 1) {
       out.clipped.push(`${sel(el)} "${el.textContent.trim().slice(0, 30)}" ${el.scrollWidth}>${el.clientWidth}`);
@@ -178,7 +199,7 @@ console.log('══════ MOTION ══════\n');
   // and anything looping >5s needs a pause affordance (WCAG 2.2.2 / 2.3.1).
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
-  await page.goto(`${ROOT}/proyectos/erade-kafi.html`, { waitUntil: 'networkidle' }).catch(() => {});
+  await page.goto(TARGETS.clips[0], { waitUntil: 'networkidle' }).catch(() => {});
   await page.waitForTimeout(2500);
   const v = await page.evaluate(() => {
     const vids = [...document.querySelectorAll('.media-video')];
@@ -199,7 +220,7 @@ console.log('══════ MOTION ══════\n');
 {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
-  await page.goto(`${ROOT}/directora.html`, { waitUntil: 'networkidle' }).catch(() => {});
+  await page.goto(TARGETS.role[0], { waitUntil: 'networkidle' }).catch(() => {});
   const tile = page.locator('.proyecto-tile[data-posters]').first();
   if (await tile.count()) {
     await tile.hover();
@@ -235,7 +256,7 @@ console.log('\n══════ ROTATION (portrait → landscape → portrait)
 {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
-  await page.goto(`${ROOT}/directora.html`, { waitUntil: 'networkidle' }).catch(() => {});
+  await page.goto(TARGETS.role[0], { waitUntil: 'networkidle' }).catch(() => {});
   const snap = async (label) => {
     const s = await page.evaluate(() => ({
       vw: innerWidth, vh: innerHeight,

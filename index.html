@@ -23,13 +23,22 @@
       <img class="logo-letter" src="assets/logo/letters/8-e.png" alt="" style="--x:62.865%; --y:51.111%; --w:10.0%; --anim: letter-drift-9; --dur: 22.5s; --delay: -15.0s;">
     </h1>
     <p class="role">dirección creativa</p>
+
+    <nav class="nav-pills">
+      <!-- A plain link rather than the staged disclosure menu: only the
+           direction section has shipped, and a dropdown with one item in it
+           is worse than a link. Turn it back into a menu when the second
+           role page goes live. -->
+      <a href="directora.html" data-i18n="nav.projects">proyectos</a>
+
+      <a href="https://pdi.rip/" data-i18n="nav.otherWork">otros trabajos</a>
+
+      <div class="lang-menu">
+        <button id="lang-toggle" data-i18n="langBtn" aria-expanded="false" aria-controls="lang-list">idiomas</button>
+        <ul class="lang-list" id="lang-list" hidden></ul>
+      </div>
+    </nav>
   </main>
-  <footer>
-    <div class="lang-menu">
-      <button id="lang-toggle" data-i18n="langBtn" aria-expanded="false" aria-controls="lang-list">idiomas</button>
-      <ul class="lang-list" id="lang-list" hidden></ul>
-    </div>
-  </footer>
   <script src="js/translations.js"></script>
   <script src="js/main.js"></script>
 </body>

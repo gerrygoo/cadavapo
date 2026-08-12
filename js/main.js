@@ -197,19 +197,30 @@
   //
   // `.media-video` elements ship with `preload="none"` and their real source
   // in `data-src`, so the browser never fetches video bytes up front. An
-  // IntersectionObserver assigns `src` only once a clip nears the viewport;
-  // once it can play, it crossfades in over its poster via the `is-loaded`
-  // class, the same opacity-transition idiom the carousel's `is-active` uses.
+  // IntersectionObserver assigns `src` only once a clip nears the viewport.
+  // The element itself is faded in as soon as its poster can paint, via the
+  // `is-loaded` class — the same opacity-transition idiom the carousel's
+  // `is-active` uses — and the browser swaps poster→first frame internally
+  // once playback starts, so there is no second fade to manage.
 
-  // When we aren't going to play a clip, reveal the element without fetching
-  // any video bytes: `<video poster>` (tier 1) paints on its own, which is
-  // exactly the still we want. Deliberately *not* done by loading the video
-  // and leaving it paused — with `preload="none"` a load() that is never
-  // followed by play() doesn't actually fetch, so the element would sit at
-  // readyState 0 behind opacity 0 and the viewer would keep staring at the
-  // blurred tier-0 background.
+  // Reveal the element as soon as its poster (tier 1) can paint, without
+  // fetching any video bytes. `<video poster>` is fetched with the document
+  // regardless of `preload="none"`, so this is normally a cache hit that
+  // resolves on the next tick — but it has to be waited for either way, since
+  // revealing before the poster decodes would just fade an empty box in over
+  // the tier-0 blur.
+  //
+  // Deliberately *not* done by loading the video and leaving it paused — with
+  // `preload="none"` a load() that is never followed by play() doesn't
+  // actually fetch, so the element would sit at readyState 0 behind opacity 0
+  // and the viewer would keep staring at the blurred tier-0 background.
   function revealPosterOnly(video) {
-    video.classList.add('is-loaded');
+    if (video.classList.contains('is-loaded')) return;
+    var poster = video.getAttribute('poster');
+    if (!poster) return;   // nothing to show yet; tier 0 stays up until canplay
+    var img = new Image();
+    img.onload = function () { video.classList.add('is-loaded'); };
+    img.src = poster;      // onerror deliberately unhandled: keep the tier-0 blur
   }
 
   function loadProgressiveVideo(video) {
@@ -219,8 +230,14 @@
     }
     if (_clipsPaused) { revealPosterOnly(video); return; }
 
+    // Tier 1 first: the poster is already downloaded, so show it now rather
+    // than holding the blur until video data arrives. Measured on a 120 kB/s
+    // throttle, waiting for `canplay` meant 5.1s of tier-0 blur with a sharp
+    // poster decoded and hidden behind it.
+    revealPosterOnly(video);
+
     video.addEventListener('canplay', function () {
-      video.classList.add('is-loaded');
+      video.classList.add('is-loaded'); // no-op unless the poster failed/was absent
       video.play().catch(function () {}); // muted autoplay can still be blocked in rare cases
     }, { once: true });
     video.src = video.dataset.src;

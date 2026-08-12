@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="staging.css">
 </head>
-<body class="page-staging page-landing">
+<body class="page-site page-landing">
   <video class="bg-video" autoplay muted loop playsinline aria-hidden="true">
     <source src="../assets/video/star-animation.mp4" type="video/mp4">
   </video>
@@ -25,13 +25,15 @@
     </h1>
     <p class="role">dirección creativa</p>
 
-    <nav class="staging-nav">
+    <nav class="nav-pills">
       <a href="#" data-i18n="nav.about">sobre mí</a>
 
       <div class="lang-menu">
         <button id="projects-toggle" data-i18n="nav.projects" aria-expanded="false" aria-controls="projects-list">proyectos</button>
         <ul class="lang-list" id="projects-list" hidden>
-          <li><a href="directora.html" data-i18n="proyectos.directora">directora</a></li>
+          <!-- directora has shipped: it lives at the site root now, and the
+               staged copy was deleted so the two can't drift apart. -->
+          <li><a href="../directora.html" data-i18n="proyectos.directora">directora</a></li>
           <li><a href="diseno-produccion.html" data-i18n="proyectos.disenoProduccion">diseño de producción</a></li>
         </ul>
       </div>
