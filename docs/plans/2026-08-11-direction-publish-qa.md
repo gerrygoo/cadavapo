@@ -191,6 +191,37 @@ in motion, accessibility, and untranslated content.
   viewport screenshot baselines (Playwright `toHaveScreenshot`, or
   BackstopJS) would close that gap, and this design *is* the product.
 
-- [ ] **Real-device rotation.** `page.setViewportSize` does not fire a
-  genuine `orientationchange`, so device-specific rotation bugs can hide
-  from the harness.
+- [ ] **Real-device rotation — untested, not a known break.** The harness's
+  "rotation" step only resizes the viewport box. Measured, that means:
+
+  ```
+  events fired         : resize            (no orientationchange, no
+                                            screen.orientation change)
+  screen.orientation   : angle 0, "landscape-primary"  — before AND after
+                         being resized to a 390×844 portrait box
+  window.orientation   : undefined
+  ```
+
+  Two of those don't matter here: nothing in the site's JS listens for
+  rotation (layout is pure CSS reflow), and since the proyectos grid moved
+  off `orientation:` to width queries, no layout depends on the orientation
+  media feature at all.
+
+  What a desktop browser genuinely cannot reproduce is **`100vh` under a
+  mobile URL bar**. On iOS Safari and Chrome Android `100vh` resolves to the
+  *large* viewport (toolbars retracted), which is taller than what's on
+  screen while they're shown — and rotating changes that geometry, which is
+  where it surfaces. Affected:
+
+  - `css/style.css:696` `body.page-landing { min-height: 100vh }`
+  - `staging/staging.css:4` `body.page-staging { min-height: 100vh }`
+  - `css/style.css:656` `.lang-list { max-height: 60vh }`
+  - `css/style.css:741-742` `.bg-video` portrait `width:100vh; height:100vw`
+
+  For the first three the fix is the standard two-line progressive
+  enhancement (`min-height: 100vh; min-height: 100dvh;`) — old browsers keep
+  `vh`, new ones track the dynamic viewport. `.bg-video` is the subtle one:
+  it's a `position:fixed` cover, so `dvh` would make it resize as the
+  toolbar collapses mid-scroll, and `lvh` (largest viewport) is probably
+  what it wants instead. That one should be confirmed on a real phone
+  before changing, since it's on the live landing page.
