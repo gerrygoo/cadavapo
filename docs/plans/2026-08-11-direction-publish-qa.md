@@ -108,10 +108,13 @@ in motion, accessibility, and untranslated content.
   `la-verticalidad-desahuciada`), four with `y` (`presa-alamo-paraiso`,
   `fantasma-astral`, `satelite-futura-club`, `archivo-digital`). Pick one.
 
-- [ ] **Dani's own name appears in three forms** across the credits —
+- [x] **Dani's own name appeared in three forms** across the credits —
   `Dani Ponce`, `Daniela Vázquez Ponce` (presa, fantasma, satélite) and
-  `Daniela V. Ponce` (archivo). Defensible if it mirrors how each
-  production credited her; needs her call.
+  `Daniela V. Ponce` (archivo). Standardized to **`Daniela Ponce`**, which
+  the eight non-director project pages were already using, so the director
+  pages were the outliers. Scoped to `<dd>` credits only — the 26 `<title>`s,
+  5 `aria-label`s and the sliced-letter wordmark keep `Dani Ponce`, which is
+  the brand rather than a credit.
 
 - [x] **Same person, two names on one page.** `fantasma-astral.html`:
   `Aza Arroyo` under Producción, `Azael Arroyo` under Dirección de
@@ -131,9 +134,11 @@ in motion, accessibility, and untranslated content.
   (→ `music videos`); `non-fiction explorations` is long enough to wrap
   the filter chip onto a second row at 390px.
 
-- [ ] **Confirm with Dani, do not auto-correct:** `Vicente Jauregui` →
-  `Jáuregui`? `Alamo Paraiso` → `Álamo Paraíso`? Both may be intentional
-  stylings of the credited names.
+- [x] **Accents on credited names.** `Vicente Jauregui` → `Vicente Jáuregui`
+  (20 occurrences) and `Alamo Paraiso` → `Álamo Paraíso` (11), applied to
+  every display surface including `<title>`. URL slugs stay ASCII
+  (`heroes-vicente-jauregui.html`, `presa-alamo-paraiso.html`) so no links
+  or asset paths moved.
 
 ---
 

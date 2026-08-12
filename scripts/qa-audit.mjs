@@ -119,7 +119,16 @@ for (const [pname, url] of PAGES) {
     const page = await ctx.newPage();
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
-    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    page.on('console', (m) => {
+      if (m.type() !== 'error') return;
+      // Only our own scripts. The YouTube embed reports a compute-pressure
+      // permissions-policy violation whenever the iframe wins the load race,
+      // which is nothing we can fix and made this check flaky run to run.
+      const src = m.location()?.url || '';
+      if (src && !src.startsWith(ORIGIN)) return;
+      if (/Permissions policy violation/i.test(m.text())) return;
+      errors.push(m.text());
+    });
     await page.goto(url, { waitUntil: 'networkidle' }).catch(() => {});
     await page.waitForTimeout(250);
     const r = await page.evaluate(LAYOUT_PROBE);
