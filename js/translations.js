@@ -22,7 +22,7 @@ const T = {
       fichaTecnica:      "ficha técnica",
       volver:            "← volver a proyectos",
       filterAll:         "todos",
-      categoriaVideoclip: "videoclips",
+      categoriaVideoclip: "videos musicales",
       categoriaNoFiccion: "no ficción",
       categoriaComercial: "comercial",
       vistaCuadricula:   "cuadrícula",
@@ -35,7 +35,6 @@ const T = {
     // Ficha técnica labels. Only the labels are translated — the values are
     // credited names, which stay as the production credited them.
     creditos: {
-      tipo:                "Tipo",
       direccion:           "Dirección",
       produccion:          "Producción",
       productoraEjecutiva: "Productora ejecutiva",
@@ -51,7 +50,7 @@ const T = {
       modelo:              "Modelo",
       modelos:             "Modelos",
       extras:              "Extras",
-      estilismo:           "Estilismo",
+      estilismo:           "Stylist",
       maquillaje:          "Maquillaje",
       disenoProduccion:    "Diseño de producción",
       disenoGrafico:       "Diseño gráfico",
@@ -64,6 +63,7 @@ const T = {
       asistenciaProduccion:"Asistencia de producción",
       materialArchivo:     "Material de archivo",
       sinopsis:            "Sinopsis",
+      duracion:            "Duración",
       locacionAno:         "Locación / Año"
     },
     langBtn: "idiomas"
@@ -100,7 +100,6 @@ const T = {
       filtrarCategoria:  "Filter by category"
     },
     creditos: {
-      tipo:                "Type",
       direccion:           "Director",
       produccion:          "Production",
       productoraEjecutiva: "Executive producer",
@@ -116,7 +115,7 @@ const T = {
       modelo:              "Model",
       modelos:             "Models",
       extras:              "Extras",
-      estilismo:           "Styling",
+      estilismo:           "Stylist",
       maquillaje:          "Makeup",
       disenoProduccion:    "Production design",
       disenoGrafico:       "Graphic design",
@@ -129,6 +128,7 @@ const T = {
       asistenciaProduccion:"Production assistance",
       materialArchivo:     "Archive material",
       sinopsis:            "Synopsis",
+      duracion:            "Duration",
       locacionAno:         "Location / Year"
     },
     langBtn: "language"
